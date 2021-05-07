@@ -1,0 +1,132 @@
+{% load mptt_tags %}
+{% load secciones %}
+{% load static %}
+<div class="col-md-3 col-sm-12 p-0">
+  <div class="accordion sidebar" id="sidebar-accordion">
+    
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% current_time as secciones %}
+    {% for seccion in secciones %}
+      
+      <div class="card">
+        {% if puesto > limit_simp %}
+        
+        <button class="btn btn-link position-relative text-left p-0 sidebar__trigger collapsed" id="node-{{ seccion.id }}" type="button" data-toggle="collapse" data-target="#node-{{ seccion.id }}-Target" aria-expanded="false" aria-controls="node-{{ seccion.id }}-Target">
+          <div class="sidebar__heading none"> {{ seccion.seccion }} 
+            {% get_status seccion folio_declaracion as status%}
+                    
+            <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  title="{{ status.1 }}"  data-placement="left">{{ status.1 }}{{status.max}}  </div>
+          </div>
+        </button> 
+        {%else%}
+
+          {% if seccion.simp is 1 %}
+        <button class="btn btn-link position-relative text-left p-0 sidebar__trigger collapsed" id="node-{{ seccion.id }}" type="button" data-toggle="collapse" data-target="#node-{{ seccion.id }}-Target" aria-expanded="false" aria-controls="node-{{ seccion.id }}-Target">
+          <div class="sidebar__heading none"> {{ seccion.seccion }} 
+            {% get_status seccion folio_declaracion as status%}
+                    
+            <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  title="{{ status.1 }}"  data-placement="left">{{ status }}{{status.max}}  </div>
+          </div>
+        </button> 
+        {% endif %}
+        {% endif %}       
+        {% with "not-show" as show %}       
+          {% show_menu request.path seccion.seccion as show %}
+          <div id="node-{{ seccion.id }}-Target" class="collapse sidebar__content {{show}}" aria-labelledby="node-{{ seccion.id }}" data-parent="#sidebar-accordion">
+            {% for children in seccion.get_children %}
+              {% if folio_declaracion %}
+                {% with "declaracion:"|add:children.url as url %}
+                  {% if children.parametro != '' %}
+                    {% get_status children folio_declaracion as status %}
+                    
+                    <a href="{% url url folio_declaracion children.parametro %}" class="sidebar__link {{ status.0 }} {% if url|cut:"declaracion:" in request.path %}bgcolor-neutro{%endif%}"><span></span> 
+                      {{children.seccion}}
+                        <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"   data-placement="left" title="{{ status.1 }}">
+                        </div>
+                    </a>
+                  {% else %}
+                    {% get_status children folio_declaracion as status%}
+                    {% if puesto > limit_simp %}
+                      {% if declaracion2.cat_tipos_declaracion_id is 1 %}
+                        <a href="{% url url folio_declaracion %}" class="sidebar__link {% if url|cut:"declaracion:" in request.path %}bgcolor-neutro{%endif%}"><span></span> {{children.seccion}}
+                        <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  data-placement="left" title="{{ status.1 }}">
+                        </div></a>
+                      {% else %}
+                        {% if children.id is not 10 %}
+                          <a href="{% url url folio_declaracion %}" class="sidebar__link {% if url|cut:"declaracion:" in request.path %}bgcolor-neutro{%endif%}"><span></span> {{children.seccion}}
+                          <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  data-placement="left" title="{{ status.1 }}">
+                          </div></a>
+                        {% endif %}
+                      {% endif %}
+                    {% else %}
+                      {% if children.simp is 1 %}
+                        {% if declaracion2.cat_tipos_declaracion_id is 1 %}
+                          <a href="{% url url folio_declaracion %}" class="sidebar__link {% if url|cut:"declaracion:" in request.path %}bgcolor-neutro{%endif%}"><span></span> {{children.seccion}}
+                          <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  data-placement="left" title="{{ status.1 }}">
+                          </div></a>
+                        {% else %}
+                          {% if children.id is not 10 %}
+                            <a href="{% url url folio_declaracion %}" class="sidebar__link {% if url|cut:"declaracion:" in request.path %}bgcolor-neutro{%endif%}"><span></span> {{children.seccion}}
+                            <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  data-placement="left" title="{{ status.1 }}">
+                            </div></a>
+                          {% endif %}
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+
+                  {% endif %}
+                {% endwith %}
+              {% else %}
+                 {%if children.url == 'informacion-general'%}
+                   <a href="#" class="sidebar__link"><span></span>{{children.seccion}}</a>
+                 {% else %}
+                   <a href="#" class="sidebar__link_first"><span></span>{{children.seccion}}</a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+        </div>
+      {% endwith %} 
+    {% endfor %}
+    <!--<div class="card">
+      <button class="btn btn-link position-relative text-left p-0 sidebar__trigger collapsed" id="taxReturn" type="button" data-toggle="collapse" data-target="#taxReturnTarget" aria-expanded="false" aria-controls="taxReturnTarget">
+        <div class="sidebar__heading success"> Declaración fiscal</div>
+      </button>
+      <div id="taxReturnTarget" class="collapse sidebar__content" aria-labelledby="taxReturn" data-parent="#sidebar-accordion">
+        {% if folio_declaracion %}
+          <a href="{% url 'declaracion:declaracion-fiscal' folio_declaracion %}" class="sidebar__link"><span></span>Subir archivo.</a>
+        {%else%}
+          <a href="#" class="sidebar__link"><span></span>Subir archivo.</a>
+        {% endif %}
+      </div>
+    </div>-->
+    <div class="card">
+      <span class="color-alerta fs-75">Nota: Los campos con un asterisco * son obligatorios</span>
+    </div>
+    <div class="card">
+      <div class="card-body bg-transparent border-0" id="progress_card">
+        <h6 id="progress_title" class="text-uppercase text-md">Avance de tu declaración </h6>
+        <div class="progress" id="progress_bar">
+          <div class="progress-bar progress_card" role="progressbar" style="width: {{ avance }}%;" aria-valuenow="{{ avance }}" aria-valuemin="0" aria-valuemax="100">{{ avance }}%</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body bg-transparent border-0" id="progress_card">
+        {% if folio_declaracion %}
+        <div class="btn btn_firmar_declaracion bgcolor-primario">
+            <a class="color-secundario" href="{% url 'declaracion:confirmar-allinone' folio_declaracion %}" style="color:white">Ver resumen de mi declaración</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

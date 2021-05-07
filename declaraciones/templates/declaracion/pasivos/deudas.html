@@ -1,0 +1,261 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Deudas{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include '../../layout/sidebar.html'%}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Pasivos</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">ADEUDOS/PASIVOS(SITUACION ACTUAL)</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 text-uppercase mb-3">1. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">XIV. ADEUDOS/PASIVOS(SITUACION ACTUAL)</span></h2>
+            <p class="leyenda_privados" style="width: 800px;">Todos los datos de los adeudos/pasivos a nombre de la pareja, dependientes económicos y/o terceros o que sean en copropiedad con el declarante no serán públicos</p>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:deudas-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:deudas-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:deudas' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+              {% csrf_token %}
+                    <div class="row">
+                        {% include 'layout/no_aplica.html' %}
+                    </div>
+              {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="TIPO DE OPERACIÓN" titulo_dos="Tipo de acreedor" titulo_tres="Tipo de adeudo" agregar=agregar editar_id=editar_id %}
+
+                    <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12 mb-2">
+                        <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar operación a la deuda del Declarante.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                          {% include 'layout/radiobuttons.html' with field_select=deudas_form.fields.cat_tipos_operaciones field_name=deudas_form.cat_tipos_operaciones otro_name=deudas_form.otra_operacion col=2 col_o=4 %}
+                    </div>
+                    <div class="col-12">
+                        <label class="label-secondary">TIPO DE ADEUDO{% if 'cat_tipos_adeudos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar cualquiera de las siguientes opciones. Se entenderá por crédito personal, aquel obtenido ante una institución de cŕédito o bancaria. Se entenderá por crédito personal aquel obteinido a través de un familiar, amigo y/o familiar conocido del declarante">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                          {% include 'layout/radiobuttons.html' with field_select=deudas_form.fields.cat_tipos_adeudos field_name=deudas_form.cat_tipos_adeudos otro_name=deudas_form.otro_tipo_adeudo col=2 col_o=4 %}
+                    </div>
+                    <div class="col-12">
+                        <label class="label-secondary">TITULAR DEL ADEUDO{% if 'cat_tipos_titulares' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar titular del adeudo.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=deudas_form.fields.cat_tipos_titulares   field_name=deudas_form.cat_tipos_titulares otro_name=deudas_form.otro_titular col=2 col_o=4 tipo='cat_tipos_titulares' campos_privados=campos_privados%}
+                    </div>
+                    <div class="col-md-12"><br></div>
+                     <div class="col-md-8">
+                        <div class="form-group {% if 'numero_cuenta' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-id" class="label-secondary">NUMERO DE CUENTA O CONTRATO{% if 'numero_cuenta' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el número de contrato, cuenta o cualquier dato que permita su identificación, en caso de préstamo personal se indicará no aplica.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field deudas_form.numero_cuenta placeholder="Número de cuenta, contrato o identicador de la deuda"  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-secondary">FECHA DE ADQUISICIÓN DEL ADEUDO/PASIVO{% if 'fecha_generacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar la fecha en que adquirió el adeudo">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <div class="form-row">
+                             {% bootstrap_field deudas_form.fecha_generacion placeholder="Especifique"  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'monto_original' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-monto" class="label-secondary">MONTO ORIGINAL DEL ADEUDO{% if 'monto_original' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Es necesario capturar cantidades sin comas, sin puntos, sin centavos y sin ceros a la isquierda.El monto a reportar será el inicial al adeudo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field deudas_form.monto_original placeholder="Especifique"  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'cat_monedas' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-moneda" class="label-secondary">TIPO DE MONEDA{% if 'cat_monedas' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Tipo de moneda del adeudo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field deudas_form.cat_monedas placeholder="Especifique" field_class="moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'saldo_pendiente' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-saldo" class="label-secondary">SALDO INSOLUTO(SITUACION ACTUAL){% if 'saldo_pendiente' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Monto total pendiente de cobro.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field deudas_form.saldo_pendiente placeholder="Saldo"  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        {% include 'layout/persona_simp.html' with form=tercero_infopersonalvar_form label=" inversión" title="TERCERO" tipo=False %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-rfc" class="label-secondary">RFC DEL TERCERO{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <small class="text-help text-primary">(Si aplica)</small>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field tercero_infopersonalvar_form.rfc placeholder="RFC" field_class='valida_rfc' show_label=False%}
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                        <label class="label-secondary">¿DONDE SE LOCALIZA EL ADEUDO?{% if 'cat_paises' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar donde se encuentra el aduedo.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/nacionalidad.html'  with field=deudas_form.cat_paises pais=True %}
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label class="label-secondary">OTORGANTE DEL CRÉDITO{% if 'cat_tipos_acreedores' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar prestador del adeudo que declare.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <div class="row">
+                            <div class="col-1" style="margin-bottom: 10px;">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary tipo_persona">
+                                    <input {% if not deudas_form.acredor_es_fisica.initial %}checked{% endif %}  {% if deudas_form.acredor_es_fisica.initial == True %}checked{% endif %} type="radio"  id="id-{{deudas_form.acredor_es_fisica.html_name}}-f" value="true" name="{{ deudas_form.acredor_es_fisica.html_name }}" class="custom-control-input pfisica" onchange="radioTPersona(this.value,'{{ deudas_form.acredor_es_fisica.html_name }}')">
+                                    <label class="custom-control-label text-rg" for="id-{{deudas_form.acredor_es_fisica.html_name}}-f">Física</label>
+                                </div>
+                            </div>
+                            <div class="col-1" style="margin-bottom: 10px;">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary tipo_persona">
+                                    <input {% if deudas_form.acredor_es_fisica.initial == False %}checked{% endif %} type="radio" id="id-{{ deudas_form.acredor_es_fisica.html_name }}-m"  value="false" name="{{ deudas_form.acredor_es_fisica.html_name }}" class="custom-control-input pmoral " onchange="radioTPersona(this.value,'{{ deudas_form.acredor_es_fisica.html_name }}')">
+                                    <label class="custom-control-label text-rg" for="id-{{ deudas_form.acredor_es_fisica.html_name }}-m">Moral</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group {% if 'acreedor_nombre' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-monto" class="label-secondary">NOMBRE O RAZON SOCIAL DEL OTORGANTE{% if 'acreedor_nombre' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}<small class="text-help text-primary">(Si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="NOMBRE O RAZON SOCIAL DEL OTORGANTE.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field deudas_form.acreedor_nombre placeholder="Escriba nombre completo o razón social del ente otorgante"  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'acreedor_rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-monto" class="label-secondary">RFC DEL OTORGANTE{% if 'acreedor_rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}<small class="text-help text-primary">(Si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="RFC con homoclave del otorgante.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field deudas_form.acreedor_rfc placeholder="Escriba rfc del ente otorgante" field_class='valida_rfc' show_label=False%}
+                        </div>
+                    </div>
+                </div>
+                <div id="ms_campos_obligatorios"></div>
+                <div class="text-right row-form" style="{% if checked %}display: none;{% endif %}">
+                    <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-primary font-weight-semibold text-uppercase">
+                      Guardar y agregar otra deuda<img src="{% static 'src/img/plus.svg'%}" alt="agregar" class="svg">
+                    </button>
+                </div>
+                <div class="row row-form">
+                     <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-comentarios" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field observaciones_form.observacion  placeholder="ACLARACIONES/OBSERVACIONES"  show_label=False%}
+                        </div>
+                    </div>
+                </div>
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            } 
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='deudas-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

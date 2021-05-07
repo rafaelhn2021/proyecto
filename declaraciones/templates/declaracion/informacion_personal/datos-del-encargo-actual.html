@@ -1,0 +1,239 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Encargo Actual{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include '../../layout//sidebar.html' %}
+        <div class="col-md-9">DATOS DEL EMPLEO, CARGO O COMISIÓN QUE INICIA
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Información personal</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">DATOS DEL EMPLEO, CARGO O COMISIÓN QUE INICIA</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">1. Información personal <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">IV. DATOS DEL EMPLEO, CARGO O COMISIÓN QUE DECLARA</span></h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            <form action="{% url 'declaracion:datos-del-encargo-actual' folio_declaracion %}" method="post" novalidate>
+            {% csrf_token %}
+                <div class="row ">
+                    <div class="col-12 my-2">
+                        <div class="form-group {% if 'cat_tipos_operaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al bien inmueble.">
+                                <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                            </button> {% include 'layout/radiobuttons.html' with field_select=datos_encargo_actual_form.fields.cat_tipos_operaciones field_name=datos_encargo_actual_form.cat_tipos_operaciones otro_name=datos_encargo_actual_form.otro_tipo_operacion col=2 col_o=4 %}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group {% if 'cat_ordenes_gobierno' in campos_privados %}form-group-private{% endif %}">
+                            <label for="nivel-gobierno" class="label-secondary">NIVEL / ORDEN DE GOBIERNO{% if 'cat_ordenes_gobierno' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar el orden de gobierno en el que se encuentra.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="inkfo" class="svg">
+                            </button>
+                            {% include 'layout/radiobuttons.html' with field_select=datos_encargo_actual_form.fields.cat_ordenes_gobierno field_name=datos_encargo_actual_form.cat_ordenes_gobierno otro_name=datos_encargo_actual_form.otro_tipo_operacion col=2 col_o=4 %}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group {% if 'cat_poderes' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">ÁMBITO PÚBLICO{% if 'cat_poderes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la naturaleza jurídica al que pertenece.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% include 'layout/radiobuttons.html' with field_select=datos_encargo_actual_form.fields.cat_poderes  field_name=datos_encargo_actual_form.cat_poderes otro_name=datos_encargo_actual_form.otro_naturalezas_juridicas %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'nombre_ente_publico' in campos_privados %}form-group-private{% endif %}">
+                            <label for="ente-publico" class="label-secondary">NOMBRE ENTE PÚBLICO{% if 'nombre_ente_publico' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el Ente Público al cual se encuentra adcrita la plaza">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                               {% bootstrap_field datos_encargo_actual_form.nombre_ente_publico show_label=False %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'area_adscripcion' in campos_privados %}form-group-private{% endif %}">
+                            <label for="area-adscripcion" class="label-secondary">ÁREA DE ADSCRIPCIÓN{% if 'area_adscripcion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Especificar el nombre de la unidad Administrativa u homóloga superior inmediata a su adscripción.(Superior jerárquico)">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_encargo_actual_form.cat_areas  show_label=False placeholder="Área de adscripción" %}
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group {% if 'cat_puestos' in campos_privados %}form-group-private{% endif %}">
+                            <label for="nombre-cargo" class="label-secondary">EMPLEO, CARGO O COMISIÓN{% if 'cat_puestos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el nombre del empleo, cargo o comisión que aparece en su recibo de nómina, nombramiento, contrato u oficio de comisión">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_encargo_actual_form.cat_puestos show_label=False placeholder="Nombre del empleo, cargo o comisión" %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="label-secondary">¿ESTÁ CONTRATADO POR HONORARIOS?{% if 'honorarios' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar si/no">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <div class="row">
+                            <div class="col-auto">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="honorarios-si" name="datos_encargo_actual-honorarios" class="custom-control-input" value="True" {% if not datos_encargo_actual_form.honorarios.initial %}checked{% endif %}  {% if datos_encargo_actual_form.honorarios.initial == True %}checked{% endif %}>
+                                    <label class="custom-control-label text-rg" for="honorarios-si">Sí</label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="honorarios-no" name="datos_encargo_actual-honorarios" class="custom-control-input" value="False" {% if datos_encargo_actual_form.honorarios.initial == False %}checked{% endif %}>
+                                    <label class="custom-control-label text-rg" for="honorarios-no">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'nivel_encargo' in campos_privados %}form-group-private{% endif %}">
+                            <label for="nivel-cargo" class="label-secondary">NIVEL DEL EMPLEO CARGO O COMISION{% if 'nivel_encargo' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir conforme a lo que señala su recibo de pago, en caso de no encontrarse en la lista desplegable,señalar otro y especificar.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_encargo_actual_form.nivel_encargo  show_label=False placeholder="Nivel de encargo" %}
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label class="label-secondary mb-2">ESPECIFIQUE FUNCION PRINCIPAL{% if 'cat_funciones_principales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar cuál es la función o actividad principal que desempeña en su empleo, cargo o comisión.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                    {% include 'layout/radiobuttons.html' with field_select=datos_encargo_actual_form.fields.cat_funciones_principales  field_name=datos_encargo_actual_form.cat_funciones_principales otro_name=datos_encargo_actual_form.otra_funcion %}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'posesion_inicio' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">FECHA DE TOMA DE POSESIÓN{% if 'posesion_inicio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha en que inició/concluyo el encargo. Ésta deberá coicidir con la que se haya dado de alta/baja en el área de recursos humanos del Ente público correspondiente, ya que dicha fecha es la que se toma en cuenta para contabilizar los sesenta días que prevé la Ley para cumplir con la presentación de la declaración de inicio/conclusión.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_encargo_actual_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'telefono_laboral' in campos_privados %}form-group-private{% endif %}">
+                            <label for="cargo-tel" class="label-secondary">TELEFONO DE OFICINA{% if 'telefono_laboral' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Proporcionar el teléfono laboral y extensión según corresponda">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_encargo_actual_form.telefono_laboral show_label=False placeholder="Teléfono laboral"  field_class="valida_telefono"  %}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group {% if 'telefono_extension' in campos_privados %}form-group-private{% endif %}">
+                            <label for="cargo-tel" class="label-secondary">EXTENSIÓN{% if 'telefono_extension' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Número exterior donde se ubica el encargo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_encargo_actual_form.telefono_extension show_label=False placeholder="Teléfono laboral extensión" %}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <h6>DOMICILIO DEL EMPLEO, CARGO O COMISION
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Proporcionar los datos relativos al lugar en el que labora actualmente.Seleccionado si es en México o el extranjero. En caso de seleccionar México, porporcionar los siguientes datos: calle, número exterior, número interior(si aplica), localidad o colonia, municipio o alcaldía, entidad federativa y código postal. En caso de seleccionar extranjero, proporcionar los siguientes datos: calle, número exterior, número interior(si aplica), ciudad/localidad, estado, provincia y código postal">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                        </h6>
+                    </div>
+                    {% include 'declaracion/direccion.html' with form=domicilio_form campos_privados=campos_privados only=True%}
+                    <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                          <label class="label-secondary mb-2">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                          {% bootstrap_field observaciones_form.observacion show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                </div>
+
+                    <div id="ms_campos_obligatorios"></div>
+
+                    {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>')
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            }
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='datos_encargo_actual-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

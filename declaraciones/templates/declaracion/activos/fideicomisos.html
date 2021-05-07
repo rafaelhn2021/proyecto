@@ -1,0 +1,243 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Fideicomisos{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html'%}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración de intereses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Fideicomisos</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 text-uppercase">2. Declaracion de Intereses <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">VII. Fideicomisos</span></h2>
+            <p class="leyenda_privados" style="width: 800px;">Todos los datos de participación en fideicomisos de la pareja, dependientes económicos no serán públicos</p>
+
+            <p class="text-sm font-italic text-muted font-weight-extralight">Acciones, bonos, valores, títulos, cuentas de ahorro o bancarias o con entidades financieras, fondo de retiro, etc.</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:fideicomisos-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:fideicomisos-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:fideicomisos' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+            {% csrf_token %}
+                {% if aplica %}
+                    <div class="row">
+                      {% include 'layout/no_aplica.html' %}
+                    </div>
+                {% endif %}
+            {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="TIPO DE OPERACIÓN" titulo_dos="TIPO DE FIDEICOMISO" titulo_tres="SECTOR FIDEICOMISO" agregar=agregar editar_id=editar_id %}
+            <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12 mb-2">
+                        <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN del fideicomiso.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                         {% include 'layout/radiobuttons.html' with field_select=fideicomisos_form.fields.cat_tipos_operaciones  field_name=fideicomisos_form.cat_tipos_operaciones otro_name=fideicomisos_form.otra_operacion col=2 col_o=6%}
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="fedeicomiso-nombre" class="label-secondary">PARTICIPACION EN FIDEICOMISOS{% if 'tipo_relacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Dato que identifique el fideicomiso">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field fideicomisos_form.tipo_relacion field_name=fideicomisos_form.tipo_relacion show_label=False %}
+                        </div>
+                    </div>
+                     <div class="col-6 mb-2">
+                        <label class="label-secondary">TIPO DE FIDEICOMISO{% if 'cat_tipos_fideicomisos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Tipo de fideicomiso con marco normativo.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% bootstrap_field fideicomisos_form.cat_tipos_fideicomisos field_name=fideicomisos_form.cat_tipos_fideicomisos show_label=False %}
+
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="fedeicomiso-nombre" class="label-secondary">TIPO DE PARTICIPACION{% if 'cat_tipo_participacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Dato que identifique el fideicomiso">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field fideicomisos_form.cat_tipo_participacion field_name=fideicomisos_form.cat_tipo_participacion show_label=False %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-rfc" class="label-secondary">RFC DEL FIDEICOMISO{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field fideicomisos_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC" %}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group {% if 'fideicomitente' in campos_privados %}form-group-private{% endif %}">
+                            {% include 'layout/persona_simp.html' with form=fideicomitente_form  title="Tipo de persona del FIDEICOMITENTE" label=" del fideicomitente" rfc=True tipo=True nombre=True razon_social=True curp=True tipo=False %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="fideicomitente-rfc" class="label-secondary">RFC de fideicomitente {% if 'rfc_fideicomitente' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                    <small class="text-help text-primary">(Si aplica)</small>
+                                    <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                        <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                    </button>
+                                    {% bootstrap_field fideicomitente_form.rfc   field_class='valida_rfc' show_label=False placeholder="RFC de fideicomitente" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <div class="form-group {% if 'fiduciario' in campos_privados %}form-group-private{% endif %}">
+                            {% include 'layout/persona_simp.html' with form=fiduciario_form  title="Tipo de persona del FIDUCIARIO" label=" del fiduciario" tipo=False nombre=False razon_social=False curp=False %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="fiduciario-rfc" class="label-secondary">RFC de fiduciario{% if 'rfc_fiduciario' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                    <small class="text-help text-primary">(Si aplica)</small>
+                                    <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                        <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                    </button>
+                                    {% bootstrap_field fiduciario_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC de fiduciario" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group {% if 'fideicomisario' in campos_privados %}form-group-private{% endif %}">
+                        {% include 'layout/persona_simp.html' with form=fideicomisario_form  title="Tipo de persona del FIDEICOMISARIO" label=" del fideicomisario" rfc=True  tipo=False nombre=True razon_social=True curp=True %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="fideicomisario-rfc" class="label-secondary">RFC de fideicomisario{% if 'rfc_fideicomisario' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <small class="text-help text-primary">(Si aplica)</small>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field fideicomisario_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC de fideicomisario" %}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="label-secondary">SECTOR PRODUCTIVO AL QUE PERTENECE{% if 'cat_sectores_industria' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar una de las siguientes opciones">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=fideicomisos_form.fields.cat_sectores_industria field_name=fideicomisos_form.cat_sectores_industria col=3 col_o=5 tipo='sector' %}
+                    </div>
+                    <div class="col-md-4">
+                        {% include 'layout/nacionalidad.html' with field=fideicomisos_form.cat_paises form=form label="¿DÓNDE SE LOCALIZA EL FIDEICOMISO?" pais=pais%}
+                    </div>
+
+                    <div class="col-md-12"><br></div>                    
+                </div>
+
+                <div id="ms_campos_obligatorios"></div>
+                <div class="text-right row-form" style="{% if checked %}display: none;{% endif %}">
+                    <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-primary font-weight-semibold text-uppercase">
+                      Guardar y agregar otro fideicomiso<img src="{% static 'src/img/plus.svg'%}" alt="agregar" class="svg">
+                    </button>
+                </div>
+                <div class="row row-form">
+                    <div class="col-12">
+                        <div class="form-group-private mr-4">
+                            <label for="fideicomiso-comentarios" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field observaciones_form.observacion show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                </div>
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            } 
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='fideicomisos-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

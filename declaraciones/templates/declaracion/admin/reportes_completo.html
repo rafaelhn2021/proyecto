@@ -1,0 +1,53 @@
+{% for declaracion in declaraciones %}
+<table class="tg_d_completo">
+  <colgroup>
+    <col style="width: 150px">
+    <col style="width: 150px">
+    <col style="width: 90px">
+    <col style="width: 90px">
+    <col style="width: 90px">
+    <col style="width: 140px">
+    <col style="width: 140px">
+  </colgroup>
+  <tr class="tg_d_completo-hx12">
+    <th colspan="6">{{declaracion.folio|default_if_none:""}}</th>
+    <th style="width: auto; float: right;">{{declaracion.avance|default_if_none:"0"}}%</th>
+  </tr>
+  <tr class="tg_d_completo-km2t">
+    <td>Tipo</td>
+    <td>Estado</td>
+    <td>Patromonial</td>
+    <td>Intereses</td>
+    <td>Fiscal</td>
+    <td>Fecha inicio</td>
+    <td>Fecha cierre</td>
+  </tr>
+  <tr>
+    <td>{{declaracion.cat_tipos_declaracion.codigo|default_if_none:""}}</td>
+    <td>{{declaracion.cat_estatus|default_if_none:""}}</td>
+    <td>{{declaracion.patrimonial_total|default_if_none:"0"}} / {{declaracion.patrimonial|default_if_none:""}}</td>
+    <td>{{declaracion.intereses_total|default_if_none:"0"}} / {{declaracion.intereses|default_if_none:""}}</td>
+    <td>{{declaracion.fiscal_total|default_if_none:"0"}} / {{declaracion.fiscal|default_if_none:""}}</td>
+    <td>{{declaracion.fecha_declaracion|date:"d-m-Y"|default_if_none:"" }}</td>
+    <td>{{declaracion.fecha_recepcion|date:"d-m-Y"|default_if_none:"" }}</td>
+  </tr>
+  <tr class="tg_d_completo-hx12">
+    <td colspan="6">Usuario: {{declaracion.info_personal_fija.nombre_completo|default_if_none:""}}</td>
+    <th style="width: auto; float: right;">{{declaracion.info_personal_fija.usuario.is_active|yesno:"Activo ,No activo "|default_if_none:" " }} </th>
+  </tr>
+  <tr class="tg_d_completo-km2t">
+    <td colspan="3">Puesto</td>
+    <td colspan="2">Correo</td>
+    <td>Ingresó</td>
+    <td>Ultima sesión</td>
+  </tr>
+  <tr>
+    <td colspan="3">{{declaracion.info_personal_fija.puesto|default_if_none:"" }}</td>
+    <td colspan="2">{{declaracion.info_personal_fija.usuario.email|default_if_none:"Sin correo"}}</td>
+    <td>{{declaracion.info_personal_fija.usuario.date_joined|date:"d-m-Y"|default_if_none:""}}</td>
+    <td>{{declaracion.info_personal_fija.usuario.last_login|date:"d-m-Y"|default_if_none:""}}</td>
+  </tr>
+</table>
+<br>
+<br>
+{% endfor %}

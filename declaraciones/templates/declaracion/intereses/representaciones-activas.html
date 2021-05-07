@@ -1,0 +1,252 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Representaciones activas{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html'%}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Intereses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">REPRESENTACIÓN(HASTA LOS ULTIMOS 2 AÑOS)</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">2. INTERESES <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">IV. REPRESENTACIÓN(HASTA LOS ULTIMOS 2 AÑOS)</span></h2>
+            <p class="leyenda_privados" style="width: 800px;">Todos los datos de representación de la pareja, dependientes económicos no serán públicos</p>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:representacion-activa-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:representacion-activa-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:representacion-activa' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+                {% csrf_token %}
+                    <div class="row">
+                      {% include 'layout/no_aplica.html' %}
+                    </div>
+                {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Tipo de representación" titulo_dos="Sector/Industria" titulo_tres="Nombre o razón social de la parte representada" agregar=agregar editar_id=editar_id %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                  <div class="col-12 my-2">
+                    <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                    <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al bien inmueble.">
+                      <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                    </button> 
+                    {% include 'layout/radiobuttons.html' with field_select=representaciones_activas_form.fields.cat_tipos_operaciones field_name=representaciones_activas_form.cat_tipos_operaciones otro_name=representaciones_activas_form.otro_tipo_operacion col=2 col_o=4  tipo='cat_tipos_operaciones' campos_privados=campos_privados%}
+                  </div>
+                  <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="nombre-representacion" class="label-secondary">TIPO DE RELACIÓN{% if 'cat_tipos_relaciones_personales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Nombre o Nombres completos sin abreviaturas ni signos especiales.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=representaciones_activas_form.fields.cat_tipos_relaciones_personales  field_name=representaciones_activas_form.cat_tipos_relaciones_personales otro_name=representaciones_activas_form.otra_representacion col=3 col_o=6 tipo='cat_tipos_relaciones_personales' campos_privados=campos_privados%}
+                      </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                        <label for="" class="label-secondary">TIPO DE REPRESENTACIÓN{% if 'cat_tipos_representaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Tipo de representación.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=representaciones_activas_form.fields.cat_tipos_representaciones  field_name=representaciones_activas_form.cat_tipos_representaciones otro_name=representaciones_activas_form.otra_representacion col=3 col_o=6 tipo='cat_tipos_representaciones' campos_privados=campos_privados%}
+                    </div>
+                  </div>
+                  <div class="col-6">
+                      <label class="label-secondary">FECHA DE INICIO DE LA REPRESENTACION{% if 'fecha_inicio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} </label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar la fecha en que comenzó la representación">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      {% bootstrap_field representaciones_activas_form.fecha_inicio show_label=False %}
+                  </div>
+                  <div class="col-md-6"></div>
+
+                  <div class="col-md-12">
+                    {% include 'layout/persona_simp.html' with form=info_personal_var_form label=" representaciones" title="REPRESENTANTE/REPRESENTADO" tipo=False %}
+                  </div>
+                  <div class="col-md-4">
+                     <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                          <label for="rfc-representada" class="label-secondary">RFC {% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}<small class="text-help text-primary">(si aplica)</small></label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                           {% bootstrap_field info_personal_var_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC de la parte representada" %}
+                      </div>
+                  </div>
+                  <div class="col-md-12"><br></div>
+
+                  <div class="col-4">
+                    <div class="form-group {% if 'pagado' in campos_privados %}form-group-private{% endif %}">
+                      <label class="label-secondary">¿RECIBE REMUNERACIÓN?{% if 'pagado' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar si o no le pagan por representar a alguien.">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      <div class="row" style="margin-left: 10px;height: 36px;">
+                        <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                            <input type="radio" id="no-pagado-act" name="representaciones_activas-pagado" class="custom-control-input" value="False" {% if representaciones_activas_form.pagado.initial == 0 %} checked {% endif %} onclick="accion_hide_disabled_show(this);">
+                            <label class="custom-control-label text-rg" for="no-pagado-act">No</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline radio-secondary"><!--d-flex align-items-center-->
+                            <input type="radio" id="Pagado-act" name="representaciones_activas-pagado" class="custom-control-input" value="True" {% if representaciones_activas_form.pagado.initial == 1 %} checked {% endif %} onclick="accion_hide_disabled_show(this);">
+                            <label class="custom-control-label text-rg" for="Pagado-act">Si</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    <div class="col-md-4">
+                      <div class="form-group {% if 'monto' in campos_privados %}form-group-private{% endif %}">
+                        <label class="label-secondary">MONTO MENSUAL NETO DE SU REPRSENTACION{% if 'monto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Especificar el monto mensual neto, sin centavos, que percibe por su representación.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                          {% bootstrap_field representaciones_activas_form.monto show_label=False placeholder="Monto" %}
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group {% if 'cat_moneda' in campos_privados %}form-group-private{% endif %}">
+                        <label class="label-secondary">MONEDA{% if 'cat_moneda' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Monto.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                          {% bootstrap_field representaciones_activas_form.cat_moneda show_label=False placeholder="Moneda" %}
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label for="ente-publico" class="label-secondary">UBICACIÓN {% if 'cat_pais' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="País de ubicación de la represntación.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {%include 'layout/nacionalidad.html' with field=info_personal_var_form.cat_pais show_label=False%}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                    <div class="form-group {% if 'cat_entidades_federativas' in campos_privados %}form-group-private{% endif %}">
+                      <label for="ente-publico" class="label-secondary">ENTIDAD FEDERATIVA{% if 'cat_entidades_federativas' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Estado de ubicación de la Institución educativa.">
+                        <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      {% bootstrap_field info_personal_var_form.cat_entidades_federativas  field_class='entidad'  show_label=False%}
+                    </div>
+                  </div>
+                    <div class="col-6">
+                    </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                            <label for="tipo-representacion" class="label-secondary">SECTOR PRODUCTIVO AL QUE PERTENECE{% if 'cat_sectores_industria' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir el sector al que pertenece">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                           {% include 'layout/radiobuttons.html' with field_select=info_personal_var_form.fields.cat_sectores_industria  field_name=info_personal_var_form.cat_sectores_industria otro_name=info_personal_var_form.otro_sector col=4 col_o=4 tipo='cat_sectores_industria' campos_privados=campos_privados %}
+                        </div>
+                    </div>
+                   </div>
+                   <div id="ms_campos_obligatorios"></div>
+                   <div class="col-12 text-right row-form"  style="{% if checked %}display: none;{% endif %}">
+                     <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-success font-weight-semibold text-uppercase">
+                       Guardar y agregar otra representación activa
+                         <img src="/static/src/img/plus.svg" alt="agregar" class="svg">
+                     </button>
+                    </div>
+                    <div class="row row-form">
+                      <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label for="observaciones" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field observaciones_form.observacion show_label=False placeholder="Aclaraciones / ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                      </div>
+                    </div>
+                    {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            } 
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='representaciones_activas-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

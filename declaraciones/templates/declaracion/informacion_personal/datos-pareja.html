@@ -1,0 +1,473 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Datos pareja{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Información personal</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">DATOS DE LA PAREJA</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 text-uppercase mb-3">1. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">VI. DATOS DE LA PAREJA</span></h2>
+
+            
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+
+            <form action="{% url 'declaracion:datos-pareja' folio_declaracion %}" method="post" novalidate>
+                {% csrf_token %}
+                <div class="row">
+                  {% include 'layout/no_aplica.html' %}
+                </div>
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12 my-2">
+                        <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al bien inmueble.">
+                            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                        </button> {% include 'layout/radiobuttons.html' with field_select=datos_pareja_form.fields.cat_tipos_operaciones field_name=datos_pareja_form.cat_tipos_operaciones otro_name=datos_pareja_form.otro_tipo_operacion col=2 col_o=4 %}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'nombres' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-nombre" class="label-secondary">NOMBRE(S){% if 'nombres' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Nombre(S) completos del cónyuge o dependiente económico, sin abreviaturas y preferentemente sin acentos  ni  signos  especiales.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var_form.nombres show_label=False %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'apellido1' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-apellido1" class="label-secondary">PRIMER APELLIDO{% if 'apellido1' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Apellido que se presenta en la primer posición después del nombre o nombres de pila en el acta de nacimiento.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var_form.apellido1 show_label=False placeholder="PRIMER APELLIDO" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'apellido2' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-apellido2" class="label-secondary">SEGUNDO APELLIDO{% if 'apellido2' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Apellido que se presenta en la segunda posición después del nombre o nombres de pila en el acta de nacimiento.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var_form.apellido2  show_label=False placeholder="SEGUNDO APELLIDO" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'fecha_nacimiento' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-fecha_nacimiento" class="label-secondary">FECHA DE NACIMIENTO{% if 'fecha_nacimiento' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha de nacimiento de la Pareja en el formato de día, mes y año.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var_form.fecha_nacimiento show_label=False placeholder="Fecha de nacimiento" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'curp' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-curp" class="label-secondary">CURP <small class="text-help text-primary">(si aplica)</small>{% if 'curp' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 18 caracteres de la Clave Unica de Registro de Población.En caso de no contar con ella, podrá consultarla en la página de la Secretaría de gobierno, en el apartado de Trámites">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var_form.curp  field_class='valida_curp'  show_label=False placeholder="CURP" %}
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-rfc" class="label-secondary">RFC{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} <small class="text-help text-primary">(si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC" %}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="label-secondary">RELACIÓN CON EL DECLARANTE{% if 'cat_tipos_relaciones_personales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar el tipo de relación entre las siguientes opciones">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=datos_pareja_form.fields.cat_tipos_relaciones_personales  field_name=datos_pareja_form.cat_tipos_relaciones_personales otro_name=datos_pareja_form.otro_poder col_o=3 col=3 tipo='cat_tipos_relaciones_personales' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-md-12"><br></div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'es_extranjero' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">¿ES CIUDADANO EXTRANJERO?{% if 'es_extranjero' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Marcar es extranjero o no.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                        <input type="radio" id="extranjero-si" name="datos_pareja-es_extranjero" value="True" class="custom-control-input" {% if not datos_pareja_form.es_extranjero.initial %}checked{% endif %}  {% if datos_pareja_form.es_extranjero.initial == True %}checked{% endif %}>
+                                        <label class="custom-control-label text-rg" for="extranjero-si">Sí</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                        <input type="radio" id="extranjero-no" name="datos_pareja-es_extranjero" value="False" class="custom-control-input" {% if datos_pareja_form.es_extranjero.initial == False %}checked{% endif %}>
+                                        <label class="custom-control-label text-rg" for="extranjero-no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'ingresos_propios' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">¿ES DEPENDIENTE ECONÓMICO?{% if 'ingresos_propios' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Si la manutención depende principalemente de los ingresos de la persona servidora pública Declarante, señalará sí, en caso contrario señalará no.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                        <input type="radio" id="ingresos-si" name="datos_pareja-ingresos_propios" value="True" class="custom-control-input" {% if not datos_pareja_form.ingresos_propios.initial %}checked{% endif %}  {% if datos_pareja_form.ingresos_propios.initial == True %}checked{% endif %}>
+                                        <label class="custom-control-label text-rg" for="ingresos-si">Sí</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                        <input type="radio" id="ingresos-no" name="datos_pareja-ingresos_propios" value="False" class="custom-control-input" {% if datos_pareja_form.ingresos_propios.initial == False %}checked{% endif %}>
+                                        <label class="custom-control-label text-rg" for="ingresos-no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'ingresos_propios' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">¿HABITA EN EL DOMICILIO DE DECLARANTE?{% if 'habita_domicilio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar si no la pareja vive en el domicilio del Declarante">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                        <input type="radio" id="mismo-domicilio-si" name="datos_pareja-habita_domicilio" value="True" class="custom-control-input" {% if not datos_pareja_form.habita_domicilio.initial %}checked{% endif %}  {% if datos_pareja_form.habita_domicilio.initial == True %}checked{% endif %} >
+                                        <label class="custom-control-label text-rg" for="mismo-domicilio-si">Sí</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                        <input type="radio" id="mismo-domicilio-no" name="datos_pareja-habita_domicilio" value="False" class="custom-control-input" {% if datos_pareja_form.habita_domicilio.initial == False %}checked{% endif %}>
+                                        <label class="custom-control-label text-rg" for="mismo-domicilio-no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br>
+                        <h6>
+                            Domicilio
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En caso de que la pareja, no viva en el domicilio del Declarante, indicar si vive en México o en el extranjero.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                        </h6>
+                    </div>
+
+                    {% include 'declaracion/direccion.html' with form=domicilio_form only=True%}
+
+                    <div class="col-md-6">
+                        <div class="form-group {% if 'actividadLaboral' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">ACTIVIDAD LABORAL{% if 'actividadLaboral' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar si la pareja se encuentra trabajando actualmente, seleccionando alguno de los siguiente+ campos">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field datos_pareja_form.actividadLaboral show_label=False placeholder="RFC" %}
+                        </div>
+                    </div>
+                    <div class="row" id="datos-pareja-sector-publico" style="margin-left: 2px;{% if datos_pareja_form.actividadLaboral.initial != 1 %}display: none;{% endif %}">
+                        <div class="col-md-12 mb-2">
+                            <h6>
+                                SECTOR PÚBLICO
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Al seleccionar actividad laboral público llene los siguientes campos.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                            </h6>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                         <div class="form-group">
+                            <label for="experiencia-nivel" class="label-secondary">NIVEL / ORDEN DE GOBIERNO{% if 'cat_ordenes_gobierno' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar el orden de gobierno en el qie se encuentra">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% include 'layout/radiobuttons.html' with field_select=actividad_laboral_sector_form.fields.cat_ordenes_gobierno  field_name=actividad_laboral_sector_form.cat_ordenes_gobierno otro_name=actividad_laboral_sector_form.otro_poder col_o=4 col=2 tipo='cat_ordenes_gobierno' campos_privados=campos_privados %}
+                         </div>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label class="label-secondary">ÁMBITO PÚBLICO{% if 'cat_poderes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir la naturaleza jurídica como: Ejecutivo, Legislativo, Judicial, órgano constitucional autónomo">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% include 'layout/radiobuttons.html' with field_select=actividad_laboral_sector_form.fields.cat_poderes  field_name=actividad_laboral_sector_form.cat_poderes otro_name=actividad_laboral_sector_form.otro_poder col_o=4 col=2 tipo='cat_poderes' campos_privados=campos_privados %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'nombre_ente_publico' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">NOMBRE DEL ENTE PÚBLICO{% if 'nombre_ente_publico' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el Ente público al cual se encuentra adscrita la plaza">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                <input type="text" name="datos_encargo_actual-nombre_ente_publico"{% if actividad_laboral_sector_form.nombre_ente_publico.initial %}value="{{actividad_laboral_sector_form.nombre_ente_publico.initial}}"{% endif %} maxlength="300"  class="form-control" placeholder="Nombre ente publico" title="" id="id_datos_encargo_actual-nombre_ente_publico">
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'area_adscripcion' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">ÁREA DE ADSCRIPCIÓN{% if 'area_adscripcion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Especificar el nombre de la Unidad Administrativa u homóloga superior inmediata en la que está adscrito">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.area_adscripcion  show_label=False %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'empleo_cargo_comision' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">EMPLEO,CARGO O COMISIÓN{% if 'empleo_cargo_comision' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el nombre del empleo, cargo o comisión que se estableció es su recibo de nómina, nombramiento, contrato u oficio de comisión.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.empleo_cargo_comision  show_label=False %}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="label-secondary mb-2">FUNCIONES PRINCIPALES{% if 'cat_funciones_principales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar cual es la función principal que desempeña su Pareja">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% include 'layout/radiobuttons.html' with field_select=actividad_laboral_sector_form.fields.cat_funciones_principales  field_name=actividad_laboral_sector_form.cat_funciones_principales otro_name=actividad_laboral_sector_form.otra_funcion tipo='cat_funciones_principales' campos_privados=campos_privados %}
+                        </div>
+                        <div class="col-md-12"><br></div>
+                        <div class="col-3">
+                            <div class="form-group {% if 'salarioMensualNeto' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">SALARIO MENSUAL NETO{% if 'salarioMensualNeto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Deberá especificar el monto mensual neto, sin centavos, que percibe el dependiente">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+
+                                <input type="number" name="datos_encargo_actual-salarioMensualNetoPublico" class="form-control" placeholder="Salario mensual neto" title="" id="id_datos_encargo_actual-salarioMensualNetoPublico" value="{{actividad_laboral_sector_form.salarioMensualNeto.initial}}">
+
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group {% if 'moneda' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">MONEDA{% if 'moneda' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir la opción estatal (local)">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.moneda show_label=False placeholder="Moneda" %}
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group {% if 'posesion_inicio' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">FECHA DE INGRESO AL EMPLEO{% if 'posesion_inicio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha en que inició empleo, cargo o comisón">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="datos-pareja-sector-privado" style="margin-left: 2px;{% if datos_pareja_form.actividadLaboral.initial != 2 %}display: none;{% endif %}">
+                        <div class="col-md-12 mb-2">
+                            <h6>
+                                SECTOR PRIVADO
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Al seleccionar actividad laboral privado llene los siguientes campos.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                            </h6>
+                        </div>
+                         <div class="col-md-4">
+                            <div class="form-group {% if 'nombreEmpresaSociedadAsociacion' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">NOMBRE EMPRESA/SOCIEDAD/ASOCIACIÓN{% if 'nombreEmpresaSociedadAsociacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Proporcionar el nombre de la empresa, sociedad o asiciación en la que labora">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.nombreEmpresaSociedadAsociacion  show_label=False placeholder="Nombre de la empresa"%}
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                            <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                                <label for="relacion-rfc" class="label-secondary">RFC <small class="text-help text-primary">(si aplica)</small></label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC" %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'ocupacion_girocomercial' in campos_privados %}form-group-private{% endif %}">
+                                <label for="ocupacion" class="label-secondary">EMPLEO O CARGO{% if 'rfc' in ocupacion_girocomercial %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Proporcionar el nombre del puesto que desempeña">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field info_personal_var_form.ocupacion_girocomercial  show_label=False placeholder="Ocupación / Profesión" %}
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group {% if 'posesion_inicio' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">FECHA DE INGRESO AL EMPLEO{% if 'posesion_inicio' in ocupacion_girocomercial %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir fecha en la que asumió el cargo">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                            </div>
+                        </div>
+                         <div class="col-4">
+                            <div class="form-group {% if 'salarioMensualNeto' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">SALARIO MENSUAL NETO{% if 'salarioMensualNeto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Especificar el monto mensual neto, sin centavos que percibe la pareja">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+
+                                <input type="number" name="datos_encargo_actual-salarioMensualNetoPrivado" class="form-control" placeholder="Salario mensual neto" title="" id="id_datos_encargo_actual-salarioMensualNetoPrivado" value="{{actividad_laboral_sector_form.salarioMensualNeto.initial}}">
+
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group {% if 'moneda' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">MONEDA{% if 'moneda' in ocupacion_girocomercial %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar moneda">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field actividad_laboral_sector_form.moneda show_label=False placeholder="Moneda" %}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group {% if 'proveedor_contratista' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary">¿ES PROVEEDOR O CONTRATISTA DE GOBIERNO?{% if 'proveedor_contratista' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar si o no la pareja vende o presta algún servicio al gobierno">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                            <input type="radio" id="proveedor-gobierno-si" name="datos_pareja-proveedor_contratista" value="True" class="custom-control-input" {% if not datos_pareja_form.proveedor_contratista.initial %}checked{% endif %}  {% if datos_pareja_form.proveedor_contratista.initial == True %}checked{% endif %}>
+                                            <label class="custom-control-label text-rg" for="proveedor-gobierno-si">Si</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                            <input type="radio" id="proveedor-gobierno-no" name="datos_pareja-proveedor_contratista" value="False" class="custom-control-input" {% if datos_pareja_form.proveedor_contratista.initial == False %}checked{% endif %}>
+                                            <label class="custom-control-label text-rg" for="proveedor-gobierno-no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12"><br></div>
+                        <div class="col-12 mb-2">
+                            <label class="label-secondary mb-2">SECTOR AL QUE PERTENECE{% if 'cat_sectores_industria' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Sector o Área laboral al que pertenece el encargo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% include 'layout/radiobuttons.html' with field_select=info_personal_var_form.fields.cat_sectores_industria  field_name=info_personal_var_form.cat_sectores_industria otro_name=info_personal_var_form.otro_sector col=4 col_o=4 tipo='cat_sectores_industria' campos_privados=campos_privados %}
+                        </div>
+                    </div>
+
+                    <div class="row" id="datos-pareja-otro" style="margin-left: 2px;{% if datos_pareja_form.actividadLaboral.initial != 6 %}display: none;{% endif %}">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-group {% if 'otra_actividadLaboral' in campos_privados %}form-group-private{% endif %}">
+                                <label for="experiencia-nivel" class="label-secondary">Otro</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indique otro">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field datos_pareja_form.otra_actividadLaboral show_label=False placeholder='Especifique'%}
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-12 mb-2">
+                        <div class="form-group {% if 'salarioMensualNeto' in campos_privados %}form-group-private{% endif %}">
+                            <label for="relacion-comentarios" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field observaciones_form.observacion show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                </div>
+                <div id="ms_campos_obligatorios"></div>
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>')
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            }
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='var-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

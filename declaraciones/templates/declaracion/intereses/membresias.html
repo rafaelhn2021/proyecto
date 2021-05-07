@@ -1,0 +1,242 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Toma de decisiones{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        {% include 'layout/sidebar.html'%}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Intereses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Participación toma de decisiones</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">2. INTERESES <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">II. Participación toma de decisiones</span></h2>
+            <p class="leyenda_privados" style="width: 800px;">Todos los datos de la participación en alguna de estas instituciones de la pareja, dependientes económicos no serán públicos</p>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:membresias-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:membresias-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:membresias' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+                {% csrf_token %}
+                  <div class="row">
+                    {% include 'layout/no_aplica.html' %}
+                  </div>
+                {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Nombre de la institución" titulo_dos="Tipo de institución" titulo_tres="Sector/Industria" agregar=agregar editar_id=editar_id %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                  <div class="col-12 my-2">
+                    <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                    <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al bien inmueble."><img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                    </button> {% include 'layout/radiobuttons.html' with field_select=membresia_form.fields.cat_tipos_operaciones field_name=membresia_form.cat_tipos_operaciones otro_name=membresia_form.otro_tipo_operacion col=2 col_o=4 tipo='cat_tipos_operaciones' campos_privados=campos_privados %}
+                  </div>
+
+                  <div class="col-md-12" >
+                      <label  class="label-secondary" >RELACION {% if 'tipoRelacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar quien tiene participación en la empresa, sociedad o asociación. ">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      {% include 'layout/radiobuttons.html' with field_select=membresia_form.fields.tipoRelacion field_name=membresia_form.tipoRelacion otro_name=membresia_form.otra_relacion_familiar otrof_name=membresia_form.otra_relacion col=2 col_o=3 tipo='tipoRelacion' campos_privados=campos_privados%}
+                  </div>
+
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label for="nombre-menbresia" class="label-secondary">TIPO DE INSTITUCIÓN{% if 'cat_tipos_instituciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="SEñalar el catálogo de las siguientes">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                      </div>
+                  </div>
+                <div class="col-md-12">
+                  {% include 'layout/radiobuttons.html' with field_select=membresia_form.fields.cat_tipos_instituciones  field_name=membresia_form.cat_tipos_instituciones otro_name=membresia_form.otras_instituciones col=2 col_o=4 tipo='cat_tipos_instituciones' campos_privados=campos_privados %}
+                </div>
+                  <div class="col-md-6">
+                      <div class="form-group {% if 'nombre_institucion' in campos_privados %}form-group-private{% endif %}">
+                          <label for="nombre-institucion" class="label-secondary">NOMBRE DE LA INSTITUCIÓN{% if 'nombre_institucion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Proporcionar la denominación o razón social de la instución, tal y como se encuentra registrada formalmente.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                          {% bootstrap_field membresia_form.nombre_institucion show_label=False placeholder="Nombre de la intitución" %}
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                          <label for="nombre-institucion" class="label-secondary">RFC DE LA INSTITUCIÓN{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Denominación o razón social de la institución.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                          {% bootstrap_field membresia_form.rfc show_label=False placeholder="RFC de la institución" field_class='valida_rfc'%}
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group {% if 'puesto_rol' in campos_privados %}form-group-private{% endif %}">
+                          <label for="puesto-rol" class="label-secondary">PUESTO/ROL{% if 'puesto_rol' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Indicar cargo del Declarante.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                          {% bootstrap_field membresia_form.puesto_rol show_label=False placeholder="Puesto/Rol" %}
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <label class="label-secondary">FECHA DE INICIO DE PARTICIPACION DENTRO DE LA INSTITUCION{% if 'fecha_inicio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} </label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      <div class="form-row">
+                          {% bootstrap_field membresia_form.fecha_inicio show_label=False placeholder="Fecha de inicio" %}
+                      </div>
+                  </div>
+                   <div class="col-md-6">
+                      <div class="form-group {% if 'monto' in campos_privados %}form-group-private{% endif %}">
+                        <label class="label-secondary">¿RECIBE REMUNERACIÓN POR SU PARTICIPACIÓN?{% if 'pagado' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} </label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Recibe remuneración o no.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <div class="row">
+                            <div class="col-auto col-3">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="no-pagado" name="membresia-pagado" value="False" class="custom-control-input" {% if membresia_form.pagado.initial == False %} checked {% endif %} onclick="accion_hide_disabled_show(this);" >
+                                    <label class="custom-control-label text-rg" for="no-pagado">No</label>
+                                </div>
+                            </div>
+                            <div class="col-auto col-3">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary d-flex align-items-center">
+                                    <input type="radio" id="Pagado" name="membresia-pagado" value="True" class="custom-control-input" {% if membresia_form.pagado.initial == True %} checked {% endif %} onclick="accion_hide_disabled_show(this);">
+                                    <label class="custom-control-label text-rg" for="Pagado">Si</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                              {% bootstrap_field membresia_form.monto show_label=False placeholder="Monto mensual neto" %}
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-6">
+                      <div class="form-group {% if 'moneda' in campos_privados %}form-group-private{% endif %}">
+                          <label for="moneda" class="label-secondary">MONEDA{% if 'moneda' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Indicar moneda">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                          {% bootstrap_field membresia_form.moneda show_label=False placeholder="Moneda de lo pagado" %}
+                      </div>
+                  </div> 
+                  <div class="col-md-6">
+                      <label class="label-secondary mb-2">UBICACIÓN.{% if 'cat_pais' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Domicilio.">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      {% include 'layout/nacionalidad.html' with field=domicilio_form.cat_pais form=form label="Lugar donde se ubica" pais=pais%}
+                  </div>
+                  <div class="col-md-6">
+                      <label class="label-secondary mb-2">ENTIDAD FEDERATIVA.{% if 'cat_entidades_federativas' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                      <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="Domicilio.">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                      </button>
+                      {% bootstrap_field domicilio_form.cat_entidades_federativas show_label=False placeholder="Entidad federativa" %}
+                  </div>
+                </div>
+                <div id="ms_campos_obligatorios"></div>
+                <div class="col-12 text-right row-form"  style="{% if checked %}display: none;{% endif %}">
+                    <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-primary font-weight-semibold text-uppercase">
+                      Guardar y agregar otra participación
+                        <img src="{% static 'src/img/plus.svg'%}" alt="agregar" class="svg">
+                    </button>
+                </div>
+                <div class="row row-form">
+                   <div class="col-12">
+                       <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                          <label for="observaciones" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  tabindex="9999" title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                          {% bootstrap_field observaciones_form.observacion placeholder="ACLARACIONES/OBSERVACIONES" show_label=False %}
+                      </div>
+                  </div>
+                </div>
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            } 
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='membresia-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

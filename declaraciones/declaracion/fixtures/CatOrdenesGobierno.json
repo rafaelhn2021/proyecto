@@ -1,0 +1,3 @@
+[{"model": "declaracion.catordenesgobierno", "pk": 1, "fields": {"orden_gobierno": "Federal", "created_at": "2019-03-12T00:00:00Z", "updated_at": "2019-03-12T00:00:00Z", "default": 0, "orden": 1, "codigo": "FEDERAL"}},
+ {"model": "declaracion.catordenesgobierno", "pk": 2, "fields": {"orden_gobierno": "Estatal", "created_at": "2019-03-12T00:00:00Z", "updated_at": "2019-03-12T00:00:00Z", "default": 0, "orden": 1, "codigo": "ESTATAL"}},
+ {"model": "declaracion.catordenesgobierno", "pk": 3, "fields": {"orden_gobierno": "Municipal alcaldia", "created_at": "2019-03-12T00:00:00Z", "updated_at": "2019-03-12T00:00:00Z", "default": 0, "orden": 1, "codigo": "MUNICIPAL_ALCALDIA"}}]

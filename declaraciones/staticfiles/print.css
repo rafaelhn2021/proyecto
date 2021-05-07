@@ -1,0 +1,26 @@
+.pHide {
+	visibility: visible;
+}
+
+.pShow {
+	visibility: hidden;
+}
+
+@media print {
+	.pHide {
+		visibility: hidden;
+	}
+
+	.pShow {
+		visibility: visible;
+	}
+
+	#Header, #Footer { display: none !important; }
+	
+	@page {
+	  size: A4;
+	  margin-bottom: 10%;
+	  margin-top: 10%; 
+	}
+}
+

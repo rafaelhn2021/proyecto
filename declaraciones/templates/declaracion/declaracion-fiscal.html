@@ -1,0 +1,73 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Declaración fiscal{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9">
+        	<nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Información personal</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Información general</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaracion fiscal</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">1. Subir archivo <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">I. Subir archivo PDF correspondiente</span></h2>
+            {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Archivo guardado" fiscal="fiscal"%}
+            <form action="{% url 'declaracion:declaracion-fiscal' folio_declaracion %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ declaracion }}
+                <div class="row">
+                  {% include 'layout/no_aplica.html' %}
+                  {{ prueba }}
+                </div>
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    {% if subir_archivo %}
+                   
+                    <div class="col-md-12">
+                        <div class="file-upload">
+                          <div class="image-upload-wrap" id="image-upload-wrap-pdf">
+                            <input class="file-upload-input" type='file' name="declaracion_fiscal-archivo_pdf" id="id_declaracion_fiscal-archivo_pdf" onchange="readURL(this);" accept=".pdf" tipo="pdf"/>
+                            <div class="drag-text">
+                              <h3>Arrastre y suelte el archivo <b>PDF</b> aquí</h3>
+                            </div>
+                          </div>
+                          <div class="file-upload-content" id="file-upload-content-pdf">
+                            <img class="file-upload-image" src="{% static 'src/img/pdf_bn.png'%}" alt="Archivo PDF"/>
+                            <div class="image-title-wrap">
+                              <button type="button" onclick="removeUpload('pdf')" class="btn btn-outline-primary text-uppercase font-weight-bold">Eliminar<br>  <span class="image-title" id="image-title-pdf">Archivo</span></button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="col-md-6">
+                        <div class="file-upload">
+                          <div class="image-upload-wrap" id="image-upload-wrap-xml">
+                            <input class="file-upload-input" type='file' name="declaracion_fiscal-archivo_xml" id="id_declaracion_fiscal-archivo_xml" onchange="readURL(this);" accept=".xml" tipo="xml"/>
+                            <div class="drag-text">
+                              <h3>Arrastre y suelte el archivo <b>XML</b> aquí</h3>
+                            </div>
+                          </div>
+                          <div class="file-upload-content" id="file-upload-content-xml">
+                            <img class="file-upload-image" src="{% static 'src/img/xml_bn.png'%}" alt="Archivo XML"/>
+                            <div class="image-title-wrap">
+                              <button type="button" onclick="removeUpload('xml')" class="btn btn-outline-primary text-uppercase font-weight-bold">Eliminar<br>  <span class="image-title" id="image-title-xml">Archivo</span></button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>-->
+                    {% endif %}
+
+                </div>
+                 {% include 'layout/guardar.html' %}
+                  <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

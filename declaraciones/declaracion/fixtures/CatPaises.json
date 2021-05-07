@@ -1,0 +1,2978 @@
+[
+  {
+    "model": "declaracion.catpaises",
+    "pk": 1,
+    "fields": {
+      "pais": "Afganistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 2,
+    "fields": {
+      "pais": "Albania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 3,
+    "fields": {
+      "pais": "Alemania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "DE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 4,
+    "fields": {
+      "pais": "Andorra",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 5,
+    "fields": {
+      "pais": "Angola",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 6,
+    "fields": {
+      "pais": "Anguila",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 7,
+    "fields": {
+      "pais": "Antártida",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AQ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 8,
+    "fields": {
+      "pais": "Antigua y Barbuda",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 9,
+    "fields": {
+      "pais": "Arabia Saudita",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 10,
+    "fields": {
+      "pais": "Argelia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "DZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 11,
+    "fields": {
+      "pais": "Argentina",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 12,
+    "fields": {
+      "pais": "Armenia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 13,
+    "fields": {
+      "pais": "Aruba",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 14,
+    "fields": {
+      "pais": "Australia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 15,
+    "fields": {
+      "pais": "Austria",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 16,
+    "fields": {
+      "pais": "Azerbaiyán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 17,
+    "fields": {
+      "pais": "Bélgica",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 18,
+    "fields": {
+      "pais": "Bahamas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 19,
+    "fields": {
+      "pais": "Bahrein",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 20,
+    "fields": {
+      "pais": "Bangladesh",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 21,
+    "fields": {
+      "pais": "Barbados",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BB"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 22,
+    "fields": {
+      "pais": "Belice",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 23,
+    "fields": {
+      "pais": "Benín",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BJ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 24,
+    "fields": {
+      "pais": "Bhután",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 25,
+    "fields": {
+      "pais": "Bielorrusia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 26,
+    "fields": {
+      "pais": "Birmania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 27,
+    "fields": {
+      "pais": "Bolivia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 28,
+    "fields": {
+      "pais": "Bosnia y Herzegovina",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 29,
+    "fields": {
+      "pais": "Botsuana",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 30,
+    "fields": {
+      "pais": "Brasil",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 31,
+    "fields": {
+      "pais": "Brunéi",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 32,
+    "fields": {
+      "pais": "Bulgaria",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 33,
+    "fields": {
+      "pais": "Burkina Faso",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 34,
+    "fields": {
+      "pais": "Burundi",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 35,
+    "fields": {
+      "pais": "Cabo Verde",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CV"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 36,
+    "fields": {
+      "pais": "Camboya",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 37,
+    "fields": {
+      "pais": "Camerún",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 38,
+    "fields": {
+      "pais": "Canadá",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 39,
+    "fields": {
+      "pais": "Chad",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 40,
+    "fields": {
+      "pais": "Chile",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 41,
+    "fields": {
+      "pais": "China",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 42,
+    "fields": {
+      "pais": "Chipre",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 43,
+    "fields": {
+      "pais": "Ciudad del Vaticano",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 44,
+    "fields": {
+      "pais": "Colombia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 45,
+    "fields": {
+      "pais": "Comoras",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 46,
+    "fields": {
+      "pais": "República del Congo",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 47,
+    "fields": {
+      "pais": "República Democrática del Congo",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 48,
+    "fields": {
+      "pais": "Corea del Norte",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KP"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 49,
+    "fields": {
+      "pais": "Corea del Sur",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 50,
+    "fields": {
+      "pais": "Costa de Marfil",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 51,
+    "fields": {
+      "pais": "Costa Rica",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 52,
+    "fields": {
+      "pais": "Croacia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "HR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 53,
+    "fields": {
+      "pais": "Cuba",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 54,
+    "fields": {
+      "pais": "Curazao",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 55,
+    "fields": {
+      "pais": "Dinamarca",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "DK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 56,
+    "fields": {
+      "pais": "Dominica",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "DM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 57,
+    "fields": {
+      "pais": "Ecuador",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "EC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 58,
+    "fields": {
+      "pais": "Egipto",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "EG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 59,
+    "fields": {
+      "pais": "El Salvador",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SV"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 60,
+    "fields": {
+      "pais": "Emiratos Árabes Unidos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 61,
+    "fields": {
+      "pais": "Eritrea",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ER"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 62,
+    "fields": {
+      "pais": "Eslovaquia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 63,
+    "fields": {
+      "pais": "Eslovenia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 64,
+    "fields": {
+      "pais": "España",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ES"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 65,
+    "fields": {
+      "pais": "Estados Unidos de América",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "US"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 66,
+    "fields": {
+      "pais": "Estonia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "EE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 67,
+    "fields": {
+      "pais": "Etiopía",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ET"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 68,
+    "fields": {
+      "pais": "Filipinas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 69,
+    "fields": {
+      "pais": "Finlandia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "FI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 70,
+    "fields": {
+      "pais": "Fiyi",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "FJ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 71,
+    "fields": {
+      "pais": "Francia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "FR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 72,
+    "fields": {
+      "pais": "Gabón",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 73,
+    "fields": {
+      "pais": "Gambia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 74,
+    "fields": {
+      "pais": "Georgia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 75,
+    "fields": {
+      "pais": "Ghana",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 76,
+    "fields": {
+      "pais": "Gibraltar",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 77,
+    "fields": {
+      "pais": "Granada",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 78,
+    "fields": {
+      "pais": "Grecia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 79,
+    "fields": {
+      "pais": "Groenlandia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 80,
+    "fields": {
+      "pais": "Guadalupe",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GP"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 81,
+    "fields": {
+      "pais": "Guam",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 82,
+    "fields": {
+      "pais": "Guatemala",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 83,
+    "fields": {
+      "pais": "Guayana Francesa",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 84,
+    "fields": {
+      "pais": "Guernsey",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 85,
+    "fields": {
+      "pais": "Guinea",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 86,
+    "fields": {
+      "pais": "Guinea Ecuatorial",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GQ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 87,
+    "fields": {
+      "pais": "Guinea-Bissau",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 88,
+    "fields": {
+      "pais": "Guyana",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 89,
+    "fields": {
+      "pais": "Haití",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "HT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 90,
+    "fields": {
+      "pais": "Honduras",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "HN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 91,
+    "fields": {
+      "pais": "Hong kong",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "HK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 92,
+    "fields": {
+      "pais": "Hungría",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "HU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 93,
+    "fields": {
+      "pais": "India",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 94,
+    "fields": {
+      "pais": "Indonesia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ID"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 95,
+    "fields": {
+      "pais": "Irán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 96,
+    "fields": {
+      "pais": "Irak",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IQ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 97,
+    "fields": {
+      "pais": "Irlanda",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 98,
+    "fields": {
+      "pais": "Isla Bouvet",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BV"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 99,
+    "fields": {
+      "pais": "Isla de Man",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 100,
+    "fields": {
+      "pais": "Isla de Navidad",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CX"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 101,
+    "fields": {
+      "pais": "Isla Norfolk",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 102,
+    "fields": {
+      "pais": "Islandia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 103,
+    "fields": {
+      "pais": "Islas Bermudas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 104,
+    "fields": {
+      "pais": "Islas Caimán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 105,
+    "fields": {
+      "pais": "Islas Cocos (Keeling)",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 106,
+    "fields": {
+      "pais": "Islas Cook",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 107,
+    "fields": {
+      "pais": "Islas de Åland",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AX"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 108,
+    "fields": {
+      "pais": "Islas Feroe",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "FO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 109,
+    "fields": {
+      "pais": "Islas Georgias del Sur y Sandwich del Sur",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 110,
+    "fields": {
+      "pais": "Islas Heard y McDonald",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "HM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 111,
+    "fields": {
+      "pais": "Islas Maldivas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MV"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 112,
+    "fields": {
+      "pais": "Islas Malvinas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "FK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 113,
+    "fields": {
+      "pais": "Islas Marianas del Norte",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MP"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 114,
+    "fields": {
+      "pais": "Islas Marshall",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 115,
+    "fields": {
+      "pais": "Islas Pitcairn",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 116,
+    "fields": {
+      "pais": "Islas Salomón",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SB"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 117,
+    "fields": {
+      "pais": "Islas Turcas y Caicos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 118,
+    "fields": {
+      "pais": "Islas Ultramarinas Menores de Estados Unidos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "UM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 119,
+    "fields": {
+      "pais": "Islas Vírgenes Británicas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 120,
+    "fields": {
+      "pais": "Islas Vírgenes de los Estados Unidos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 121,
+    "fields": {
+      "pais": "Israel",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 122,
+    "fields": {
+      "pais": "Italia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 123,
+    "fields": {
+      "pais": "Jamaica",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "JM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 124,
+    "fields": {
+      "pais": "Japón",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "JP"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 125,
+    "fields": {
+      "pais": "Jersey",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "JE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 126,
+    "fields": {
+      "pais": "Jordania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "JO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 127,
+    "fields": {
+      "pais": "Kazajistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 128,
+    "fields": {
+      "pais": "Kenia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 129,
+    "fields": {
+      "pais": "Kirguistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 130,
+    "fields": {
+      "pais": "Kiribati",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 131,
+    "fields": {
+      "pais": "Kuwait",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 132,
+    "fields": {
+      "pais": "Líbano",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LB"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 133,
+    "fields": {
+      "pais": "Laos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 134,
+    "fields": {
+      "pais": "Lesoto",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 135,
+    "fields": {
+      "pais": "Letonia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LV"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 136,
+    "fields": {
+      "pais": "Liberia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 137,
+    "fields": {
+      "pais": "Libia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 138,
+    "fields": {
+      "pais": "Liechtenstein",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 139,
+    "fields": {
+      "pais": "Lituania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 140,
+    "fields": {
+      "pais": "Luxemburgo",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 141,
+    "fields": {
+      "pais": "México",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MX"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 142,
+    "fields": {
+      "pais": "Mónaco",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 143,
+    "fields": {
+      "pais": "Macao",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 144,
+    "fields": {
+      "pais": "Macedônia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 145,
+    "fields": {
+      "pais": "Madagascar",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 146,
+    "fields": {
+      "pais": "Malasia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 147,
+    "fields": {
+      "pais": "Malawi",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 148,
+    "fields": {
+      "pais": "Mali",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ML"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 149,
+    "fields": {
+      "pais": "Malta",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 150,
+    "fields": {
+      "pais": "Marruecos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 151,
+    "fields": {
+      "pais": "Martinica",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MQ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 152,
+    "fields": {
+      "pais": "Mauricio",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 153,
+    "fields": {
+      "pais": "Mauritania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 154,
+    "fields": {
+      "pais": "Mayotte",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "YT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 155,
+    "fields": {
+      "pais": "Micronesia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "FM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 156,
+    "fields": {
+      "pais": "Moldavia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 157,
+    "fields": {
+      "pais": "Mongolia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 158,
+    "fields": {
+      "pais": "Montenegro",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ME"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 159,
+    "fields": {
+      "pais": "Montserrat",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 160,
+    "fields": {
+      "pais": "Mozambique",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 161,
+    "fields": {
+      "pais": "Namibia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 162,
+    "fields": {
+      "pais": "Nauru",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 163,
+    "fields": {
+      "pais": "Nepal",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NP"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 164,
+    "fields": {
+      "pais": "Nicaragua",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NI"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 165,
+    "fields": {
+      "pais": "Niger",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 166,
+    "fields": {
+      "pais": "Nigeria",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 167,
+    "fields": {
+      "pais": "Niue",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 168,
+    "fields": {
+      "pais": "Noruega",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 169,
+    "fields": {
+      "pais": "Nueva Caledonia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 170,
+    "fields": {
+      "pais": "Nueva Zelanda",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 171,
+    "fields": {
+      "pais": "Omán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "OM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 172,
+    "fields": {
+      "pais": "Países Bajos",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "NL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 173,
+    "fields": {
+      "pais": "Pakistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 174,
+    "fields": {
+      "pais": "Palau",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 175,
+    "fields": {
+      "pais": "Palestina",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 176,
+    "fields": {
+      "pais": "Panamá",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 177,
+    "fields": {
+      "pais": "Papúa Nueva Guinea",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 178,
+    "fields": {
+      "pais": "Paraguay",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 179,
+    "fields": {
+      "pais": "Perú",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 180,
+    "fields": {
+      "pais": "Polinesia Francesa",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 181,
+    "fields": {
+      "pais": "Polonia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 182,
+    "fields": {
+      "pais": "Portugal",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 183,
+    "fields": {
+      "pais": "Puerto Rico",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 184,
+    "fields": {
+      "pais": "Qatar",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "QA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 185,
+    "fields": {
+      "pais": "Reino Unido",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "GB"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 186,
+    "fields": {
+      "pais": "República Centroafricana",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 187,
+    "fields": {
+      "pais": "República Checa",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 188,
+    "fields": {
+      "pais": "República Dominicana",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "DO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 189,
+    "fields": {
+      "pais": "República de Sudán del Sur",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 190,
+    "fields": {
+      "pais": "Reunión",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "RE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 191,
+    "fields": {
+      "pais": "Ruanda",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "RW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 192,
+    "fields": {
+      "pais": "Rumanía",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "RO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 193,
+    "fields": {
+      "pais": "Rusia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "RU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 194,
+    "fields": {
+      "pais": "Sahara Occidental",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "EH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 195,
+    "fields": {
+      "pais": "Samoa",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "WS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 196,
+    "fields": {
+      "pais": "Samoa Americana",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "AS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 197,
+    "fields": {
+      "pais": "San Bartolomé",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "BL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 198,
+    "fields": {
+      "pais": "San Cristóbal y Nieves",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "KN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 199,
+    "fields": {
+      "pais": "San Marino",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 200,
+    "fields": {
+      "pais": "San Martín (Francia)",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "MF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 201,
+    "fields": {
+      "pais": "San Pedro y Miquelón",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "PM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 202,
+    "fields": {
+      "pais": "San Vicente y las Granadinas",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 203,
+    "fields": {
+      "pais": "Santa Elena",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 204,
+    "fields": {
+      "pais": "Santa Lucía",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 205,
+    "fields": {
+      "pais": "Santo Tomé y Príncipe",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ST"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 206,
+    "fields": {
+      "pais": "Senegal",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 207,
+    "fields": {
+      "pais": "Serbia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "RS"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 208,
+    "fields": {
+      "pais": "Seychelles",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SC"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 209,
+    "fields": {
+      "pais": "Sierra Leona",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 210,
+    "fields": {
+      "pais": "Singapur",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 211,
+    "fields": {
+      "pais": "Sint Maarten",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SX"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 212,
+    "fields": {
+      "pais": "Siria",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 213,
+    "fields": {
+      "pais": "Somalia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 214,
+    "fields": {
+      "pais": "Sri lanka",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "LK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 215,
+    "fields": {
+      "pais": "Sudáfrica",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ZA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 216,
+    "fields": {
+      "pais": "Sudán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SD"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 217,
+    "fields": {
+      "pais": "Suecia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 218,
+    "fields": {
+      "pais": "Suiza",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "CH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 219,
+    "fields": {
+      "pais": "Surinám",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 220,
+    "fields": {
+      "pais": "Svalbard y Jan Mayen",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SJ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 221,
+    "fields": {
+      "pais": "Swazilandia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "SZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 222,
+    "fields": {
+      "pais": "Tayikistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TJ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 223,
+    "fields": {
+      "pais": "Tailandia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TH"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 224,
+    "fields": {
+      "pais": "Taiwán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TW"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 225,
+    "fields": {
+      "pais": "Tanzania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 226,
+    "fields": {
+      "pais": "Territorio Británico del Océano Índico",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "IO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 227,
+    "fields": {
+      "pais": "Territorios Australes y Antárticas Franceses",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 228,
+    "fields": {
+      "pais": "Timor Oriental",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TL"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 229,
+    "fields": {
+      "pais": "Togo",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 230,
+    "fields": {
+      "pais": "Tokelau",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TK"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 231,
+    "fields": {
+      "pais": "Tonga",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TO"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 232,
+    "fields": {
+      "pais": "Trinidad y Tobago",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TT"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 233,
+    "fields": {
+      "pais": "Tunez",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 234,
+    "fields": {
+      "pais": "Turkmenistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 235,
+    "fields": {
+      "pais": "Turquía",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TR"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 236,
+    "fields": {
+      "pais": "Tuvalu",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "TV"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 237,
+    "fields": {
+      "pais": "Ucrania",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "UA"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 238,
+    "fields": {
+      "pais": "Uganda",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "UG"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 239,
+    "fields": {
+      "pais": "Uruguay",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "UY"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 240,
+    "fields": {
+      "pais": "Uzbekistán",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "UZ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 241,
+    "fields": {
+      "pais": "Vanuatu",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VU"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 242,
+    "fields": {
+      "pais": "Venezuela",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 243,
+    "fields": {
+      "pais": "Vietnam",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "VN"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 244,
+    "fields": {
+      "pais": "Wallis y Futuna",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "WF"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 245,
+    "fields": {
+      "pais": "Yemen",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "YE"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 246,
+    "fields": {
+      "pais": "Yibuti",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "DJ"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 247,
+    "fields": {
+      "pais": "Zambia",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ZM"
+    }
+  },
+  {
+    "model": "declaracion.catpaises",
+    "pk": 248,
+    "fields": {
+      "pais": "Zimbabue",
+      "created_at": "2019-04-01T00:00:00Z",
+      "updated_at": "2019-04-01T00:00:00Z",
+      "default": 0,
+      "orden": 1,
+      "codigo": "ZW"
+    }
+  }
+]

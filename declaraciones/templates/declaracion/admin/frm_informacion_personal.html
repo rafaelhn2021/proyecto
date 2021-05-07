@@ -1,0 +1,1472 @@
+{% load no_aplica %}
+{% load static %}
+<div class="row">
+  {% if 'informacion-general' in secciones_por_tipo_declaracion %}
+    <div class="col-6">
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+        I.DATOS GENERALES
+      </h4>
+        <dl class="p_opciones"><dt> Nombre </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-nombres' in campos_privados %} text-privado {% endif %}">{{ info_personal_fija.nombres|default_if_none:"" }}
+          </dd>
+        </dl>
+        <dl class="p_opciones"><dt> Primer apellido </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-apellido1' in campos_privados %} text-privado {% endif %}">{{ info_personal_fija.apellido1|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Segundo apellido </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-apellido2' in campos_privados %} text-privado {% endif %}">{{ info_personal_fija.apellido2|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> RFC con homoclave </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-rfc' in campos_privados %} text-privado {% endif %}"> {{ info_personal_fija.rfc|default_if_none:"" }} </dd>
+        </dl>
+        <dl class="p_opciones"><dt> Correo electrónico personal </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-email_personal' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.email_personal|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Correo electrónico institucional * </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-email_personal' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.email_personal|default_if_none:"" }}</dd>
+        </dl>
+          <dl class="p_opciones"><dt> Teléfono particular </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-tel_particular' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.tel_particular|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Teléfono celular </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-tel_movil' in campos_privados %} text-privado {% endif %}"> {{ info_personal_var.tel_movil|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Estado civil o situación personal </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-cat_estados_civiles' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.cat_estados_civiles|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Régimen Matrimonial * </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-cat_estados_civiles' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.cat_estados_civiles|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> País de nacimiento </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-cat_pais' in campos_privados %} text-privado {% endif %}">{{ info_personal_fija.cat_pais|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Nacionalidad(es) </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-cat_pais' in campos_privados %} text-privado {% endif %}">
+            {{ info_personal_var.nacionalidades.all|join:"," }}
+          </dd>
+        </dl>
+        <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
+          <dd class="text-black_opciones {% if 'informacion-general-observacion' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.observaciones }}</dd>
+        </dl>
+    </div>
+  {% endif %}
+
+  {% if 'direccion' in secciones_por_tipo_declaracion %}
+    <div class="col-6">
+        <h4 class="text-base text-uppercase text-success-lighter mb-25">
+        II.DOMICILIO
+        </h4>
+        <dl class="p_opciones"><dt> País </dt>
+          <dd class="text-black_opciones {% if 'direccion-cat_pais' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.cat_pais|default_if_none:"" }}</dd>
+        </dl>
+          <dl class="p_opciones"><dt> Calle </dt>
+          <dd class="text-black_opciones {% if 'direccion-nombre_via' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.nombre_via|default_if_none:"" }}</dd>
+        </dl>
+          <dl class="p_opciones"><dt> Número exterior </dt>
+            <dd class="text-black_opciones {% if 'direccion-num_exterior' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.num_exterior|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Número interior </dt>
+            <dd class="text-black_opciones {% if 'direccion-num_interior' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.num_interior|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Colonia </dt>
+          <dd class="text-black_opciones {% if 'direccion-colonia' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.colonia|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Entidad federativa </dt>
+          <dd class="text-black_opciones {% if 'direccion-cat_entidades_federativas' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Municipio </dt>
+          <dd class="text-black_opciones {% if 'direccion-municipio' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.municipio|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones"><dt> Código postal </dt>
+          <dd class="text-black_opciones {% if 'direccion-cp' in campos_privados %} text-privado {% endif %}">{{ info_personal_var.domicilios.cp|default_if_none:"" }}</dd>
+        </dl>
+    </div>
+  {% endif %}
+
+  {% if 'datos-curriculares' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea"/>
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      III.DATOS CURRICULARES
+      </h4>
+      {% no_aplica declaracion.folio 'datos-curriculares' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for datos_curriculares in datos_curriculares.all %}
+          <div class="col-6">
+            <h6 class="h6 text-uppercase font-weight-bold" style="font-size: 14px;">DATO CURRICULAR {{ forloop.counter }}</h6>
+              
+              <dl class="p_opciones"><dt> Nivel </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-cat_grados_academicos' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.cat_grados_academicos|default_if_none:"" }}</dd>
+              </dl>
+              
+              <dl class="p_opciones"><dt> Institución educativa </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-institucion_educativa' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.institucion_educativa|default_if_none:"" }}</dd>
+              </dl>
+              
+              <dl class="p_opciones"><dt> Carrera o área de conocimiento </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-carrera_o_area' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.carrera_o_area|default_if_none:"" }}</dd>
+              </dl>
+              <dl class="p_opciones"><dt> Estatus </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-cat_estatus_estudios' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.cat_estatus_estudios|default_if_none:"" }}</dd>
+              </dl>
+              <dl class="p_opciones"><dt> Documento obtenido </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-cat_documentos_obtenido' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.cat_documentos_obtenido|default_if_none:"" }}</dd>
+              </dl>
+              <dl class="p_opciones"><dt> Fecha de obtención del documento * </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-conclusion' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.conclusion|default_if_none:"" }}</dd>
+              </dl>
+              <br>
+              <dl class="p_opciones">
+                <dt>País de la inscitución educativa</dt>
+                <dd>{{ datos_curriculares.cat_pais }}</dd>
+              </dl>  
+
+              <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
+                <dd class="text-black_opciones {% if 'datos-curriculares-observaciones' in campos_privados %} text-privado {% endif %}">{{ datos_curriculares.observaciones|default_if_none:"" }}</dd>
+              </dl>
+          </div>
+          <br>
+        {%  endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+
+  {% if 'datos-del-encargo-actual' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea"/>
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+        IV.DATOS DEL EMPLEO, CARGO O COMISIÓN QUE INICIA
+      </h4>
+      <dl class="p_opciones"><dt> Nivel/orden de gobierno </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-cat_ordenes_gobierno' in campos_privados %} text-privado {% endif %}">{{ encargos.cat_ordenes_gobierno|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Empleo, cargo o comisión </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-cat_puestos' in campos_privados %} text-privado {% endif %}">{{ encargos.cat_puestos.puesto|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Área de adscripción </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-area_adscripcion' in campos_privados %} text-privado {% endif %}">{{ encargos.cat_puestos.cat_areas.codigo|default_if_none:"" }} - {{ encargos.cat_puestos.cat_areas.area|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Nivel del empleo cargo o comisión * </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-cat_ordenes_gobierno' in campos_privados %} text-privado {% endif %}">{{ encargos.cat_puestos.codigo|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Ámbito público * </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-poderes' in campos_privados %} text-privado {% endif %}">{{ encargos.poderes|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Nombre del ente público </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-nombre_ente_publico' in campos_privados %} text-privado {% endif %}">{{ encargos.nombre_ente_publico|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Contrato por honorarios </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-honorarios' in campos_privados %} text-privado {% endif %}">{{ encargos.honorarios|yesno:"Sí,No" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Funcion principales </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-cat_funciones_principales' in campos_privados %} text-privado {% endif %}">{{ encargos.cat_funciones_principales|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Fecha de toma de posesión/conclusión </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-posesion_inicio' in campos_privados %} text-privado {% endif %}">{{ encargos.posesion_inicio|default_if_none:"" }}</dd>
+      </dl>
+      <dl class="p_opciones"><dt> Teléfono laboral </dt>
+        <dd class="text-black_opciones {% if 'datos-del-encargo-actual-telefono_laboral' in campos_privados %} text-privado {% endif %}">{{ encargos.telefono_laboral|default_if_none:"" }}</dd>
+      </dl>
+    </div>
+  {% endif %}
+
+  {% if 'experiencia-laboral' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      V.EXPERIENCIA LABORAL(ÙLTIMO 5 EMPLEOS)
+      </h4>
+      {% no_aplica declaracion.folio 'experiencia-laboral' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for expl in experiecia_laboral %}
+          <h6 class="h6 mb-3 text-uppercase font-weight-bold mt-2" style="font-size: 14px;">EXPERIENCIA LABORAL {{ forloop.counter }}</h6>
+          <dl class="p_opciones"><dt> Ámbito </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-cat_ambitos_laborales' in campos_privados %} text-privado {% endif %}">{{ expl.cat_ambitos_laborales|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Nivel/orden de gobierno </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-cat_ordenes_gobierno' in campos_privados %} text-privado {% endif %}">{{ expl.cat_ordenes_gobierno|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Poder </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-cat_poderes' in campos_privados %} text-privado {% endif %}">{{ expl.cat_poderes|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Nombre de la institución </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-nombre_institucion' in campos_privados %} text-privado {% endif %}">{{ expl.nombre_institucion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Sector/industria </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-cat_sectores_industria' in campos_privados %} text-privado {% endif %}">{{ expl.cat_sectores_industria|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Cargo/puesto </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-cargo_puesto' in campos_privados %} text-privado {% endif %}">{{ expl.cargo_puesto|default_if_none:"" }}</dd>
+          </dl>
+
+          <dl class="p_opciones"><dt> Fecha de ingreso </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-fecha_ingreso' in campos_privados %} text-privado {% endif %}">{{ expl.fecha_ingreso|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Fecha de salida </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-fecha_salida' in campos_privados %} text-privado {% endif %}">{{ expl.fecha_salida|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Funciones principales </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-funciones_principales' in campos_privados %} text-privado {% endif %}">{{ expl.funciones_principales|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> País * </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-cat_pais' in campos_privados %} text-privado {% endif %}"> {{ expl.domicilios.cat_pais|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
+            <dd class="text-black_opciones {% if 'experiencia-laboral-observacion' in campos_privados %} text-privado {% endif %}"> {{ expl.observaciones|default_if_none:"" }}</dd>
+          </dl>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'datos-pareja' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      VI.DATOS DE LA PAREJA
+      </h4>
+      {% no_aplica declaracion.folio 'datos-pareja' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        <div class="row mt-2">
+          <div class="col-6">
+            <dl class="p_opciones"><dt> Nombre(s) </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-nombres' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.nombres|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Primer apellido </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-apellido1' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.apellido1|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Segundo apellido </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-apellido2' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.apellido2|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> CURP </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-curp' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.curp|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> RFC con homoclave </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-rfc' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.rfc|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Habita en el domicilio del declarante </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-habita_domicilio' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.habita_domicilio|yesno:"Sí,No" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Ocupación/profesión </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-ocupacion_girocomercial' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.ocupacion_girocomercial }} </dd>
+            </dl>
+            <dl class="p_opciones"><dt> Sector/industria </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-cat_sectores_industria' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.cat_sectores_industria|default_if_none:"" }} </dd>
+            </dl>
+            <dl class="p_opciones"><dt> ¿Es proveedor o contratista de gobierno? </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-proveedor_contratista' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.proveedor_contratista|yesno:"Sí,No" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> ¿Tiene el familiar o dependiente intereses en el mismo sector/industria al que pertenece el empleo oficial del Declarante? </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-intereses_comunes' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.intereses_comunes|yesno:"Sí,No" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> ¿Desarrolla el familiar o dependiente actividades de cabildeo en el mismo sector/industria al que pertenece el empleo oficial del declarante? </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-cabildeo_sector' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.cabildeo_sector|yesno:"Sí,No" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-observacion' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.observaciones|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> ¿El familiar o dependiente es beneficiario directo de un programa público (apoyo, subsidio, transferencia)? </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-nombres' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.tiene_apoyos|yesno:"Sí,No" }}</dd>
+            </dl>
+          </div>
+
+          <div class="col-6">
+            <p class="text-primary font-weight-bold p_opciones"> Dirección de la persona</p>
+            <dl class="p_opciones"><dt> Código postal </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-cp' in campos_privados %} text-privado {% endif %}"> {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cp|default_if_none:"" }} </dd>
+            </dl>
+            <dl class="p_opciones"><dt> País </dt> 
+              <dd class="text-black_opciones {% if 'datos-pareja-cat_pais' in campos_privados %} text-privado {% endif %}"> {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_pais|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Entidad federativa </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-cat_entidades_federativas' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Municipio </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-municipio' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.municipio|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Colonia </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-colonia' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.colonia|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Nombre de vía </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-nombre_via' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones"><dt> Número exterior </dt>
+              <dd class="text-black_opciones {% if 'datos-pareja-num_exterior' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}</dd>
+            </dl>
+          </div>
+        </div>
+        {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'dependientes-economicos' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      VII.DATOS DEL DEPENDIENTE ECÓNOMICO
+      </h4>
+      {% no_aplica declaracion.folio 'dependientes-economicos' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        <div class="row">
+          {% for dependiente in otros_dependientes %}
+            <br>
+            <div class="col-6">
+            <h6 class="h6 mb-3 text-uppercase font-weight-bold mt-2" style="font-size: 14px;">DEPENDIENTE {{ forloop.counter }}</h6>
+            <h6 class="h6 mb-3 text-uppercase font-weight-bold mt-2" style="font-size: 14px;">{{ dependiente.tipo_relacion_personal }}</h6>
+            </div>
+
+            <div class="row mt-2 col-12">
+              <div class="col-6">
+                <dl class="p_opciones"><dt> Nombre(s) </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-nombres' in campos_privados %} text-privado {% endif %}">{{ dependiente.dependiente_infopersonalvar.nombres|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Primer apellido </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-apellido1' in campos_privados %} text-privado {% endif %}">{{ dependiente.dependiente_infopersonalvar.apellido1|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Segundo apellido </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-apellido2' in campos_privados %} text-privado {% endif %}">{{ dependiente.dependiente_infopersonalvar.apellido2|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> CURP </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-curp' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.curp|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> RFC con homoclave </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-nombres' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.rfc|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Fecha de nacimiento </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-fecha_nacimiento' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.fecha_nacimiento|default_if_none:"" }}</dd>
+                </dl>
+
+                <dl class="p_opciones"><dt> Habita en el domicilio del declarante </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-habita_domicilio' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.habita_domicilio|yesno:"Sí,No" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Ocupación/profesión </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-ocupacion_girocomercial' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.ocupacion_girocomercial }} </dd>
+                </dl>
+                <dl class="p_opciones"><dt> Sector/industria </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-cat_sectores_industria' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.cat_sectores_industria|default_if_none:"" }} </dd>
+                </dl>
+                <dl class="p_opciones"><dt> ¿Es proveedor o contratista de gobierno? </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-proveedor_contratista' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.proveedor_contratista|yesno:"Sí,No" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> ¿Tiene el familiar o dependiente intereses en el mismo sector/industria al que pertenece el empleo oficial del Declarante? </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-intereses_comunes' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.intereses_comunes|yesno:"Sí,No" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> ¿Desarrolla el familiar o dependiente actividades de cabildeo en el mismo sector/industria al que pertenece el empleo oficial del declarante? </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-cabildeo_sector' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.cabildeo_sector|yesno:"Sí,No" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-observacion' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.observaciones|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> ¿El familiar o dependiente es beneficiario directo de un programa público (apoyo, subsidio, transferencia)? </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-tiene_apoyos' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.tiene_apoyos|yesno:"Sí,No" }}</dd>
+                </dl>
+              </div>
+              <div class="col-6">
+                <p class="text-primary font-weight-bold p_opciones"> Dirección de la persona</p>
+                <dl class="p_opciones"><dt> Código postal </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-cp' in campos_privados %} text-privado {% endif %}"> {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cp|default_if_none:"" }} </dd>
+                </dl>
+                <dl class="p_opciones"><dt> País </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-cat_pais' in campos_privados %} text-privado {% endif %}"> {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_pais|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Entidad federativa </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-cat_entidades_federativas' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Municipio </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-municipio' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.municipio|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Colonia </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-colonia' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.colonia|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Tipo de vía </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-cat_tipo_via' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_tipo_via|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Nombre de vía </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-nombre_via' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Número exterior </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-num_exterior' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}</dd>
+                </dl>
+                <dl class="p_opciones"><dt> Número interior </dt>
+                  <dd class="text-black_opciones {% if 'dependientes-economicos-num_interior' in campos_privados %} text-privado {% endif %}">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.num_interior|default_if_none:"" }}</dd>
+                </dl>
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'ingresos-netos' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      VIII.INGRESOS NETOS DEL DECLARANTE, PAREJA Y/O DEPENDIENTES ECONÓMICOS (SITUACION ACTUAL)
+      </h4>
+      {% no_aplica declaracion.folio 'ingresos-netos' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        <dl class="p_opciones col-6">
+          <dt> I.- Remuneración mensual neta del declarante por su cargo públcio (por concepto de sueldos, honorarios, compensaciones, bonos y prestaciones)(cantidades netas después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_cargo' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_cargo|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Moneda del ingreso por cargo público del declarante</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_cargo' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_cargo|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> II.- Otros ingresos del declarante (suma del II.1 al II.4) </dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_otros_ingresos' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_otros_ingresos|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Moneda de otros ingresos </dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_otro_ingresos_mensual' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_otro_ingresos_mensual|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> II.1.- Remuneración mensual por actividad industrial, comercial y/o empresarial (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_actividad' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_actividad|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de actividad industrial</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_actividad' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_actividad|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Razón Social negocio</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-razon_social_negocio' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.razon_social_negocio|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Tipo de negocio</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-tipo_negocio' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.tipo_negocio|default_if_none:"" }}</dd>
+        </dl> 
+        <dl class="p_opciones col-6">
+          <dt> II.2.- Remuneración mensual por actividad financiera (rendimientos o ganancias) (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_financiera' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_financiera|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de actividad financiera</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_financiera' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_financiera|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> II.3.- Remuneración mensual por servicios profesionales, consejos, consultorías y/o asesorías (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_servicios' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_servicios|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de actividad servicios profesionales, consejos, consultorias y/o asesorías</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_servicios' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_servicios|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Tipo de servicios profesionales, consejos, consultorías y/o asesorías (describe)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-tipo_servicio' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.tipo_servicio|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> II.4.- Otros ingresos no considerados a los anteriores (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_otros_ingresos' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_otros_ingresos|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de otros ingresos no considerados a los anteriores</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_otros_ingresos' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_otros_ingresos|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Tipo de otros ingresos</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_tipos_actividad' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_tipos_actividad|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> A.- Ingreso mensual NETO del declarante (SUMA DEL NUMERAL I y II)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_neto' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_neto|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de ingreso NETO del declarante</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_neto' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_neto|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> B.- Ingreso mensual NETO de la pareja y/o dependientes económicos (despúes de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_pareja_dependientes' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_pareja_dependientes|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de ingreso NETO de la pareja</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_pareja_dependientes' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_pareja_dependientes|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> C.- TOTAL de ingresos mensuales NETOS percibidos por el declarante, pareja y/o dependientes económicos (suma de los apartados A y B)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-ingreso_mensual_total' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.ingreso_mensual_total|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de ingreso NETO de la pareja</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-cat_moneda_total' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.cat_moneda_total|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Aclaraciones / observaciones</dt>
+          <dd class="text-black_opciones {% if 'ingresos-netos-observacion' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos.observaciones|default_if_none:"" }}</dd>
+        </dl>  
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'ingresos-servidor-publico' in secciones_por_tipo_declaracion and declaracion.cat_tipos_declaracion.codigo != "MODIFICACIÓN" %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      XI.TE DESEMPEÑASTE COMO SERVIDOR PÚBLICO EN EL AÑO ANTERIOR?
+      </h4>
+      {% no_aplica declaracion.folio 'ingresos-servidor-publico' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        <dl class="p_opciones col-6">
+          <dt> I.- Remuneración mensual neta del declarante por su cargo públcio (por concepto de sueldos, honorarios, compensaciones, bonos y prestaciones)(cantidades netas después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-nombres' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_cargo|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Moneda del ingreso por cargo público del declarante</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_cargo' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_cargo|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> II.- Otros ingresos del declarante ( SUMA del II.1 al II.5 )</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_otros_ingresos' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_otros_ingresos|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Moneda de otros ingresos </dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_otro_ingresos_mensual' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_otro_ingresos_mensual|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Remuneración mensual por actividad industrial, comercial y/o empresarial (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_actividad' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_actividad|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de actividad industrial</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_actividad' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_actividad|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Razón Social negocio</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-razon_social_negocio' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.razon_social_negocio|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Tipo de negocio</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-tipo_negocio' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.tipo_negocio|default_if_none:"" }}</dd>
+        </dl> 
+        <dl class="p_opciones col-6">
+          <dt> Remuneración mensual por actividad financiera (rendimientos o ganancias) (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_financiera' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_financiera|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de actividad financiera</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_financiera' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_financiera|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Remuneración mensual por servicios profesionales, consejos, consultorías y/o asesorías (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_servicios' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_servicios|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de actividad servicios profesionales, consejos, consultorias y/o asesorías</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_servicios' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_servicios|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Tipo de servicios profesionales, consejos, consultorías y/o asesorías (describe)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-tipo_servicio' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.tipo_servicio|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> Otros ingresos no considerados a los anteriores (después de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_otros_ingresos' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_otros_ingresos|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de otros ingresos no considerados a los anteriores</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_otros_ingresos' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_otros_ingresos|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Tipo de otros ingresos</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_tipos_actividad' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_tipos_actividad|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> A.- Ingreso mensual NETO del declarante (SUMA DEL NUMERAL I y II)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_neto' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_neto|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de ingreso NETO del declarante</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_neto' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_neto|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> B.- Ingreso mensual NETO de la pareja y/o dependientes económicos (despúes de impuestos)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_pareja_dependientes' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_pareja_dependientes|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de ingreso NETO de la pareja</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_pareja_dependientes' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_pareja_dependientes|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-6">
+          <dt> C.- TOTAL de ingresos mensuales NETOS percibidos por el declarante, pareja y/o dependientes económicos (suma de los apartados A y B)</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-ingreso_mensual_total' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.ingreso_mensual_total|default_if_none:"" }}</dd>
+        </dl>   
+        <dl class="p_opciones col-6">
+          <dt> Moneda de ingreso NETO de la pareja</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-cat_moneda_total' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.cat_moneda_total|default_if_none:"" }}</dd>
+        </dl>
+        <dl class="p_opciones col-12">
+          <dt> Aclaraciones / observaciones</dt>
+          <dd class="text-black_opciones {% if 'ingresos-servidor-publico-observacion' in campos_privados %} text-privado {% endif %}">{{ IngresosNetos_anterior.observaciones|default_if_none:"" }}</dd>
+        </dl> 
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'bienes-inmuebles' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      X.BIENES INMUEBLES
+      </h4>
+      {% no_aplica declaracion.folio 'bienes-inmuebles' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for inmueble in declaracion.bienesinmuebles_set.all %}
+          <h6>Inmueble #{{ forloop.counter }} </h6><br>
+          <dl class="p_opciones col-12"><dt>Tipo de operacion </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-tipo_operacion' in campos_privados %} text-privado {% endif %}">{{ inmueble.tipo_operacion }}</dd>
+          </dl>     
+          <dl class="p_opciones col-12">
+            <dt> Tipo de Inmueble </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cat_tipos_inmuebles' in campos_privados %} text-privado {% endif %}">{{ inmueble.cat_tipos_inmuebles|default_if_none:"" }}</dd>
+          </dl> 
+          <dl class="p_opciones col-12">
+            <dt> Titular </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-titular' in campos_privados %} text-privado {% endif %}">{{ inmueble.titular|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Porcentaje de Propiedad </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-porcentaje' in campos_privados %} text-privado {% endif %}">{{ inmueble.persona.porcentaje|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Superficie de terreno </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-superficie_terreno' in campos_privados %} text-privado {% endif %}">{{ inmueble.superficie_terreno|default_if_none:"" }}</dd>
+          </dl>  
+          <dl class="p_opciones col-12">
+            <dt> Superficie de la construcción </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-superficie_construccion' in campos_privados %} text-privado {% endif %}">{{ inmueble.superficie_construccion|default_if_none:"" }}</dd>
+          </dl>
+          
+          {% for copropietario in inmueble.copropietario %}
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (tercero) {{ forloop.counter }} - tipo de persona </dt>
+              <dd class="text-black_opciones {% if 'bienes-inmuebles-es_fisica' in campos_privados %} text-privado {% endif %}">
+                {% if copropietario.otra_persona.es_fisica %}
+                Física 
+                {% elif not copropietario.otra_persona.es_fisica %}
+                Moral
+                {% else %}
+                --
+                {% endif %}
+              </dd>
+            </dl>
+            {% if copropietario.otra_persona.es_fisica %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (tercero) {{ forloop.counter }} - Nombre(s) </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-nombres' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.nombres }}</dd>
+              </dl>
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (tercero) {{ forloop.counter }} - Primer Apellido </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-apellido1' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido1|default_if_none:"" }}</dd>
+              </dl>
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (tercero) {{ forloop.counter }} - Segundo Apellido </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-apellido2' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido2|default_if_none:"" }}</dd>
+              </dl>
+            {% else %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (tercero) {{ forloop.counter }} - Razón social </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-razon_social' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.razon_social|default_if_none:"" }}</dd>
+              </dl>
+          {% endif %}
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (tercero) {{ forloop.counter }} - rfc </dt>
+              <dd class="text-black_opciones {% if 'bienes-inmuebles-rfc' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.rfc|default_if_none:"" }}</dd>
+            </dl>
+          {% endfor %}
+
+          <dl class="p_opciones col-12">
+            <dt> Forma de adquisición </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cat_formas_adquisiciones' in campos_privados %} text-privado {% endif %}">{{ inmueble.cat_formas_adquisiciones|default_if_none:"" }}</dd>
+          </dl>
+          
+
+          {% for propietario_anterior in inmueble.propietario_anterior %}
+            <dl class="p_opciones col-12">
+              <dt> Transmisor - tipo de persona </dt>
+              <dd class="text-black_opciones {% if 'bienes-inmuebles-es_fisica' in campos_privados %} text-privado {% endif %}">
+                {% if propietario_anterior.otra_persona.es_fisica %}
+                Física 
+                {% elif not propietario_anterior.otra_persona.es_fisica %}
+                Moral
+                {% else %}
+                --
+                {% endif %}
+              </dd>
+            </dl>
+            
+            {% if propietario_anterior.otra_persona.es_fisica %}
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Nombre(s) </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-nombres' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.nombres|default_if_none:"" }}</dd>
+              </dl>
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Primer Apellido </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-apellido1' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.apellido1|default_if_none:"" }}</dd>
+              </dl>              
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Segundo Apellido </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-apellido2' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.apellido2|default_if_none:"" }}</dd>
+              </dl>
+            {% else %}
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Razón social </dt>
+                <dd class="text-black_opciones {% if 'bienes-inmuebles-razon_social' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.razon_social|default_if_none:"" }}</dd>
+              </dl>
+            {% endif %}
+            <dl class="p_opciones col-12">
+              <dt> Transmisor - rfc </dt>
+              <dd class="text-black_opciones {% if 'bienes-inmuebles-rfc' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.rfc|default_if_none:"" }}</dd>
+            </dl>
+            <dl class="p_opciones col-12">
+              <dt> Transmisor - relación con el titular *** </dt>
+              <dd class="text-black_opciones {% if 'bienes-inmuebles-tipo_relacion' in campos_privados %} text-privado {% endif %}">{{ inmueble.propietario_anterior.tipo_relacion|default_if_none:"" }}{{ propietario_anterior.otro_tipo_relacion_familiar|default_if_none:""}}</dd>
+            </dl>
+            <dl class="p_opciones col-12">
+              <dt> Datos del registro público de la propiedad </dt>
+              <dd class="text-black_opciones {% if 'bienes-inmuebles-num_registro_publico' in campos_privados %} text-privado {% endif %}">{{ inmueble.num_registro_publico|default_if_none:"" }}</dd>
+            </dl>
+
+          {% endfor %}
+
+          
+          <dl class="p_opciones col-12">
+            <dt> Forma de Pago </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-forma_pago' in campos_privados %} text-privado {% endif %}">{{ inmueble.forma_pago|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Valor Aquisición </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-precio_adquisicion' in campos_privados %} text-privado {% endif %}">{{ inmueble.precio_adquisicion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Moneda </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cat_monedas' in campos_privados %} text-privado {% endif %}">{{ inmueble.cat_monedas|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Fecha Adquisición </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-fecha_adquisicion' in campos_privados %} text-privado {% endif %}">{{ inmueble.fecha_adquisicion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> ¿El valor de adquisición del inmueble es conforme a...? </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-valor_conforme_a' in campos_privados %} text-privado {% endif %}">{{ inmueble.valor_conforme_a|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - País </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cat_pais' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.cat_pais|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - Calle </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-nombre_via' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.nombre_via|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - Número exterior </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-num_exterior' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.num_exterior|default_if_none:"" }}</dd>
+          </dl>              
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - Número interior </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-num_interior' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.num_interior|default_if_none:"" }}</dd>
+          </dl> 
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - Colonia/localidad </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-colonia' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.colonia|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - Entidad Federativa </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cat_entidades_federativas' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - Municipio </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-municipio' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.municipio|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Domicilio - CP </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cp' in campos_privados %} text-privado {% endif %}">{{ inmueble.domicilios.cp|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> En caso de baja del inmueble incluir motivo ***</dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-cat_motivo_baja' in campos_privados %} text-privado {% endif %}">{{ inmueble.cat_motivo_baja|default_if_none:"" }} {{ inmueble.otro_motivo|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Aclaraciones/Observaciones </dt>
+            <dd class="text-black_opciones {% if 'bienes-inmuebles-observacion' in campos_privados %} text-privado {% endif %}">{{ inmueble.observaciones|default_if_none:"" }}</dd>
+          </dl>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'muebles-noregistrables' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />  
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      XI.VEHÍCULOS
+      </h4>
+      {% no_aplica declaracion.folio 'muebles-noregistrables' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for vehiculo in vehiculos %}
+          <h6>Vehículo # {{ forloop.counter }}</h6>
+                  
+          <dl class="p_opciones col-12">
+            <dt> Tipo de operación </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-tipo_operacion' in campos_privados %} text-privado {% endif %}">{{ vehiculo.tipo_operacion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Tipo de vehiculo </dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_tipos_muebles' in campos_privados %} text-privado {% endif %}">{{ vehiculo.cat_tipos_muebles|default_if_none:"" }} {{ vehiculo.otro_bien_mueble|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Titular </dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_tipos_titulares' in campos_privados %} text-privado {% endif %}">{{ vehiculo.cat_tipos_titulares|default_if_none:"" }}</dd>
+          </dl>
+
+          {% for propietario_anterior in vehiculo.propietario_anterior %}
+            <dl class="p_opciones col-12">
+              <dt> Transmisor - tipo persona </dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-es_fisica' in campos_privados %} text-privado {% endif %}">
+                {% if propietario_anterior.otra_persona.es_fisica %}
+                Física 
+                {% elif not propietario_anterior.otra_persona.es_fisica %}
+                Moral
+                {% else %}
+                --
+                {% endif %}
+              </dd>
+            </dl>
+            {% if propietario_anterior.otra_persona.es_fisica %}
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Nombre(s)</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-nombres' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.nombres|default_if_none:"" }}</dd>
+              </dl> 
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Apellido Paterno</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-apellido1' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.apellido1|default_if_none:"" }}</dd>
+              </dl>
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Apellido Materno</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-apellido2' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.apellido2|default_if_none:"" }}</dd>
+              </dl> 
+            {% else %}
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - Razón social</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-razon_social' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.razon_social|default_if_none:"" }}</dd>
+              </dl>
+            {% endif %}
+            <dl class="p_opciones col-12">
+              <dt> Transmisor - rfc</dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-rfc' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.rfc|default_if_none:"" }}</dd>
+            </dl> 
+            <dl class="p_opciones col-12">
+              <dt> Transmisor - relación con titular</dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_tipos_relaciones_personales' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.cat_tipos_relaciones_personales|default_if_none:"" }}</dd>
+            </dl>
+          {% endfor %}
+          <dl class="p_opciones col-12">
+            <dt> Marca </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-marca' in campos_privados %} text-privado {% endif %}">{{ vehiculo.marca|default_if_none:"" }}</dd>
+          </dl> 
+          <dl class="p_opciones col-12">
+            <dt> Modelo </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-modelo' in campos_privados %} text-privado {% endif %}">{{ vehiculo.modelo|default_if_none:"" }}</dd>
+          </dl> 
+          <dl class="p_opciones col-12">
+            <dt> Año </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-anio' in campos_privados %} text-privado {% endif %}">{{ vehiculo.anio|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Número de serie </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-num_serie' in campos_privados %} text-privado {% endif %}">{{ vehiculo.num_serie|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> ¿Dónde se encuentra registrado? - país </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_pais' in campos_privados %} text-privado {% endif %}">{{ vehiculo.domicilios.cat_pais|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> ¿Dónde se encuentra registrado? - entidad federativa </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_entidades_federativas' in campos_privados %} text-privado {% endif %}">{{ vehiculo.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+          </dl>
+          {% for copropietario in vehiculo.copropietario %}
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (Tercero) {{ forloop.counter }}- tipo persona</dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-es_fisica' in campos_privados %} text-privado {% endif %}">
+                {% if copropietario.otra_persona.es_fisica %}
+                Física 
+                {% elif not copropietario.otra_persona.es_fisica %}
+                Moral
+                {% else %}
+                --
+                {% endif %}
+              </dd>
+            </dl> 
+            {% if copropietario.otra_persona.es_fisica %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Nombre(s)</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-nombres' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.nombres|default_if_none:"" }}</dd>
+              </dl> 
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Apellido Paterno</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-apellido1' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido1|default_if_none:"" }}</dd>
+              </dl> 
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Apellido Materno</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-apellido2' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido2|default_if_none:"" }}</dd>
+              </dl>
+            {% else %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Razón social</dt>
+                <dd class="text-black_opciones {% if 'muebles-noregistrables-razon_social' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.razon_social|default_if_none:"" }}</dd>
+              </dl> 
+            {% endif %}
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (Tercero) {{ forloop.counter }}- rfc</dt>
+              <dd class="text-black_opciones {% if 'muebles-noregistrables-rfc' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.rfc|default_if_none:"" }}</dd>
+            </dl> 
+          {% endfor %}
+
+          <dl class="p_opciones col-12">
+            <dt> Forma de adquisición </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_formas_adquisiciones' in campos_privados %} text-privado {% endif %}">{{ vehiculo.cat_formas_adquisiciones|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Forma de Pago </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-forma_pago' in campos_privados %} text-privado {% endif %}">{{ vehiculo.forma_pago|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Valor Aquisición </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-precio_adquisicion' in campos_privados %} text-privado {% endif %}">{{ vehiculo.precio_adquisicion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Moneda </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_monedas' in campos_privados %} text-privado {% endif %}">{{ vehiculo.cat_monedas|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Fecha Adquisición </dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-fecha_adquisicion' in campos_privados %} text-privado {% endif %}">{{ vehiculo.fecha_adquisicion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> En caso de baja del vehículo incluir motivo ***</dt>
+            <dd class="text-black_opciones {% if 'muebles-noregistrables-cat_motivo_baja' in campos_privados %} text-privado {% endif %}">{{ vehiculo.cat_motivo_baja|default_if_none:"" }} {{ vehiculo.otro_motivo|default_if_none:"" }}</dd>
+          </dl>
+          <dt> Aclaraciones/Observaciones </dt>
+          <dd class="text-black_opciones {% if 'muebles-noregistrables-observacion' in campos_privados %} text-privado {% endif %}">{{ vehiculo.observaciones|default_if_none:"" }}</dd>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'bienes-muebles' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      XII.BIENES MUEBLES
+      </h4>
+      {% no_aplica declaracion.folio 'bienes-muebles' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for mueble in declaracion.bienesmuebles_set.all %}
+          <h6> MUEBLE # {{ forloop.counter }}</h6>
+          <dl class="p_opciones col-12">
+            <dt> Tipo Operación </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-tipo_operacion' in campos_privados %} text-privado {% endif %}">{{ mueble.tipo_operacion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Tipo de mueble </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-otro_tipo_mueble' in campos_privados %} text-privado {% endif %}">{{ mueble.cat_tipos_muebles|default_if_none:"" }}{{ mueble.otro_tipo_mueble|default_if_none:"" }}</dd>
+          </dl> 
+          <dl class="p_opciones col-12">
+            <dt> Titular </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-cat_tipos_titulares' in campos_privados %} text-privado {% endif %}">{{ mueble.cat_tipos_titulares|default_if_none:"" }}</dd>
+          </dl> 
+          {% for propietario_anterior in mueble.propietario_anterior %}
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - tipo persona </dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-es_fisica' in campos_privados %} text-privado {% endif %}">
+                {% if propietario_anterior.otra_persona.es_fisica %}
+                Física 
+                {% elif not propietario_anterior.otra_persona.es_fisica %}
+                Moral
+                {% else %}
+                --
+                {% endif %}</dd>
+              </dl> 
+              {% if mueble.propietario_anterior.otra_persona.es_fisica %}
+                <dl class="p_opciones col-12">
+                  <dt> Transmisor - Nombre(s)</dt>
+                  <dd class="text-black_opciones {% if 'bienes-muebles-nombres' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.nombres|default_if_none:"" }}</dd>
+                </dl> 
+                <dl class="p_opciones col-12">
+                  <dt> Transmisor - Apellido Paterno</dt>
+                  <dd class="text-black_opciones {% if 'bienes-muebles-apellido1' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.apellido1|default_if_none:"" }}</dd>
+                </dl> 
+                <dl class="p_opciones col-12">
+                  <dt> Transmisor - Apellido Materno</dt>
+                  <dd class="text-black_opciones {% if 'bienes-muebles-apellido2' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.apellido2|default_if_none:"" }}</dd>
+                </dl> 
+              {% else %}
+                <dl class="p_opciones col-12">
+                  <dt> Transmisor - Razón social</dt>
+                  <dd class="text-black_opciones {% if 'bienes-muebles-razon_social' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.razon_social|default_if_none:"" }}</dd>
+                </dl> 
+              {% endif %}
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - rfc</dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-rfc' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.rfc|default_if_none:"" }}</dd>
+              </dl> 
+              <dl class="p_opciones col-12">
+                <dt> Transmisor - relación con titular</dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-cat_tipos_relaciones_personales' in campos_privados %} text-privado {% endif %}">{{ propietario_anterior.otra_persona.cat_tipos_relaciones_personales|default_if_none:"" }}</dd>
+              </dl>
+          {% endfor %}
+
+          {% for copropietario in mueble.copropietario %}
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (Tercero) {{ forloop.counter }}- tipo persona</dt>
+              <dd class="text-black_opciones {% if 'bienes-muebles-es_fisica' in campos_privados %} text-privado {% endif %}">
+            {% if copropietario.otra_persona.es_fisica %}
+              Física 
+              {% elif not copropietario.otra_persona.es_fisica %}
+              Moral
+              {% else %}
+              --
+              {% endif %}</dd>
+            </dl> 
+
+            {% if copropietario.otra_persona.es_fisica %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Nombre(s)</dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-nombres' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.nombres|default_if_none:"" }}</dd>
+              </dl> 
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Apellido Paterno</dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-apellido1' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido1|default_if_none:"" }}</dd>
+              </dl> 
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Apellido Materno</dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-apellido2' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido2|default_if_none:"" }}</dd>
+              </dl>
+            {% else %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Razón social</dt>
+                <dd class="text-black_opciones {% if 'bienes-muebles-razon_social' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.razon_social|default_if_none:"" }}</dd>
+              </dl> 
+            {% endif %}
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (Tercero) {{ forloop.counter }}- rfc</dt>
+              <dd class="text-black_opciones {% if 'bienes-muebles-rfc' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.rfc|default_if_none:"" }}</dd>
+            </dl> 
+            <dl class="p_opciones col-12">
+              <dt> Copropietario (Tercero) {{ forloop.counter }}- relación con titular</dt>
+              <dd class="text-black_opciones {% if 'bienes-muebles-cat_tipos_relaciones_personales' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.cat_tipos_relaciones_personales|default_if_none:"" }}</dd>
+            </dl>
+          {% endfor %}
+
+          <dl class="p_opciones col-12">
+            <dt> Forma de adquisición </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-cat_formas_adquisiciones' in campos_privados %} text-privado {% endif %}">{{ mueble.cat_formas_adquisiciones|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Forma de Pago </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-forma_pago' in campos_privados %} text-privado {% endif %}">{{ mueble.forma_pago|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Valor Aquisición </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-precio_adquisicion' in campos_privados %} text-privado {% endif %}">{{ mueble.precio_adquisicion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Moneda </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-cat_monedas' in campos_privados %} text-privado {% endif %}">{{ mueble.cat_monedas|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Fecha Adquisición </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-fecha_adquisicion' in campos_privados %} text-privado {% endif %}">{{ mueble.fecha_adquisicion|default_if_none:"" }}</dd>
+          </dl>
+          <dl class="p_opciones col-12">
+            <dt> Descripción del bien </dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-despcipcion_bien' in campos_privados %} text-privado {% endif %}">{{ mueble.despcipcion_bien|default_if_none:"" }}</dd>
+          </dl>             
+          <dl class="p_opciones col-12">
+            <dt> En caso de baja del mueble incluir motivo ***</dt>
+            <dd class="text-black_opciones {% if 'bienes-muebles-cat_motivo_baja' in campos_privados %} text-privado {% endif %}">{{ mueble.cat_motivo_baja|default_if_none:"" }} {{ mueble.otro_motivo|default_if_none:"" }}</dd>
+          </dl>
+          <dt> Aclaraciones/Observaciones </dt>
+          <dd class="text-black_opciones {% if 'bienes-muebles-observacion' in campos_privados %} text-privado {% endif %}">{{ mueble.observaciones|default_if_none:"" }}</dd>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'inversiones' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      XIII.INVERSIONES, CUENTAS BANCARIAS Y OTRO TIPO DE VALORES / ACTIVOS (SITUACION ACTUAL)
+      </h4>
+      {% no_aplica declaracion.folio 'inversiones' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for inversion in inversiones %}
+            <h6>Inversión # {{ forloop.counter }}</h6>
+
+          <dl class="p_opciones col-12">
+            <dt> Tipo de operación </dt>
+            <dd class="text-black_opciones {% if 'inversiones-tipo_operacion' in campos_privados %} text-privado {% endif %}">{{ inversion.tipo_operacion|default_if_none:"" }}</dd>
+          </dl>
+
+          <dl class="p_opciones col-12">
+            <dt> Tipo de inversión </dt>
+            <dd class="text-black_opciones {% if 'inversiones-cat_tipos_inversiones' in campos_privados %} text-privado {% endif %}">{{ inversion.cat_tipos_inversiones|default_if_none:"" }}</dd>
+          </dl>               
+
+          <dl class="p_opciones col-12">
+            <dt> Titular </dt>
+            <dd class="text-black_opciones {% if 'inversiones-cat_tipos_titulares' in campos_privados %} text-privado {% endif %}">{{ inversion.cat_tipos_titulares|default_if_none:"" }}</dd>
+          </dl>
+
+          <dl class="p_opciones col-12">
+            <dt> Bancaría </dt>
+            <dd class="text-black_opciones {% if 'inversiones-cat_tipos_especificos_inversiones' in campos_privados %} text-privado {% endif %}">{{ inversion.cat_tipos_especificos_inversiones|default_if_none:"" }} {{ inversion.otro_tipo_especifico }}</dd>
+          </dl>
+            *****
+            {% for copropietario in inversion.copropietario %}
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- tipo persona</dt>
+                <dd class="text-black_opciones {% if 'inversiones-es_fisica' in campos_privados %} text-privado {% endif %}">
+              {% if copropietario.otra_persona.es_fisica %}
+              Física 
+              {% elif not copropietario.otra_persona.es_fisica %}
+              Moral
+              {% else %}
+              --
+              {% endif %}</dd>
+              </dl> 
+
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Nombre(s)</dt>
+                <dd class="text-black_opciones {% if 'inversiones-nombres' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.nombres|default_if_none:"" }}</dd>
+              </dl> 
+
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Apellido Paterno</dt>
+                <dd class="text-black_opciones {% if 'inversiones-apellido1' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido1|default_if_none:"" }}</dd>
+              </dl> 
+
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- Apellido Materno</dt>
+                <dd class="text-black_opciones {% if 'inversiones-apellido2' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.apellido2|default_if_none:"" }}</dd>
+              </dl> 
+
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- rfc</dt>
+                <dd class="text-black_opciones {% if 'inversiones-rfc' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.rfc|default_if_none:"" }}</dd>
+              </dl> 
+
+              <dl class="p_opciones col-12">
+                <dt> Copropietario (Tercero) {{ forloop.counter }}- relación con titular</dt>
+                <dd class="text-black_opciones {% if 'inversiones-cat_tipos_relaciones_personales' in campos_privados %} text-privado {% endif %}">{{ copropietario.otra_persona.cat_tipos_relaciones_personales|default_if_none:"" }}</dd>
+              </dl>
+            {% endfor %}
+
+            <dl class="p_opciones col-12">
+              <dt> Fondos de inversión </dt>
+              <dd class="text-black_opciones {% if 'inversiones-fondo_inversion' in campos_privados %} text-privado {% endif %}">{{ inversion.fondo_inversion|default_if_none:"" }}</dd>
+            </dl>                  
+
+            <dl class="p_opciones col-12">
+              <dt> Organizaciones privadas y/o comerciales </dt>
+              <dd class="text-black_opciones {% if 'inversiones-organizaciones' in campos_privados %} text-privado {% endif %}">{{ inversion.organizaciones|default_if_none:"" }}</dd>
+            </dl>   
+
+            <dl class="p_opciones col-12">
+              <dt> Posesión de monedas y/o metales </dt>
+              <dd class="text-black_opciones {% if 'inversiones-posesiones' in campos_privados %} text-privado {% endif %}">{{ inversion.posesiones|default_if_none:"" }}</dd>
+            </dl> 
+
+            <dl class="p_opciones col-12">
+              <dt> Seguros </dt>
+              <dd class="text-black_opciones {% if 'inversiones-seguros' in campos_privados %} text-privado {% endif %}">{{ inversion.seguros|default_if_none:"" }}</dd>
+            </dl> 
+
+            <dl class="p_opciones col-12">
+              <dt> Valores bursátiles </dt>
+              <dd class="text-black_opciones {% if 'inversiones-valores_bursatiles' in campos_privados %} text-privado {% endif %}">{{ inversion.valores_bursatiles|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Afores </dt>
+              <dd class="text-black_opciones {% if 'inversiones-afores' in campos_privados %} text-privado {% endif %}">{{ inversion.afores|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Número de cuenta, contrato o póliza </dt>
+              <dd class="text-black_opciones {% if 'inversiones-num_cuenta' in campos_privados %} text-privado {% endif %}">{{ inversion.num_cuenta|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> ¿Dónde se localiza la inversión, cuenta bancaria y otro tipo de valores/activos?  </dt>
+              <dd class="text-black_opciones {% if 'inversiones-cat_paises' in campos_privados %} text-privado {% endif %}">{{ inversion.cat_paises|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Saldo de la fecha (situación actual)  </dt>
+              <dd class="text-black_opciones {% if 'inversiones-saldo_actual' in campos_privados %} text-privado {% endif %}">{{ inversion.saldo_actual|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Tipo de moneda  </dt>
+              <dd class="text-black_opciones {% if 'inversiones-cat_monedas' in campos_privados %} text-privado {% endif %}">{{ inversion.cat_monedas|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Aclaraciones/observaciones  </dt>
+              <dd class="text-black_opciones {% if 'inversiones-observacion' in campos_privados %} text-privado {% endif %}">{{ inversion.observaciones|default_if_none:"" }}</dd>
+            </dl>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'deudas' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      XVI.ADEUDOS/PASIVOS(SITUACION ACTUAL)
+      </h4>
+      {% no_aplica declaracion.folio 'deudas' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for adeudo in adeudos %}
+            <h6> Adeudo # {{ forloop.counter }}</h6>
+              <dl class="p_opciones col-12">
+                <dt> Tipo de operación </dt>
+                <dd class="text-black_opciones {% if 'deudas-tipo_operacion' in campos_privados %} text-privado {% endif %}">{{ adeudo.tipo_operacion|default_if_none:"" }}</dd>
+              </dl>
+
+              <dl class="p_opciones col-12">
+                <dt> Tipo de adeudo </dt>
+                <dd class="text-black_opciones {% if 'deudas-cat_tipos_adeudos' in campos_privados %} text-privado {% endif %}">{{ adeudo.cat_tipos_adeudos|default_if_none:"" }} {{ adeudo.otro_tipo_adeudo|default_if_none:"" }} </dd>
+              </dl>              
+
+            <dl class="p_opciones col-12">
+              <dt> Titular </dt>
+              <dd class="text-black_opciones {% if 'deudas-cat_tipos_titulares' in campos_privados %} text-privado {% endif %}">{{ adeudo.cat_tipos_titulares|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Número de cuenta o contrato </dt>
+              <dd class="text-black_opciones {% if 'deudas-numero_cuenta' in campos_privados %} text-privado {% endif %}">{{ adeudo.numero_cuenta|default_if_none:"" }}</dd>
+            </dl>              
+
+            <dl class="p_opciones col-12">
+              <dt> Fecha de adquisición del adeudo/pasivo </dt>
+              <dd class="text-black_opciones {% if 'deudas-fecha_generacion' in campos_privados %} text-privado {% endif %}">{{ adeudo.fecha_generacion|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Monto original del adeudo </dt>
+              <dd class="text-black_opciones {% if 'deudas-monto_original' in campos_privados %} text-privado {% endif %}">{{ adeudo.monto_original|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Tipo de moneda </dt>
+              <dd class="text-black_opciones {% if 'deudas-cat_monedas' in campos_privados %} text-privado {% endif %}">{{ adeudo.cat_monedas|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Saldo insoluto (situación actual) </dt>
+              <dd class="text-black_opciones {% if 'deudas-saldo_pendiente' in campos_privados %} text-privado {% endif %}">{{ adeudo.saldo_pendiente|default_if_none:"" }}</dd>
+            </dl>
+
+            ****
+            
+            <dl class="p_opciones col-12">
+              <dt> ¿Donde se localiza el adeudo?</dt>
+              <dd class="text-black_opciones {% if 'deudas-cat_paises' in campos_privados %} text-privado {% endif %}">{{ adeudo.cat_paises|default_if_none:"" }}</dd>
+            </dl>              
+
+            <dl class="p_opciones col-12">
+              <dt> Otorgante del crédito </dt>
+              <dd class="text-black_opciones {% if 'deudas-cat_tipos_acreedores' in campos_privados %} text-privado {% endif %}">{{ adeudo.cat_tipos_acreedores|default_if_none:"" }}
+              {{ adeudo.otro_tipo_acreedor|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Nombre o razón social del otorgante (si aplica) </dt>
+              <dd class="text-black_opciones {% if 'deudas-acreedor_nombre' in campos_privados %} text-privado {% endif %}">
+              {{ adeudo.acreedor_nombre|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> RFC del otorgante </dt>
+              <dd class="text-black_opciones {% if 'deudas-acreedor_rfc' in campos_privados %} text-privado {% endif %}">{{ adeudo.acreedor_rfc|default_if_none:"" }}
+            </dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Aclaraciones/observaciones  </dt>
+              <dd class="text-black_opciones {% if 'deudas-observacion' in campos_privados %} text-privado {% endif %}">{{ adeudo.observaciones|default_if_none:"" }}</dd>
+            </dl>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if 'prestamoComodato' in secciones_por_tipo_declaracion %}
+    <div class="col-12">
+      <hr class="linea" />
+      <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      XV.PRESTAMO O COMODATO POR TERCEROS(SITUACIÓN ACTUAL)
+      </h4>
+      {% no_aplica declaracion.folio 'prestamoComodato' as checked %}
+      {% if checked %}
+          {% include 'declaracion/admin/frm_no_aplica.html' %}
+      {% else %}
+        {% for prestamo in prestamos %}
+            <h6> prestamo / comodato # {{ forloop.counter }}</h6>
+            <dl class="p_opciones col-12">
+              <dt> Tipo de operación </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-tipo_operacion' in campos_privados %} text-privado {% endif %}">{{ prestamo.tipo_operacion|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Tipo de inmueble </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-cat_tipos_inmueble' in campos_privados %} text-privado {% endif %}">{{ prestamo.cat_tipos_inmueble|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - país </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-cat_pais' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.cat_pais|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - calle </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-nombre_via' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.nombre_via|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - número exterior </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-num_exterior' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.num_exterior|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - número interior </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-num_interior' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.num_interior|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - colonia </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-colonia' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.colonia|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - Entidades Federativas </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-cat_entidades_federativa' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.cat_entidades_federativa|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - municipio </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-municipio' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.municipio|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Ubicación del inmueble - código postal </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-cp' in campos_privados %} text-privado {% endif %}">{{ prestamo.inmueble_domicilios.cp|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> tipo Mueble </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-cat_tipos_muebles' in campos_privados %} text-privado {% endif %}">{{ prestamo.cat_tipos_muebles|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Mueble (Vehiculo) - marca </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-mueble_marca' in campos_privados %} text-privado {% endif %}">{{ prestamo.mueble_domicilios.mueble_marca|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Mueble (Vehiculo) - submarca </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-mueble_submarca' in campos_privados %} text-privado {% endif %}">{{ prestamo.mueble_domicilios.mueble_submarca|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Mueble (Vehiculo) - modelo </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-mueble_modelo' in campos_privados %} text-privado {% endif %}">{{ prestamo.mueble_domicilios.mueble_modelo|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Mueble (Vehiculo) - número de serie </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-muble_num_serie' in campos_privados %} text-privado {% endif %}">{{ prestamo.mueble_domicilios.muble_num_serie|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Mueble (Vehiculo) - Lugar de registro </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-cat_paises' in campos_privados %} text-privado {% endif %}">{{ prestamo.mueble_domicilios.cat_paises|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Mueble (Vehiculo) - número de registro </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-mueble_num_registro' in campos_privados %} text-privado {% endif %}">{{ prestamo.mueble_domicilios.mueble_num_registro|default_if_none:"" }}</dd>
+            </dl>               
+
+            <dl class="p_opciones col-12">
+              <dt> Titular - tipo persona </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-es_fisica' in campos_privados %} text-privado {% endif %}">
+                {% if copropietario.info_personal_var.es_fisica %}
+                Física 
+                {% elif not copropietario.info_personal_var.es_fisica %}
+                Moral
+                {% else %}
+                --
+                {% endif %}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Titular - Nombre (s) </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-nombres' in campos_privados %} text-privado {% endif %}">{{ prestamo.titular_infopersonalVar.nombres|default_if_none:"" }}</dd>
+            </dl>               
+
+            <dl class="p_opciones col-12">
+              <dt> Titular - Apellidos  </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-apellido1' in campos_privados %} text-privado {% endif %}">{{ prestamo.titular_infopersonalVar.apellido1|default_if_none:"" }} {{ prestamo.titular_infopersonalVar.apellido2|default_if_none:"" }}</dd>
+            </dl> 
+
+            <dl class="p_opciones col-12">
+              <dt> Titular - RFC </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-rfc' in campos_privados %} text-privado {% endif %}">{{ prestamo.titular_infopersonalVar.rfc|default_if_none:"" }}</dd>
+            </dl>  
+
+            <dl class="p_opciones col-12">
+              <dt> Relación o parentesco</dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-titular_relacion' in campos_privados %} text-privado {% endif %}">{{ prestamo.titular_relacion|default_if_none:"" }} {{ prestamo.otro_tipo_relacion|default_if_none:"" }}</dd>
+            </dl>
+
+            <dl class="p_opciones col-12">
+              <dt> Aclaraciones / observaciones </dt>
+              <dd class="text-black_opciones {% if 'prestamoComodato-observacion' in campos_privados %} text-privado {% endif %}">{{ prestamo.observaciones|default_if_none:"" }}</dd>
+            </dl>
+        {% endfor %}
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,950 @@
+{% load static %}
+{% load personalizacion_tags %}
+<!DOCTYPE html>
+<html lang="es-mx">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#FFF">
+        <meta name="keywords" content="anticorrupción,gobierno,SiDECLARA,declaraciones">
+        <meta name="Description" content="Sistema SiDECLARA para declaraciones de intereses y patrimoniales de los servidores públicos.">
+        <title>{% block header_title %}SiDECLARA v001{% endblock %}</title>
+        <link rel='icon' href="{% static 'src/img/icon-seajal.png' %}" type='image/x-icon'/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static 'urls.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+        <link rel="stylesheet" type="text/css" href="/media/personalizar/personalizar.css">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+        {% block header_style %}{% endblock %}
+        {% block header_script %}{% endblock %}
+
+
+
+    </head>
+    <body>
+        <div class="container-fluid body-container bgcolor-base">
+        {% block content_header %}
+        <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bgcolor-neutro mb-3">
+            <button class="navbar-toggler bgcolor-primario" type="button" data-toggle="collapse" data-target="#navbartoggler" aria-controls="navbartoggler" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            {% if user.is_superuser or user.is_staff %} 
+            <!--a class="dropdown-item" href="{% url 'personalizar_entidad' %}">Datos de la entidad</a-->
+            <div class="w-100 personalizar_clic">
+                <p class="color-alerta icono_personalizar"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                  </svg> Personalizar </p>
+            {% else %}
+            <a class="navbar-brand" href="/">
+            {% endif %}
+                <img class="nav-logo" src="/media/{% personalizacion 'imagen_logo' %}" alt="logo MODIFICADO">
+            {% if user.is_superuser or user.is_staff %} </div> {% endif %}
+            </a>
+          
+            <div class="collapse navbar-collapse" id="navbartoggler">
+              <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-3">
+                <li class="nav-item">
+                    <a class="pt-md-5 nav-link nav-item-link color-primario" href="{% url 'inicio' %}">Inicio</a>
+                </li>
+                {% if user.is_authenticated %}
+                {% if not user.is_staff and not user.is_superuser  %}
+                <li class="nav-item">
+                    <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'declaracion:declaracion' %}">Realizar declaración</a>
+                </li>
+                <li class="nav-item">
+                    <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'declaraciones-previas' %}">Declaraciones previas</a>
+                </li>
+                {% else %}
+                    <li class="nav-item">    
+                        <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'declaracion:busqueda-declarantes' %}">Declarantes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'declaracion:busqueda-declaraciones' %}">Declaraciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'declaracion:declaraciones-graficas' %}">Gráficas</a>
+                    </li>
+                    {% if user.is_superuser or user.is_staff %}
+                    <li class="nav-item">
+                        <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'declaracion:busqueda-usuarios' %}">Usuarios OIC</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <div class="text-center">
+                        <!--a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" target="_blank"  href="/admin/sitio/sitio_personalizacion/1/change/">Personalizar</a-->
+                        <a role="button" class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <p> Personalizar</p>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/admin/sitio/sitio_personalizacion/1/change/">Datos de las entidades</a>
+                            <a class="dropdown-item" href="{% url 'personalizar_catareas' %}">Catálogo de areas</a>
+                            <a class="dropdown-item" href="{% url 'personalizar_catpuestos' %}">Catálogo de puestos</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/admin/sitio/declaracion_faqs/">Preguntas frecuentes</a>
+                            <a class="dropdown-item" href="/admin/sitio/valores_smtp/">Valores del SMTP</a>
+                            <a class="dropdown-item" href="/admin/oauth2_provider/">Valores para API Oauth</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/admin/sitio/sitio_personalizacion/1/change/">Imagen y colores</a>
+                            <a class="dropdown-item" href="/admin/declaracion/infopersonalfija/">Información personal Fija</a>
+
+                        </div>
+                      </div>
+                    </li>
+                    {% endif %}
+                {% endif %}
+                {% endif %}
+                <li class="nav-item">    
+                    <a class="pt-md-5 nav-link nav-item-link color-primario font-weight-bold" href="{% url 'preguntas-frecuentes' %}">Preguntas frecuentes</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown bgcolor-primario nav-menu">
+                    <div class="dropleft text-center">
+                        <button type="button" class="btn color-neutro font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static 'src/img/SEAJAL-Declaraciones-Mi_cuenta-Icono_cuenta.png' %}" alt="Usuario" class="">
+                            <p> Mi cuenta</p>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'declaracion:perfil' %}">Ir a mi cuenta</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item nav-menu bgcolor-primario p-2">
+                    <a class="nav-item" href="{% url 'login' %}">
+                        <figure class=" text-center">
+                            <img src="{% static 'src/img/candado-cerrado.svg' %}" alt="Inicia sesión" class="align-middle">
+                            <figcaption class="color-neutro font-weight-bold">
+                                Ingresar
+                            </figcaption>   
+                        </figure>
+                    </a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+        </header>
+        {% endblock %}
+        {% block content %}{% endblock %}
+        {% block content_footer %}
+        <footer>
+            <div class="row m-0 p-3 mt-3 fit_to_body w-100 bgcolor-primario body-footer">
+                <div class="col-md-2 offset-4  text-center pb-2">
+                    {% if user.is_superuser or user.is_staff%} 
+                    <a class="color-neutro" href="/admin/sitio/sitio_personalizacion/1/change/#id_imagen_sublogo" alt="Personalizar" target="_blank">
+                    <div class="w-100 personalizar_clic">
+                        <p class="color-alerta icono_personalizar"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                          </svg> Personalizar </p>
+                    {% endif %}     
+                    <img class="img-responsive" src="/media/{% personalizacion 'imagen_sublogo' %}" alt="logo secundario">
+                    {% if user.is_superuser or user.is_staff %} </div></a> {% endif %}
+                </div>
+
+                <div class="col-md-2 offset-md-4 text-sm-center color-neutro font-weight-lighter fs-75">
+                    {% if user.is_superuser or user.is_staff%} 
+                    <a class="color-neutro" href="/admin/sitio/sitio_personalizacion/1/change/#id_nombre_institucion" alt="Personalizar" target="_blank">
+                    <div class="w-100 personalizar_clic">
+                        <p class="color-alerta icono_personalizar"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                          </svg> Personalizar </p>
+                    {% endif %}     
+                        <p class="m-0">{% personalizacion "nombre_institucion" %} </p>
+                        <p class="m-0">{% personalizacion "direccion_calle" %},  C.P. {% personalizacion "direccion_cp" %} </p>
+                        <p class="m-0">{% personalizacion "direccion_ciudad" %}, {% personalizacion "direccion_estado" %}, México.</p>
+                        <p class="m-0 pt-3">Teléfonos {% personalizacion "direccion_telefonos" %}</p>
+                        <p class="m-0">{% personalizacion "direccion_correos" %}</p>
+                    {% if user.is_superuser or user.is_staff %}</div></a>{% endif %} 
+                    </div>
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+        </div>
+        <!--script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+        <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/locale/af.min.js"></script-->
+        <script type="text/javascript" src="{% static 'moment.js' %}"></script>
+        <script src="{% static 'sizzle.js' %}"></script>
+        <script type="text/javascript" src="{% static 'bootstrap-datetime.js' %}"></script>
+        <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></scrip-->
+        <script type="text/javascript" src="{% static 'jquery.are-you-sure.js' %}"></script>
+        <!--script type="text/javascript" src="{% static 'app.js' %}"></script-->
+        <script type="text/javascript" src="{% static 'graficas.js' %}"></script>
+        <script type="text/javascript" src="{% static 'validacion.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/declaraciones.js' %}"></script>   
+        <script type="text/javascript" src="{% static 'declaracion_js/enter-key.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/loader.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/login.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/nacionalidades.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/no_aplica.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/validacion.js' %}"></script>
+        <script type="text/javascript" src="{% static 'declaracion_js/widgets.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+        <script type="text/javascript">
+
+        function check_terminos_condiciones(){
+          if($("#checkbox_crear_cuenta"). is(":checked")){
+            $('#btn_crear_cuenta').prop( "disabled", false );
+          }
+          else{
+            $('#btn_crear_cuenta').prop( "disabled", true );
+          }
+        }
+
+            function pruebas(){
+                var element = $(document).find("span");
+                alert(element.id);
+              }
+          // función para usar el jquery select2 en nacionoalidades 
+          function agregar_nacionalidad_btn() {
+            $('.multiples-nacionalidades select').select2('open');
+          }
+
+
+            function borrarRegistro(url, redirect, id) {
+              var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+              function csrfSafeMethod(method) {
+                  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+              }
+
+              $.ajaxSetup({
+                  beforeSend: function(xhr, settings) {
+                      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                          xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                      }
+                  }
+              });
+
+              if (confirm('¿Está seguro de eliminar el registro?') == true) {
+                  $.ajax({
+                      url : url,
+                      type : "POST",
+                      success : function(json) {
+                        $("#borrar-registro-" + id).hide()
+                      },
+                      error : function(xhr,errmsg,err) {
+                          console.log(xhr.status + ": " + xhr.responseText);
+                      }
+                  });
+                  location.reload();
+              } else {
+
+                  return false;
+              }
+            };
+
+        //Carga información de gráficas cuando el usuario es staff en declaraciones
+          function graficas_ajax_api(data){
+            var canvas1 = document.getElementById("chart_grafica_usuarios_declaraciones_general");
+            var canvas2 = document.getElementById("chart_grafica_usuario_declaraciones_fechas");
+
+            if(canvas1 || canvas2){
+              document.getElementById("grafica_usuarios_declaraciones_general").innerHTML = '&nbsp;';
+              document.getElementById("grafica_usuarios_declaraciones_general").innerHTML = '<canvas id="chart_grafica_usuarios_declaraciones_general"></canvas>';
+              
+              document.getElementById("grafica_usuario_declaraciones_fechas").innerHTML = '&nbsp;';
+              document.getElementById("grafica_usuario_declaraciones_fechas").innerHTML = '<canvas id="chart_grafica_usuario_declaraciones_fechas"></canvas>';
+            }
+
+            $.ajax({ 
+              method: "GET",
+              data: data,
+              url: "{% url 'declaracion:api-graficas-data' %}",
+              success: function(data) {
+                $("#filtro_anio_graficas div.row.bootstrap4-multi-input").children().each(function(){
+                  var name_input=$(this).children()[0].name;
+                  if(name_input != "anio_filtro_year"){
+                    $(this).css("display","none");
+                  }
+                });
+                drawBarGraph(data, 'chart_grafica_usuarios_declaraciones_general');
+                drawLineGraph(data, 'chart_grafica_usuario_declaraciones_fechas');
+              }, 
+              error: function(error_data) {
+                console.log(error_data); 
+              } 
+            });
+        }
+
+        function getMunicipios() {
+            var entidad_federativa = $("#id_domicilio-cat_entidades_federativas").val();
+            var url = $("#formInfoPersonal").attr("data-municipios-url");
+
+            if (entidad_federativa) {
+                //Eliminamos las opciones anteriores del select
+                $("#id_domicilio-municipio").html("");
+                $.ajax({
+                    url: "{% url 'declaracion:lista_municipios' %}",
+                    type: "GET",
+                    data: {
+                        "entidad_federativa": entidad_federativa,
+                    },
+                    success: function(response){
+                      $("#id_domicilio-municipio").html(response.municipios);
+                      $("#id_domicilio-municipio").trigger("change");
+                    }
+                });
+            } else {
+                $("#id_domicilio-municipio").html("<option value='' selected='selected'>---------</option>");
+                $("#id_domicilio-municipio").trigger("change");
+            }
+        }
+
+        function getPuestos(area_id, puesto_id, valor = '') {
+            var area = $(area_id).val();
+            var url = $("#formulario_registro").attr("data-puestos-url");
+
+            if (area) {
+                //Eliminamos las opciones anteriores del select
+                $(puesto_id).html("-----------------");
+                $.ajax({
+                    url: "{% url 'declaracion:lista_puestos' %}",
+                    type: "GET",
+                    data: {
+                        "area": area,
+                    },
+                    success: function(response){
+                      $(puesto_id).prop('disabled', false);
+                      $(puesto_id).html(response.puestos);
+                      $(puesto_id).trigger("change");
+
+                      $(puesto_id).val(valor)
+                    }
+                });
+            } else {
+                $(puesto_id).html("<option value='' selected='selected'>---------</option>");
+                $(puesto_id).trigger("change");
+                $(puesto_id).prop('disabled', 'disabled');
+            }
+        }
+
+
+        function getTiposInversionesEspecificos(){
+            var tipo_inversion = $("#id_inversiones-cat_tipos_inversiones").val();
+            var url = $("#formInversiones").attr("data-tiposInversiones-url");
+
+            if (tipo_inversion) {
+                //Eliminamos las opciones anteriores del select
+                $("#id_inversiones-cat_tipos_especificos_inversiones").html("");
+                $.ajax({
+                    url: "{% url 'declaracion:lista_tiposinversionesespecificas' %}",
+                    type: "GET",
+                    data: {
+                        "tipo_inversion": tipo_inversion,
+                    },
+                    success: function(response){
+                        console.log(response)
+                      $("#id_inversiones-cat_tipos_especificos_inversiones").html(response.inversiones_especificas);
+                      $("#id_inversiones-cat_tipos_especificos_inversiones").trigger("change");
+                    }
+                });
+            } else {
+                $("#id_inversiones-cat_tipos_especificos_inversiones").html("<option value='' selected='selected'>---------</option>");
+                $("#id_inversiones-cat_tipos_especificos_inversiones").trigger("change");
+            }
+        }
+
+        function accion_hide_disabled_show(_this){
+            switch(_this.id){
+              case 'ingreso_anio_anterior-no':
+                $('#div_sueldo_publico_actual').show();
+                $('#div_sueldo_publico_anterior').hide();
+                $('#div_sueldo_publico_anterior_fi').hide();
+                $('#div_sueldo_publico_anterior_fc').hide();
+
+                $('.fechas_anio_anterior').hide();
+                $('.fechas_anio_anterior').hide();
+
+                $('#id_ingresos_declaracion-ingreso_mensual_cargo').val(0);
+                $('#id_ingresos_declaracion-ingreso_mensual_actividad').val(0);
+                $('#id_ingresos_declaracion-ingreso_mensual_financiera').val(0);
+                $('#id_ingresos_declaracion-ingreso_mensual_servicios').val(0);
+                $('#id_ingresos_declaracion-ingreso_enajenacion_bienes').val(0);
+                $('#id_ingresos_declaracion-ingreso_otros_ingresos').val(0);
+              break;
+
+              case 'ingreso_anio_anterior-si':
+                $('#div_sueldo_publico_actual').hide();
+                $('#div_sueldo_publico_anterior').show();
+                $('#div_fue_servidor_publico').show();
+                $('#div_sueldo_publico_anterior_fi').show();
+                $('#div_sueldo_publico_anterior_fc').show();
+
+                $('.fechas_anio_anterior').show();
+                $('.fechas_anio_anterior').show();
+
+              break;
+
+              case 'id-domicilio-cat_pais-ex':
+                $('#id_domicilio-colonia').attr("disabled", true);
+                $('#id_domicilio-cat_entidades_federativas').attr("disabled", true);
+                $('#id_domicilio-municipio').attr("disabled", true);
+                $('#id_domicilio-colonia').val("");
+                $('#id_domicilio-cat_entidades_federativas').val("");
+                $('#id_domicilio-municipio').val("");
+              break;
+
+              case 'id-inmueble_domicilio-cat_pais-ex':
+                $('#id_inmueble_domicilio-colonia').attr("disabled", true);
+                $('#id_inmueble_domicilio-cat_entidades_federativas').attr("disabled", true);
+                $('#id_inmueble_domicilio-municipio').attr("disabled", true);
+                $('#id_inmueble_domicilio-colonia').val("");
+                $('#id_inmueble_domicilio-cat_entidades_federativas').val("");
+                $('#id_inmueble_domicilio-municipio').val("");
+              break;
+
+              case 'id-comodato-cat_paises-ex':
+                $('#id_comodato-cat_entidades_federativas').attr("disabled", true);
+              break;
+
+              case 'id-var-cat_pais-ex':
+                $('#id_var-cat_entidades_federativas').attr("disabled", true);
+              break;
+
+              case 'id-domicilio-cat_pais-mx':
+                $('#id_domicilio-colonia').attr("disabled", false);
+                $('#id_domicilio-cat_entidades_federativas').attr("disabled", false);
+                $('#id_domicilio-municipio').attr("disabled", false);
+              break;
+
+              case 'id-inmueble_domicilio-cat_pais-mx':
+                $('#id_inmueble_domicilio-colonia').attr("disabled", false);
+                $('#id_inmueble_domicilio-cat_entidades_federativas').attr("disabled", false);
+                $('#id_inmueble_domicilio-municipio').attr("disabled", false);
+              break;
+
+              case 'id-comodato-cat_paises-mx':
+                $('#id_comodato-cat_entidades_federativas').attr("disabled", false);
+              break;
+
+              case 'id-var-cat_pais-mx':
+                $('#id_var-cat_entidades_federativas').attr("disabled", false);
+              break;
+
+              case 'ingresos-no':
+                $('#id_socios_comerciales-montoMensual').attr("disabled", true);
+                $('#id_socios_comerciales-moneda').attr("disabled", true);
+              break;
+
+              case 'ingresos-si':
+                $('#id_socios_comerciales-montoMensual').attr("disabled", false);
+                $('#id_socios_comerciales-moneda').attr("disabled", false);
+              break;
+
+              case 'no-pagado':
+                $('#id_membresia-monto').attr("disabled", true);
+                $('#id_membresia-moneda').attr("disabled", true);
+              break;
+
+              case 'Pagado':
+                $('#id_membresia-monto').attr("disabled", false);
+                $('#id_membresia-moneda').attr("disabled", false);
+              break;
+
+              case 'no-pagado-act':
+                $('#id_representaciones_activas-monto').attr("disabled", true);
+                $('#id_representaciones_activas-cat_moneda').attr("disabled", true);
+              break;
+
+              case 'Pagado-act':
+                $('#id_representaciones_activas-monto').attr("disabled", false);
+                $('#id_representaciones_activas-cat_moneda').attr("disabled", false);
+              break;
+            }
+        }
+
+
+        /*** Declaración fisal */
+        //Se encarga de procesar el archivo que sea cargado en el input type
+        function readURL(input){
+          var tipo = input.getAttribute('tipo');
+          if(input.files && input.files[0])
+          {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              $('#image-upload-wrap-'+tipo).hide();
+              $('#file-upload-content-'+tipo).show();
+              $('#image-title-'+tipo).html(input.files[0].name);
+            };
+            reader.readAsDataURL(input.files[0]);
+          }
+          else 
+          {
+            removeUpload(tipo);
+          }
+        }
+
+        //Elimina el archivo cargado en la zona de declaración fiscal
+        function removeUpload(tipo){
+          $('declaracion_fiscal-archivo_'+tipo).replaceWith($('declaracion_fiscal-archivo_').clone());
+          $('#file-upload-content-'+tipo).hide();
+          $('#image-upload-wrap-'+tipo).show();
+        }
+
+        function muebles_forma_pago_inicial(_id){
+          var forma_pago = $('#'+_id+'-forma_pago').val();
+          if(!forma_pago){
+             $('#'+_id+'-precio_adquisicion').attr("disabled", true);
+             $('#'+_id+'-cat_monedas').attr("disabled", true);
+          }
+          else{
+            if(forma_pago == 'CRÉDITO' || forma_pago == 'CONTADO'){
+              $('#'+_id+'-precio_adquisicion').attr("disabled", false);
+              $('#'+_id+'-cat_monedas').attr("disabled", false);
+            }
+            else{
+              $('#'+_id+'-precio_adquisicion').attr("disabled", true);
+              $('#'+_id+'-cat_monedas').attr("disabled", true);
+            }
+          }
+        }
+
+        function onclick_check_terminos_condiciones(){
+            if($("#checkbox_crear_cuenta").is(":checked")){
+              $('#btn_crear_cuenta').prop( "disabled", false );
+            }
+            else{
+              $('#btn_crear_cuenta').prop( "disabled", true );
+            }
+          }
+
+        $('.block_boton').click(function(){ 
+            
+            $('.block_boton').prop('disabled', true);
+            $('.block_submit').submit();
+            $(".block_boton").prop("checked", false);
+
+
+
+        });
+
+        function no_archivo_terminos_condiciones(){
+          $('#ms_terminos_condiciones').empty()
+          $('#ms_terminos_condiciones').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Validar que exista un archivo cargado en personalización de terminos y condiciones</strong></div>')
+        }
+
+
+        function change_conyugue(_this, id_div){
+          var actividad_laboral = parseInt(_this.children("option:selected").val());
+
+            switch(actividad_laboral){
+                case 1://PUBLICO
+                    $('#'+id_div+'-sector-publico').show();
+                    $('#'+id_div+'-sector-privado').hide();
+                    $('#'+id_div+'-otro').hide();
+                 break;
+
+                case 2://PRIVADO
+                    $('#'+id_div+'-sector-publico').hide();
+                    $('#'+id_div+'-sector-privado').show();
+                    $('#'+id_div+'-otro').hide();
+                break;
+
+                case 6://Id otro con la código solicitado por API
+                    $('#'+id_div+'-sector-publico').hide();
+                    $('#'+id_div+'-sector-privado').hide();
+                    $('#'+id_div+'-otro').show();
+                break;
+
+                default:
+                    $('#'+id_div+'-sector-publico').hide();
+                    $('#'+id_div+'-sector-privado').hide();
+                    $('#'+id_div+'-otro').hide();
+            }
+        }
+
+        function change_prestamocomodato(_this, id_div){
+            var tipo_prestamo = _this.val();
+            
+            switch(tipo_prestamo){
+                case 'INMUEBLE':
+                    $('#div_inmueble_comodato').show()
+                    $('#div_mueble_comodato').hide()
+                break;
+
+                case 'MUEBLE':
+                    $('#div_inmueble_comodato').hide()
+                    $('#div_mueble_comodato').show()
+                break;
+
+                default:
+                    $('#div_inmueble_comodato').hide()
+                    $('#div_mueble_comodato').hide()
+            }
+        }
+
+
+        function change_ingresos_suma(_this){
+          var monto_pareja = $('#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes').val();
+          var monto_declarante = 0, monto_total = 0, monto_otros = 0;
+          var id_input_montos = 
+          [
+            'ingreso_mensual_cargo',
+            'ingreso_mensual_actividad',
+            'ingreso_mensual_financiera',
+            'ingreso_mensual_servicios',
+            'ingreso_enajenacion_bienes',
+            'ingreso_otros_ingresos'
+          ]
+
+          for(var i=0;i<id_input_montos.length; i++){
+            if($('#id_ingresos_declaracion-'+id_input_montos[i]).val()){
+              monto_declarante+=parseInt($('#id_ingresos_declaracion-'+id_input_montos[i]).val())
+
+              if(id_input_montos[i] != 'ingreso_mensual_cargo'){
+                monto_otros+=parseInt($('#id_ingresos_declaracion-'+id_input_montos[i]).val())
+              }
+            }
+          }
+             
+          monto_total=monto_total+monto_declarante+parseInt(monto_pareja);
+
+          if(isNaN(monto_total)){
+            monto_total = monto_declarante
+          }
+
+          $('#id_ingresos_declaracion-ingreso_mensual_otros_ingresos').val(monto_otros);
+          $('#id_ingresos_declaracion-ingreso_mensual_neto').val(monto_declarante);
+          $('#id_ingresos_declaracion-ingreso_mensual_total').val(monto_total);
+
+        }
+
+        function muebles_forma_pago(_this,_id){
+          var fp = _this.children("option:selected").val();
+          if(fp == 'CRÉDITO' || fp == 'CONTADO'){
+            $('#'+_id+'-precio_adquisicion').attr("disabled", false);
+            $('#'+_id+'-cat_monedas').attr("disabled", false);
+          }
+          else{
+            $('#'+_id+'-precio_adquisicion').attr("disabled", true);
+           $('#'+_id+'-cat_monedas').attr("disabled", true);
+          }
+        }
+
+            
+        $(window).on('load',function(){
+            if($("#no_aplica").prop("checked") && $("#no_aplica").length){
+              $(".row-form").hide();
+            }else {
+              $(".row-form").show();
+            };
+
+            $('.image-upload-wrap').bind('dragover',function(){
+              $('.image-upload-wrap').addClass('image-dropping');
+            });
+                
+            $('.image-upload-wrap').bind('dragleave',function(){
+              $('.image-upload-wrap').removeClass('image-dropping');
+            });
+
+            if('{{declaracion}}'){
+              $('#modal-aviso-declaracion-activa').modal('show');
+            }
+            //alert("Nuevo----", "{{nueva_declaracion}}");
+            //Si una declaración es nueva se mostrara un mensaje al usuario
+            if("{{nueva_declaracion}}" == "True")
+            {
+              $('#mensaje_bienvenida').modal('show');
+            }
+
+            if(document.getElementById('ingreso_anio_anterior-no'))
+            {
+                if(document.getElementById('ingreso_anio_anterior-no').checked == true){
+                  $('#div_sueldo_publico_actual').show();
+                  $('#div_sueldo_publico_anterior').hide();
+                  $('#div_sueldo_publico_anterior_fi').hide();
+                  $('#div_sueldo_publico_anterior_fc').hide();
+
+                  $('.fechas_anio_anterior').hide();
+                  $('.fechas_anio_anterior').hide();
+
+                  $('#id_ingresos_declaracion-ingreso_mensual_cargo').val(0);
+                  $('#id_ingresos_declaracion-ingreso_mensual_actividad').val(0);
+                  $('#id_ingresos_declaracion-ingreso_mensual_financiera').val(0);
+                  $('#id_ingresos_declaracion-ingreso_mensual_servicios').val(0);
+                  $('#id_ingresos_declaracion-ingreso_enajenacion_bienes').val(0);
+                  $('#id_ingresos_declaracion-ingreso_otros_ingresos').val(0);
+                }
+            }
+
+            //Validaciones de RadioButtons
+            if($("#no-pagado-act").is(":checked"))
+            {
+              $('#id_representaciones_activas-monto').attr("disabled", true);
+              $('#id_representaciones_activas-cat_moneda').attr("disabled", true);
+            }
+
+            if($("#no-pagado").is(":checked")){
+              $('#id_membresia-monto').attr("disabled", true);
+              $('#id_membresia-moneda').attr("disabled", true);
+            }
+            
+
+            $("#ventana-modal").on('show.bs.modal', function(){
+              var inputs = $('#form_declaraciones :input');
+              var values = {};
+
+              inputs.each(function(){
+                var name_imput = $(this).attr('name');
+                if(name_imput != "estatus" && name_imput != "tipo"){
+                  values[name_imput] = $(this).val();
+                }
+                else{
+                  values[name_imput] = $(this).children("option:selected").val();
+                }
+              });
+
+              var form_reporte = $('#form_declaraciones_reporte :input');
+              form_reporte.each(function(i, input){
+                $(input).val(values[$(input).attr('name')])
+              });
+            });
+
+            /*******************************VALIDACIONES DE INICIALIZACIÓN**************************************************/
+            var estado_civil = parseInt($("#id_var-cat_estados_civiles").val());
+            if(!$('#id_var-cat_regimenes_matrimoniales').val()){
+              $('#id_var-cat_regimenes_matrimoniales').attr("disabled", true);
+            }
+            else
+            {
+              if( estado_civil == 2 || estado_civil == 3){
+                $('#id_var-cat_regimenes_matrimoniales').attr("disabled", true);
+                $('#id_var-cat_regimenes_matrimoniales').val("");
+              }
+            }
+
+            //PARA DOMICILIOS SE MOSTRARÁ SOLA LA LISTA DE MUNICIPIOS DE ACUERDO A LA ENTIDAD SELECCIONADA
+            if($("#id_domicilio-cat_entidades_federativas")){
+              if($("#id_domicilio-cat_entidades_federativas").val() && !$('#id_domicilio-municipio').val()){
+              	$("#id_domicilio-cat_entidades_federativas").val(14)
+                getMunicipios()
+              }
+            }
+
+            if($("#id_inmueble_domicilio-cat_entidades_federativas")){
+              if($("#id_inmueble_domicilio-cat_entidades_federativas").val() && !$('#id_inmueble_domicilio-municipio').val()){
+              	$("id_inmueble_domicilio-cat_entidades_federativas").val(14)
+                getMunicipios()
+              }
+            }
+
+            if("{% if current_url == 'ingresos-netos' %}true{% endif %}"){
+              if(parseInt("{{puesto}}") > {% if limit_simp %}{{limit_simp}}{% else %} 15 {% endif %} ){
+                $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr('readonly', true);
+              }
+              
+              $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr("placeholder","ESTE CAMPO SE LLENARÁ AUTOMATICAMENTE")
+            }
+            else{
+              $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr('readonly', false);
+              $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr("placeholder","Ingresos de la pareja y/o dependientes económicos")
+            }
+
+            var date = new Date();
+            var year = date.getFullYear();
+
+            muebles_forma_pago_inicial('id_bienes_inmuebles');
+            muebles_forma_pago_inicial('id_muebles_no_registrables');
+            muebles_forma_pago_inicial('id_bienes_muebles'); 
+
+            if(document.getElementById("chart_grafica_usuarios_declaraciones_general")){
+              graficas_ajax_api({"year": year});
+            }
+
+            $('#id_inversiones-cat_tipos_inversiones').change(function(){
+              getTiposInversionesEspecificos();
+            });
+            
+            if($('#div_inmueble_comodato')){
+
+                if($("#id_comodato-tipo_obj_comodato").val() == 'INMUEBLE'){
+                    $('#div_inmueble_comodato').show();
+                    $('#div_mueble_comodato').hide();
+                }
+                else if ($("#id_comodato-tipo_obj_comodato").val() == 'MUEBLE'){
+                    $('#div_inmueble_comodato').hide();
+                    $('#div_mueble_comodato').show();
+                }
+                else{
+                    $('#div_inmueble_comodato').hide()
+                    $('#div_mueble_comodato').hide()
+                }
+            }
+
+            if(!$("#id_inversiones-cat_tipos_inversiones").val())
+            {
+              getTiposInversionesEspecificos();
+            }
+
+            if($('input[type=radio][name="experiencia_laboral-cat_ambitos_laborales"]:checked').val() == 1){
+              $(".ambito_publico").show();
+            }
+            else{
+              $(".ambito_publico").hide()
+            }
+            
+            /*****************************************FUNCIONES CHANGE**************************************************/
+            //Se encarga de habilitar o no el campo de regimenes matrimoniales de acuerdo al estado civil
+            $("#id_var-cat_estados_civiles").change(function(){
+              estado_civil = parseInt($(this).children("option:selected").val());
+              if(estado_civil == 2 || estado_civil == 3){
+                $('#id_var-cat_regimenes_matrimoniales').attr("disabled", true);
+                $('#id_var-cat_regimenes_matrimoniales').val("");
+              }
+              else{
+                $('#id_var-cat_regimenes_matrimoniales').attr("disabled", false);
+              }
+            });
+
+
+            //Habilita o deshabilita campos monto y moneda en bienes muebles y no registrables
+            $("#id_bienes_inmuebles-forma_pago").change(function(){
+              muebles_forma_pago($(this),'id_bienes_inmuebles');
+            });
+            $("#id_muebles_no_registrables-forma_pago").change(function(){
+              muebles_forma_pago($(this),'id_muebles_no_registrables');
+            });
+            $("#id_bienes_muebles-forma_pago").change(function(){
+              muebles_forma_pago($(this),'id_bienes_muebles');
+            });
+
+            //Para la sección de conyugue-dependieentes
+            $("#id_datos_pareja-actividadLaboral").change(function(){
+              change_conyugue($(this),'datos-pareja');
+            });
+            $("#id_conyuge_dependiente-actividadLaboral").change(function(){
+              change_conyugue($(this),'datos-dependiente');
+            });
+
+            //Para sección prestamocomodato
+            $("#id_comodato-tipo_obj_comodato").change(function(){
+              change_prestamocomodato($(this),'comodato');
+            });
+
+            //Para sección de INGRESOS
+            $("#id_ingresos_declaracion-ingreso_mensual_cargo").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $("#id_ingresos_declaracion-ingreso_mensual_actividad").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $("#id_ingresos_declaracion-ingreso_mensual_financiera").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $("#id_ingresos_declaracion-ingreso_mensual_servicios").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $("#id_ingresos_declaracion-ingreso_otros_ingresos").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $("#id_ingresos_declaracion-ingreso_enajenacion_bienes").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").change(function(){
+              change_ingresos_suma($(this));
+            });
+
+            $('#id_anio_filtro_year').change(function(){
+              graficas_ajax_api({"year": parseInt($(this).val())});
+            });
+            
+            $('input[type=radio][name="experiencia_laboral-cat_ambitos_laborales"]').change(function() {
+              if($(this).val() == 1){
+                $(".ambito_publico").show();
+              }else{
+                $(".ambito_publico").hide();
+              }
+            });
+
+                        
+            //Valida si el dato de remuneración ya esta guardado
+            if($('#ingresos-si').attr("es_inicial")){
+                $('#id_socios_comerciales-montoMensual').attr("disabled", false);
+                $('#id_socios_comerciales-moneda').attr("disabled", false);
+            }
+            else{
+                $('#id_socios_comerciales-montoMensual').attr("disabled", true);
+                $('#id_socios_comerciales-moneda').attr("disabled", true);
+            }
+
+            $("#id_domicilio-cat_entidades_federativas").on("change", getMunicipios);
+            $("#id_inversiones-cat_tipos_inversiones").on("change", getTiposInversionesEspecificos);
+
+
+            /****************VALIDACION INICIAL AREAS PUESTO EN DIFERENTES UBICACIONES DEL SISTEMA****************************/
+            
+            //>>>>>>>>>>>>>>>>>>>> INICIALES
+            
+            //Validación de campos areas y puesto en formulario de registro
+            if($("#id_areas").val() == '' ){
+              $("#id_puesto").prop('disabled', 'disabled');
+            }
+            else{
+              var puesto_valor = $("#id_puesto").val()
+              getPuestos("#id_areas","#id_puesto",puesto_valor)
+            }
+
+            //Validación de campos areas y puesto en el formulario de registro de la OIC
+            if($("#id_cat_areas").val() == '' ){
+              $("#id_cat_puestos").prop('disabled', 'disabled');
+            }
+            else{
+              var puesto_valor = $("#id_cat_puestos").val();
+              getPuestos("#id_cat_areas","#id_cat_puestos",puesto_valor)
+            }
+
+            if($("#id_datos_encargo_actual-cat_areas").val() == '' ){
+              $("#id_datos_encargo_actual-cat_puestos").prop('disabled', 'disabled');
+            }
+            else{
+              var puesto_valor =  $("#id_datos_encargo_actual-cat_puestos").val();
+              getPuestos("#id_datos_encargo_actual-cat_areas","#id_datos_encargo_actual-cat_puestos", puesto_valor)
+            }
+
+            //>>>>>>>>>>>>>>>>>>>> FUNCIONAMIENTO
+
+            //Campo en formulario de registrro
+            $("#id_areas").change(function(){
+              getPuestos("#id_areas","#id_puesto");
+            });
+            
+            //Campo en el formulario de registro de la OIC
+            $("#id_cat_areas").change(function(){
+              getPuestos("#id_cat_areas","#id_cat_puestos");
+            });
+
+            //Campo de la sección de empleo, cargo o comisión
+            $("#id_datos_encargo_actual-cat_areas").change(function(){
+              getPuestos("#id_datos_encargo_actual-cat_areas","#id_datos_encargo_actual-cat_puestos");
+            });
+            
+            $('#id_datos_encargo_actual-cat_puestos').on('change', function (e) {
+                if($('#id_datos_encargo_actual-cat_puestos').val()){
+                  var optionSelected = $("option:selected", this);
+                  
+                  document.getElementById("id_datos_encargo_actual-nivel_encargo").value = optionSelected.attr("nivel");
+                }
+            });
+          });
+        </script>
+        {% block body_script %}{% endblock %}
+    </body>
+</html>

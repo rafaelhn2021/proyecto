@@ -1,0 +1,9 @@
+[{"model": "declaracion.cattiposinmuebles", "pk": 1, "fields": {"tipo_inmueble": "Casa", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "CASA"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 2, "fields": {"tipo_inmueble": "Departamento", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "DPTO"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 3, "fields": {"tipo_inmueble": "Edificio", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "EDIF"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 4, "fields": {"tipo_inmueble": "Local comercial", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "LOCC"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 5, "fields": {"tipo_inmueble": "Bodega", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "BODG"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 6, "fields": {"tipo_inmueble": "Palco", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "PALC"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 7, "fields": {"tipo_inmueble": "Terreno", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "TERR"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 8, "fields": {"tipo_inmueble": "Rancho", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 0, "orden": 1, "codigo": "RACH"}},
+ {"model": "declaracion.cattiposinmuebles", "pk": 9, "fields": {"tipo_inmueble": "Otro (especifique)", "created_at": "2019-03-13T00:00:00Z", "updated_at": "2019-03-13T00:00:00Z", "default": 1, "orden": 1, "codigo": "OTRO"}}]

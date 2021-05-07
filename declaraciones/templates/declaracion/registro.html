@@ -1,0 +1,84 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Regístrate{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+
+<section class="container container-offset-x my-md-7 py-7">
+  
+  <figure class="text-center">
+    <img src="{% static 'src/img/SEAJAL-Declaraciones-Crear_cuenta-Grafico.png' %}" alt="crea tu cuenta">
+    <figcaption class="txtCAzulF"> <h1>Crea tu cuenta </h1> </figcaption>
+  </figure>
+
+  <p class="font-weight-light">Todos lo campos son obligatorios</p>
+  <form class="block_submit"action="{% if is_staff %}{% url 'declaracion:nuevo-usuario' %}{% else %}{% url 'declaracion:nuevo' %}{% endif %}" method="post" novalidate>
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-lg-10">
+        <div class="row">
+          <div class="col-md-6">
+            {% bootstrap_field form.fecha placeholder="16/01/2018" addon_before='<span class="" >Fecha Ingreso</span>' %}
+          </div>
+          <div class="col-md-12"></div>
+          <div class="col-md-6">
+            {% bootstrap_field form.nombres placeholder="Nombre(s)" field_class="solo_letras" addon_before='<span class="" >Nombre(s)</span>' %}
+          </div>
+          <div class="col-md-6">
+              {% bootstrap_field form.apellido1 placeholder="Primer apellido" field_class="solo_letras" addon_before='<span class="" >Primer apellido</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.apellido2 placeholder="Segundo apellido" field_class="solo_letras" addon_before='<span class="" >Segundo apellido</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.rfc placeholder="RFC con homoclave" field_class='valida_rfc' addon_before='<span class="" >RFC</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.areas placeholder="Area" field_class="solo_letras"  addon_before='<span class="" >Área</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.puesto placeholder="Empleo, cargo o comisión" field_class="solo_letras"  addon_before='<span class="" >Empleo</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.telefono placeholder="Teléfono" field_class="valida_telefono" addon_before='<span class="" >Teléfono</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.email placeholder="Correo electrónico" field_class='valida_email' addon_before='<span class="" >Correo Electrónico</span>'  %}
+          </div>        
+          <div class="col-md-6">
+            {% bootstrap_field form.contrasena1 placeholder="Contraseña" addon_before='<span class="" >Contraseña</span>' %}
+          </div>
+          <div class="col-md-6">
+            {% bootstrap_field form.contrasena2 placeholder="Confirmar Contraseña" addon_before='<span class="" >Confirmar Contraseña</span>' %}
+          </div>
+          <div class="col-12 text-right">
+            <div id="ms_terminos_condiciones"></div>
+            <input type="checkbox" id="checkbox_crear_cuenta" onclick="onclick_check_terminos_condiciones()">
+            <a 
+              {% if file_terminos_condiciones %} 
+                href="{{file_terminos_condiciones.url}}" 
+                target="_blank" 
+              {% else %}
+                href="javascript:no_archivo_terminos_condiciones()"
+              {% endif %}
+                style="color: #015F78;font-size: large;font-weight: 400;width: 50px;height: 20px;"> 
+              Acepto términos y condiciones
+            </a>
+          </div>
+           {% if cap_bool %}
+            <div class="col-12 text-right">
+              <script src='https://www.google.com/recaptcha/api.js'></script>
+               <div class="g-recaptcha" data-sitekey="{{ cap_webkey }}"></div>
+             </div>
+             <p style="color: #dc3545;    font-size: 80%; margin-left: 16px;">{{ error }}</p>
+           {% endif %}
+           
+          <div class="col-12 text-right">
+            <button type="submit" class="btn btn-success text-uppercase mt-5 block_boton" id="btn_crear_cuenta" disabled>Crear cuenta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+{% endblock %}

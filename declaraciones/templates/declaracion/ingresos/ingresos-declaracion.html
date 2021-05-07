@@ -1,0 +1,433 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Ingresos{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración patrimonial</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Declaración patrimonial</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">8. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">{% if current_url == 'ingresos-netos'%}VIII. Ingresos netos del declarante, pareja y/o dependientes económicos(situación actual){% else %}IX. ¿TE DESEMPEÑASTE COMO SERVIDOR PÚBLICO EN EL AÑO ANTERIOR?{% endif %}</span></h2>            
+
+            {% if messages %}
+                {% for message in messages %}
+                        <div class="alert alert-danger alert-dismissable alert-link">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                             <strong>{{ message }}</strong>
+                        </div>
+                {% endfor %}
+            {% endif %}
+            
+            {% if folio_declaracion %}
+              {% if current_url == 'ingresos-netos' %}
+                <form action="{% url 'declaracion:ingresos-netos' folio_declaracion %}" method="post">
+              {% else %}
+                <form action="{% url 'declaracion:ingresos-servidor-publico' folio_declaracion %}" method="post">
+              {% endif %}
+            {% endif %}
+            {% csrf_token %}
+
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    {% if current_url == 'ingresos-servidor-publico'%}
+                    <div class="col-md-12">
+                        {% for k, message in ingresos_declaracion_forms.errors.items %}
+                            <div style="background: #d46f6f;color: #fff;padding-top: 5px;">
+                                <h5>{{ message }}</h5>
+                            </div>
+                        {% endfor %}  
+                        <label class="label-secondary">¿TE DESEMPEÑASTE COMO SERVIDOR PÚBLICO EN EL AÑO ANTERIOR?{% if 'ingreso_anio_anterior' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Se deberá elegir sí o no es que fue servidor público de cualquier orden de gobierno (federal, local o municipal).">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="ingreso_anio_anterior-si" name="ingreso_declaracion-ingreso_anio_anterior" value="True" class="custom-control-input" {% if not ingresos_declaracion_forms.ingreso_anio_anterior.initial %}checked{% endif %}  {% if ingresos_declaracion_forms.ingreso_anio_anterior.initial == True %}checked{% endif %} onclick="accion_hide_disabled_show(this);">
+                                    <label class="custom-control-label text-rg" for="ingreso_anio_anterior-si">Si</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="ingreso_anio_anterior-no" name="ingreso_declaracion-ingreso_anio_anterior" value="False" class="custom-control-input" {% if ingresos_declaracion_forms.ingreso_anio_anterior.initial == False %}checked{% endif %} onclick="accion_hide_disabled_show(this);">
+                                    <label class="custom-control-label text-rg" for="ingreso_anio_anterior-no">No</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12"><br></div>                    
+                    <div class="col-md-4 fechas_anio_anterior">
+                        <div class="form-group {% if 'fecha_ingreso' in campos_privados %}form-group-private{% endif %}">
+                             {% bootstrap_label "Fecha inicio" label_for="fecha_ingreso" label_class="label-secondary"%}{% if 'fecha_ingreso' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}
+                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Fecha de ingreso.">
+                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                             </button>
+                             {% bootstrap_field ingresos_declaracion_forms.fecha_ingreso placeholder="Fecha ingreso" field_class="fecha" show_label=False%}
+
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                        <div class="form-group {% if 'fecha_conclusion' in campos_privados %}form-group-private{% endif %}">
+                             {% bootstrap_label "Fecha conclusión" label_for="fecha_conclusion" label_class="label-secondary"%}{% if 'fecha_conclusion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}
+                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Fecha de conslusion.">
+                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                             </button>
+                             {% bootstrap_field ingresos_declaracion_forms.fecha_conclusion placeholder="Fecha inicio" field_class="fecha" show_label=False%}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_cargo' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">I.-{% if current_url == 'ingresos-netos' %}REMUNERACIÓN {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} ANUAL {% else %} MENSUAL {% endif %} NETA DEL DECLARANTE POR SU CARGO PÚBLICO(POR CONCEPTO DE SUELDOS, HONORARIOS, COMPENSACIONES, BONOS Y PRESTACIONES)(CANTIDADES NETAS DESPUES DE IMPUESTOS){% else %}RENUMERACIÓN NETA DEL DECLARANTE, RECIBIDA DURANTE EL TIEMPO QUE DESEMPEÑO COMO SERVIDOR PUBLICO EN EL AÑO INMEDIATO ANTERIOR (POR CONCEPTO DE SUELDOS, HONORARIOS, COMPENSACIONES, BONOS, AGUINALDOS Y OTRAS PRESTACIONES)(CANTIDADES NETAS DESPUÉS DE IMPUESTOS){% endif %}{% if 'ingreso_mensual_cargo' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Es el ingreso neto que recibe el Declarante incluyendo bobnos, compensaciones y otras prestaciones, se recomienda manifestar la cantidad que se encuentra en su  recibo de nómina">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_cargo placeholder="Ingreso mensual cargo público" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_cargo' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">{% if current_url == 'ingresos-netos'%}MONEDA DEL INGRESO POR CARGO PUBLICO DEL DECLARANTE{% else %}MONEDA DEL INGRESO POR CARGO PUBLICO QUE DESEMPEÑO COMO SERVIDOR PUBLICO EN EL AÑO INMEDIATO ANTERIOR{% endif %}{% if 'cat_moneda_cargo' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_cargo placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_otros_ingresos' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">II.-{% if current_url == 'ingresos-netos' %}OTROS INGRESOS {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} ANUALES {% else %} MENSUALES {% endif %}DEL DECLARANTE(SUMA DEL II.1 AL II.4){% else %}OTROS INGRESOS DEL DECLARANTE, RECIBIDOS DURANTE EL TIEMPO EN EL QUE SE DESEMPEÑO COMO SERVIDOR PÚBLICO EN EL AÑO ANTERIOR INMEDIATO ANTERIOR (SUMA DEL II.1 AL II.5){% endif %}{% if 'ingreso_mensual_otros_ingresos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="ESTE CAMPO SE LENARÁ AUTOMATICAMENTE.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_otros_ingresos placeholder="ESTE CAMPO SE LENARÁ AUTOMATICAMENTE" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_otro_ingresos_mensual' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">{% if current_url == 'ingresos-netos' %}MONEDA DE OTROS INGRESOS{% else %}MONEDA DE OTROS INGRESOS DEL DECLARANTE EN EL AÑO ANTERIOR INMEDIATO{% endif %}{% if 'cat_moneda_otro_ingresos_mensual' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} </label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_otro_ingresos_mensual placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+
+
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_actividad' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">II.1 POR ACTIVIDAD INDUSTRIAL,COMERCIAL Y/O EMPRESARIAL (DESPUÉS DE IMPUESTOS){% if 'ingreso_mensual_actividad' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el monto neta por algunade las actividades descritas">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_actividad placeholder="Monto de ingresos por actividad industrial, comercial y/o empresarial" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_actividad' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA POR ACTIVIDAD INDUSTRIAL{% if 'cat_moneda_actividad' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_actividad placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-6 fechas_anio_anterior">
+                      <div class="form-group {% if 'razon_social_negocio' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">RAZÓN SOCIAL{% if 'razon_social_negocio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Proporcionar el nombre, razón social o denominación del negocio, en el cual se lleva a cabo la actividad o algun a delas actividades antes nmencionadas por la cual se genera el ingreso">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.razon_social_negocio placeholder="Razón social del negocio" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-6 fechas_anio_anterior">
+                      <div class="form-group {% if 'tipo_negocio' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">TIPO DE NEGOCIO{% if 'tipo_negocio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el tipo de negocio por el cual se obtuvo el ingreso.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.tipo_negocio placeholder="Tipo de negocio" show_label=False%}
+                        </div>
+                    </div>
+                    
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_financiera' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">II.2 POR ACTIVIDAD FINANCIERA (RENDIMIENTOS O GANANCIAS DESPUÉS DE IMPUESTOS){% if 'ingreso_mensual_financiera' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el monto neto de los rendimientos a gonancias que en su caso se hayan generado por su actividadfinaciera.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_financiera placeholder="Monto de ingresos por actividad financiera" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_financiera' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA POR ACTIVIDAD FINANCIERA{% if 'cat_moneda_financiera' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_financiera placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-12 fechas_anio_anterior">
+                      <div class="form-group">
+                            <label class="label-secondary">TIPO DE INSTRUMENTO QUE GENERÓ EL RENDIMIENTO O GANANCIA{% if 'cat_tipo_instrumento' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Debe seleccionar el intrumento que generó el rendimiento o ganancia de las siguientes opciones: capital, fondos de inversión, organizaciones privadas, seguro de separación individualizdo, valores bursàtiles, bono y/u otros.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% include 'layout/radiobuttons.html' with field_select=ingresos_declaracion_forms.fields.cat_tipo_instrumento field_name=ingresos_declaracion_forms.cat_tipo_instrumento otro_name=ingresos_declaracion_forms.otro_tipo_instrumento tipo='cat_tipo_instrumento' campos_privados=campos_privados %}
+                        </div>
+                    </div>
+
+
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_servicios' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">II.3 POR SERVICIOS PROFESIONALES, CONSEJOS, CONSULTORÍAS Y/O ASESORÍAS (DESPUÉS DE IMPUESTOS){% if 'ingreso_mensual_servicios' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el monto neto que obtenga derivado de servicios profesionales destintos al empleo cargo o comisión que desempeñe, por su participación en consejos o consultorías, y/o por asesorías que le generen alguna remuneración económica.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_servicios placeholder="Monto de ingresos por servicios profesionales" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_servicios' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA POR SERVICIOS PROFESIONALES{% if 'cat_moneda_servicios' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_servicios placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-12 fechas_anio_anterior">
+                      <div class="form-group {% if 'tipo_servicio' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">TIPO DE SERVICIO PRESTADO{% if 'tipo_servicio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar el tipo de servicio que prestó, el tipo de participación en los consejos o consultorías, así como el tipo de asesrías que llevo a cabo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.tipo_servicio placeholder="Indicar el tipo de servicio prestado.Indicar el tipo de servicio que prestó, el tipo de participación en los consejos o consultorías, así como el tipo de asesrías que llevo a cabo" show_label=False%}
+                        </div>
+                    </div>
+
+                    {% if current_url == 'ingresos-servidor-publico'%}
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_enajenacion_bienes' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">II.4 POR ENAJENACIÓN DE BIENES (DESPUÉS DE IMPUESTOS){% if 'ingreso_enajenacion_bienes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el monto neto que obtenga por la venta de bienes. Este rubro solo será llenado en la declaración de odificación y conclusión">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_enajenacion_bienes placeholder="Monto por enajenación de bienes" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_enajenacion_bienes' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA POR ENAJENACIÓN DE BIENES{% if 'cat_moneda_enajenacion_bienes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_enajenacion_bienes placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-12 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_tipos_bienes' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">TIPO DE BIEN ENAJENADO{% if 'cat_tipos_bienes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el tipo de bien vendido inmuble, vehículo o  mueble ">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                           {% include 'layout/radiobuttons.html' with field_select=ingresos_declaracion_forms.fields.cat_tipos_bienes field_name=ingresos_declaracion_forms.cat_tipos_bienes tipo='cat_tipos_bienes' campos_privados=campos_privados%}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_otros_ingresos' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">II.{% if current_url == 'ingresos-netos'%}4{% else %} 5 {% endif %}OTROS INGRESOS NO CONSIDERADOS A LOS ANTERIORES (DESPUÉS DE IMPUESTOS){% if 'ingreso_otros_ingresos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Señalar el monto neto de algun otro ingreso que no esté considerado en los numerales que anteceden.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_otros_ingresos placeholder="Monto de otros ingresos no especificados" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_otros_ingresos' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA POR OTROS SERVICIOS NO CONSIDERADOS{% if 'cat_moneda_otros_ingresos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_otros_ingresos placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-12 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_tipos_actividad' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">ESPECIFICAR TIPO DE INGRESO{% if 'cat_tipos_actividad' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Especificar si el ingreso derivó de arrendamiento, regalía, sorteo y otros">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                           {% include 'layout/radiobuttons.html' with field_select=ingresos_declaracion_forms.fields.cat_tipos_actividad field_name=ingresos_declaracion_forms.cat_tipos_actividad tipo='cat_tipos_actividad' campos_privados=campos_privados%}
+                        </div>
+                    </div>
+
+
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_neto' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">A.-{% if current_url == 'ingresos-netos' %}INGRESO {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} ANUAL {% else %} MENSUAL {% endif %}NETO DEL DECLARANTE{% else %}INGRESO NETO DEL DECLARANTE, RECIBIDO EN EL AÑO ANTERIOR INMEDIATO ANTERIOR{% endif %} (SUMA DEL NUMERAL I Y II){% if 'ingreso_mensual_neto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar monto.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_neto placeholder="ESTE CAMPO SE LLENARÁ AUTOMATICAMENTE" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_neto' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">{% if current_url == 'ingresos-netos' %} MONEDA INGRESO NETO{% else %} MONEDA INGRESO NETO DEL DECLARANTE RECIBIDO EN EL AÑO ANTERIOR INMEDIATO{% endif %}{% if 'cat_moneda_neto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_neto placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_pareja_dependientes' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">B.-{% if current_url == 'ingresos-netos' %} INGRESO {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} ANUAL {% else %} MENSUAL {% endif %}NETO DE LA PAREJA Y/O DEPENDIENTES ECONÓMICOS(DESPUÉS DE IMPUESTOS){% else %} INGRESO NETO DE LA PAREJA Y/O DEPENDIENTES ECONÓMICOS, RICIBIDOS EN EL AÑO INMEDIATO ANTERIOR(DESPUÉS DE IMPUESTOS){% endif %}{% if 'ingreso_mensual_pareja_dependientes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar monto.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_pareja_dependientes show_label=False%}
+                            <input type="hidden" id="id_ingreso_mensual_pareja_dependientes_hiden" name="ingreso_mensual_pareja_dependientes_hiden" value="{{ingresos_pareja}}">
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_pareja_dependientes' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA INGRESO NETO PAREJA Y/O DEPENDIENTES{% if 'cat_moneda_pareja_dependientes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_pareja_dependientes placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+
+                  <div class="col-8 fechas_anio_anterior">
+                      <div class="form-group {% if 'ingreso_mensual_total' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">C.- 
+                {% if current_url == 'ingresos-netos' %} TOTAL DE INGRESOS {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} ANUALES {% else %} MENSUALES {% endif %}NETOS PERCIBIDOS POR EL DECLARANTE, PAREJA Y/O DEPENDIENTES ECONÓMICOS(SUMA LOS APARTADOS A Y B){% else %} TOTAL DE INGRESOS NETOS PERCIBIDOS PRECIBIDOS POR EL DECLARANTE, PAREJA Y/O DEPENDIENTES ECONÓMICOS EN EL AÑO INMEDIATO ANTERIOR(SUMA DE LOS APARTADOS A Y B) {% endif %}{% if 'ingreso_mensual_total' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar monto.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.ingreso_mensual_total placeholder="ESTE CAMPO SE LLENARÁ AUTOMATICAMENTE" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4 fechas_anio_anterior">
+                      <div class="form-group {% if 'cat_moneda_total' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA INGRESO TOTAL PERCIBIDOS(APARTADOS A Y B){% if 'cat_moneda_total' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Indicar moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field ingresos_declaracion_forms.cat_moneda_total placeholder="Moneda" show_label=False%}
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 fechas_anio_anterior">
+                          <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                              <label class="label-secondary mb-2">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                              <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                  <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                              </button>
+                          {% bootstrap_field  observaciones.observacion   show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                  </div>
+
+                  <div id="ms_campos_obligatorios"></div>
+
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>')
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            }
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        var validar_obligatorios = true
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+
+            if(element == "ingreso_anio_anterior"){
+                if(!$("ingreso_anio_anterior-no").checked){
+                    validar_obligatorios = false;
+                }
+            }
+
+            if(validar_obligatorios){
+                var domElements = $("[id*='id_ingresos_declaracion-"+element+"']");
+                for (let i = 0; i < domElements.length; i++) {
+                    if(domElements[i].value == ""){
+                        obligatoriosSinVerificar  += element + ", ";
+                        faltantes += 1;
+                    }
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

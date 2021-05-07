@@ -1,0 +1,72 @@
+[
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 1,
+    "fields": {
+      "valor": "Capital",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "CAP"
+    }
+  },
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 2,
+    "fields": {
+      "valor": "Fondos de inversión",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "FIN"
+    }
+  },
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 3,
+    "fields": {
+      "valor": "Organizaciones privadas",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "OPR"
+    }
+  },
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 4,
+    "fields": {
+      "valor": "Seguro de separación individualizado",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "SSI"
+    }
+  },
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 5,
+    "fields": {
+      "valor": "Valores Busátiles",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "VBU"
+    }
+  },
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 6,
+    "fields": {
+      "valor": "Bonos",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "BON"
+    }
+  },
+  {
+    "model": "declaracion.cattiposinstrumentos",
+    "pk": 7,
+    "fields": {
+      "valor": "Otros",
+      "created_at": "2019-03-12T00:00:00Z",
+      "updated_at": "2019-03-12T00:00:00Z",
+      "clave": "OTRO"
+    }
+  }
+]

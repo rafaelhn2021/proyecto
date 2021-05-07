@@ -1,0 +1,152 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Buscar declaraciones{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+<form action="{% url 'declaracion:busqueda-declaraciones' %}" method="post" id="form_declaraciones">
+  <section class="container body_content" style="max-width: 1500px;">
+    <div class="row row-md ">
+      <h1 class="text-gray text-xl font-weight-medium text-uppercase mt-5 line-height-md title-mobile text-mobile"><span class="text-primary-light font-weight-semibold">
+      DECLARACIONES</span> Búsqueda</h1>
+
+      <div class="d-flex justify-content-center align-items-center flex-column flex-sm-row bg-gray p-4 rounded">
+         {% csrf_token %}
+         {%  bootstrap_field form.page %}
+         <div class="row">
+             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                 {% bootstrap_field form.folio  %}
+             </div>
+             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                 {% bootstrap_field form.tipo  field_class="solo_letras" %}
+             </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                 {% bootstrap_field form.estatus %}
+             </div>
+              <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                 {% bootstrap_field form.fecha_inicio %}
+             </div>
+             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                 {% bootstrap_field form.fecha_fin %}
+             </div>
+             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                 <button class="btn btn-success text-uppercase font-weight-semibold mt-5" type="submit" >Buscar  <img src="{% static 'src/img/busqueda.svg' %}"/></button>
+                 &nbsp;&nbsp;&nbsp;
+                 <input class="btn btn-success text-uppercase font-weight-bold mt-5" type="reset" name="reset" value="Limpiar">
+             </div>
+             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                 <a href="#" class="btn btn-success text-uppercase font-weight-bold mt-5" data-toggle="modal" data-target="#ventana-modal" target="_blank">Reportes   <img width="18px" src="{% static 'src/img/impresora_blanco.png' %}"/></a>
+             </div>
+         </div>
+      </div>
+
+    </div>
+   {% if result %}
+    <div class="row row-md">
+      <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">FOLIO</th>
+              <th scope="col">TIPO</th>
+              <th scope="col">AVANCE</th>
+              <th scope="col">EXTENDIDA</th>
+              <th scope="col">FECHA INICIO</th>
+              <th scope="col">FECHA CIERRE</th>
+              <th scope="col">ESTATUS</th>
+              <th scope="col">VER</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for r in result %}
+            <tr>
+              <td scope="row">{{ r.folio }}</th>
+              <td>{{ r.cat_tipos_declaracion.codigo }}</td>
+              <td>{{ r.avance }}%</td>
+              <td>{% if r.info_personal_fija.cat_puestos.codigo <= 15 %} No {% else %} Si {% endif%}</td>
+              <td>{{ r.fecha_declaracion|date:"D d M Y"|default_if_none:"" }}</td>
+              <td>{{ r.fecha_recepcion|date:"D d M Y"|default_if_none:"" }}</td>
+              <td>{{ r.cat_estatus }}</td>
+              <td><a href="{%  url 'declaracion:info-declaracion' r.pk 'declaracion' %}"> <img width="40px" src="{% static 'src/img/see_verde.png' %}"></a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+      </table>
+    </div>
+
+    <div class="row row-md text-center">
+      <div class="col-12">
+        <nav aria-label="Páginas" class="nav d-flex justify-content-center">
+          <ul class="pagination flex-wrap">
+          {% if result.has_previous %}
+          <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.previous_page_number }});$('#form_declaraciones').submit()" href="#">«</a></li>
+           {% endif %}
+                  {%for p in paginas%}
+                    {%ifequal p result.number %}
+                      <li class="page-item"><a class="page-link bg-primary text-light" href="#">{{result.number}}</a></li>
+                    {%else%}
+                      <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ p }});$('#form_declaraciones').submit()" href="#">{{p}}</a></li>
+                    {%endifequal%}
+                  {%endfor%}
+           {% if result.has_next %}
+          <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.next_page_number }});$('#form_declaraciones').submit()" href="#">»</a></li>
+            {%endif%}
+
+          </ul>
+        </nav>
+      </div>
+    </div>
+   {% else %}
+      {% if messages %}
+        <div class="row row-md">
+          {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %} col-12 text-center" role="alert"><h6>{{ message }}</h6></div>
+          {% endfor %}
+        </div>
+        <br>
+      {% endif %}
+   {% endif %}
+  </section>
+</form>
+
+<div class="modal fade" id="ventana-modal" tabindex="-1" role="dialog" aria-labelledby="lost-password-label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal_logo"></div>
+        <h4 class="modal-title" style="color: #A4B54C;">Click sobre botón para generar reporte</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="get" id="form_declaraciones_reporte" target="_blank">
+          <!--Se asignan los valores del formulario de busqueda a este formulario temporal para filtrar los datos en los reportes--->
+          {% csrf_token %}
+          <input type="hidden" name="folio" id="id_folio">
+          <input type="hidden" name="tipo" id="id_tipo">
+          <input type="hidden" name="estatus" id="id_estatus">
+          <input type="hidden" name="fecha_inicio_day" id="id_fecha_inicio_day">
+          <input type="hidden" name="fecha_inicio_month" id="id_fecha_inicio_month">
+          <input type="hidden" name="fecha_inicio_year" id="id_fecha_inicio_year">
+          <input type="hidden" name="fecha_fin_day" id="id_fecha_fin_day">
+          <input type="hidden" name="fecha_fin_month" id="id_fecha_fin_month">
+          <input type="hidden" name="fecha_fin_year" id="id_fecha_fin_year">
+
+          <div class="image-title-wrap text-center">
+            <button type="submit" formaction="{% url 'declaracion:reporte' 'resumen_declaracion' %}" class="btn btn-outline-primary text-uppercase font-weight-bold" style="width: 330px;">
+              <img style="max-height: 50px;max-width: 130px;" src="{% static 'src/img/pdf_bn.png'%}" alt="Descargar">Resumen por declaración
+            </button>            
+          </div>
+          <p></p>
+          <div class="image-title-wrap text-center">
+            <button type="submit" formaction="{% url 'declaracion:reporte' 'completo_declaracion' %}" class="btn btn-outline-primary text-uppercase font-weight-bold" style="width: 330px;">
+              <img style="max-height: 50px;max-width: 130px;" src="{% static 'src/img/pdf_bn.png'%}" alt="Descargar">Completo por declaración
+            </button>            
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

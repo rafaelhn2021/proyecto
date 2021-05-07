@@ -1,0 +1,256 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Bienes muebles{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html'%}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Activos</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Bienes muebles</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 text-uppercase mb-3">1.DECLARACION PATRIMONIAL  <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">XII. Bienes muebles del declarante, pareja y/o dependientes económicos</span></h2>
+            <p class="leyenda_privados" style="width: 800px;">Todos los datos de bienes declarados a nombre de la pareja, dependientes económicos y/o terceros o que sean en copropiedad con el declarante no serán públicos</p>
+            
+             <p class="text-sm font-italic text-muted font-weight-extralight">Menaje de casa, joyas, electrónicos y electrodomésticos</p>
+
+             {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:bienes-muebles-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:bienes-muebles-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:bienes-muebles' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+                {% csrf_token %}
+                <div class="row">
+                  {% include 'layout/no_aplica.html' %}
+                </div>
+                 {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="TIPO DE OPERACIÓN" titulo_dos="Forma de adquisición" titulo_tres="Titular" agregar=agregar editar_id=editar_id %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12">
+                        <label class="label-secondary mb-2">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN del bien mueble.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                            {% include 'layout/radiobuttons.html' with field_select=bienes_muebles_form.fields.cat_tipos_operaciones  field_name=bienes_muebles_form.cat_tipos_operaciones otro_name=bienes_muebles_form.otra_operacion col=2 col_o=4%}
+                    </div>
+                    <div class="col-12">
+                        <label class="label-secondary mb-2">TIPO DE BIEN{% if 'cat_tipos_muebles' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Tipo del bien mueble que se declara.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=bienes_muebles_form.fields.cat_tipos_muebles  field_name=bienes_muebles_form.cat_tipos_muebles otro_name=bienes_muebles_form.otro_tipo_mueble  col=2 col_o=5 %}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="label-secondary mb-2">TITULAR{% if 'cat_tipos_titulares' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar el titular del bien mueble.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=bienes_muebles_form.fields.cat_tipos_titulares  field_name=bienes_muebles_form.cat_tipos_titulares tipo='cat_tipos_titulares' campos_privados=campos_privados%}
+                    </div>
+
+                    <div class="col-12 my-2">
+                        {% include 'layout/persona_simp.html' with form=copropietario_form label=" de quien se adquirió el bien mueble" title="TERCERO" tipo=False %}
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="rfc-dueño" class="label-secondary mb-2 ">RFC TERCERO{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            <small class="text-help text-primary">(Si aplica)</small>
+                            {% bootstrap_field copropietario_form.rfc show_label=False  field_class='valida_rfc' %}
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12 my-2">
+                        {% include 'layout/persona_simp.html' with form=propietario_anterior_form label=" de quien se adquirió el bien mueble" title="TRANSMISOR" tipo=False %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="rfc-dueño" class="label-secondary mb-2 ">RFC DEL TRANSMISOR{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            <small class="text-help text-primary">(Si aplica)</small>
+                            {% bootstrap_field propietario_anterior_form.rfc  show_label=False  field_class='valida_rfc' %}
+                        </div>
+                    </div>
+
+                     <div class="col-md-12 my-2">
+                        <label class="label-secondary">RELACION DEL TRANSMISOR DEL MUEBLE CON EL TITULAR{% if 'tipo_relacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar la Relación con la persona a quien adquisió el inmueble">
+                            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                        </button>
+                        <div>
+                            {% include 'layout/radiobuttons.html' with field_select=bienes_personas_form.fields.tipo_relacion field_name=bienes_personas_form.tipo_relacion otro_name=bienes_personas_form.otra_relacion_familiar otrof_name=bienes_personas_form.otra_relacion col=2 col_o=4  tipo='tipo_relacion' campos_privados=campos_privados%}
+                        </div>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label class="label-secondary mb-2">FORMA DE ADQUISICIÓN{% if 'cat_formas_adquisiciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar la forma de adquisición del bien mueble.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=bienes_muebles_form.fields.cat_formas_adquisiciones  field_name=bienes_muebles_form.cat_formas_adquisiciones otro_name=bienes_muebles_form.otra_forma col=2 col_o=4%}
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group {% if 'forma_pago' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">FORMA DE PAGO{% if 'forma_pago' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Detallar información respecto al bien mueble.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field bienes_muebles_form.forma_pago field_class="moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'precio_adquisicion' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary ">VALOR DE ADQUISICIÓN DEL MUEBLE{% if 'precio_adquisicion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Monto según la factura.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                {% bootstrap_field bienes_muebles_form.precio_adquisicion  show_label=False field_class="valida_number" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'cat_monedas' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">MONEDA{% if 'cat_monedas' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Detallar información respecto al bien mueble.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field bienes_muebles_form.cat_monedas field_class="moneda" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'cat_monedas' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary ">FECHA DE ADQUISICIÓN{% if 'fecha_adquisicion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="dd/mm/aaaa">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field bienes_muebles_form.fecha_adquisicion  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="form-group {% if 'descripcion_bien' in campos_privados %}form-group-private{% endif %}">
+                            <label for="observaciones" class="label-secondary ">DESCRIPCIÓN GENERAL DEL BIEN{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Detallar información respecto al bien mueble.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  bienes_muebles_form.descripcion_bien   show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-12" >
+                        <label  class="label-secondary">EN CASO DE BAJA DEL MUEBLE INCLUIR MOTIVO{% if 'cat_motivo_baja' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar la forma de adquisición del bien mueble.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=bienes_muebles_form.fields.cat_motivo_baja  field_name=bienes_muebles_form.cat_motivo_baja otro_name=bienes_muebles_form.otra_forma  col=2 col_o=4 tipo='cat_motivo_baja' campos_privados=campos_privados %}
+                    </div>
+                </div>
+
+                <div id="ms_campos_obligatorios"></div>
+
+                <div class="text-right row-form" style="{% if checked %}display: none;{% endif %}">
+                    <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-primary font-weight-semibold text-uppercase">
+                      Guardar y agregar otro bien mueble<img src="{% static 'src/img/plus.svg'%}" alt="agregar" class="svg">
+                    </button>
+                </div>
+                <div class="row row-form">
+                    <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label for="observaciones" class="label-secondary ">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Detallar información respecto al bien mueble.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  observaciones_form.observacion show_label=False%}
+                        </div>
+                    </div>
+                </div>
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                } 
+            }
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='bienes_muebles-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

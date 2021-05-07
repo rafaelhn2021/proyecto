@@ -1,0 +1,272 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}prestamo Comodato{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include '../../layout/sidebar.html'%}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Pasivos</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Prestamo Comodatos</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 text-uppercase mb-3">1. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">XV. Prestamo o comodato por terceros</span></h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:prestamoComodato-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:prestamoComodato-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:prestamoComodato' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+              {% csrf_token %}
+                    <div class="row">
+                        {% include 'layout/no_aplica.html' %}
+                    </div>
+              {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Tipo de operación" titulo_dos="Tipo de inmueble" titulo_tres="Relación con el titular" agregar=agregar editar_id=editar_id %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12 mb-2">
+                        <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar operación a la deuda del Declarante."><img src="{% static 'src/img/info.svg'%}" alt="info" class="svg"></button>
+                          {% include 'layout/radiobuttons.html' with field_select=prestamocomodato_form.fields.cat_tipos_operaciones field_name=prestamocomodato_form.cat_tipos_operaciones otro_name=prestamocomodato_form.otra_operacion col=2 col_o=4 tipo='cat_tipos_operaciones' campos_privados=campos_privados%}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="label-secondary mb-2">RELACIÓN O PARENTESCO{% if 'titular_relacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar que tipo de relación existe en entre el dueño del bien prestado y el declarante">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <small class="text-help text-primary">{% if 'titular_relacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</small>
+                        {% include 'layout/radiobuttons.html' with field_select=prestamocomodato_form.fields.titular_relacion field_name=prestamocomodato_form.titular_relacion otro_name=prestamocomodato_form.otro_tipo_relacion tipo='titular_relacion' campos_privados=campos_privados %}
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group {% if 'tipo_obj_comodato' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary mb-2">TIPO PRESTAMO COMO O DATO {% if 'tipo_obj_comodato' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Tipo de prestmo como dato.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            <small class="text-help text-primary">(Si aplica)</small>
+                            {% bootstrap_field prestamocomodato_form.tipo_obj_comodato  show_label=False%}
+                        </div>
+                    </div>
+                
+                    <!-- INMUEBLE -->
+                    <div class="row" id="div_inmueble_comodato" style="margin: 2%;border: 1px solid #dff6f6;">
+                        <div class="col-12" style="background: #dff6f6; height: 50px;">
+                            <h6>INMUEBLE</h6>    
+                        </div>
+                        <div class="col-12 mb-2 row">
+                            <div class="col-2">
+                                <label class="label-secondary">TIPO DE INMUEBLE{% if 'cat_tipos_inmueble' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir alguna de las opciones.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                            </div>
+                            <div class="col-10"> 
+                                {% include 'layout/radiobuttons.html' with field_select=prestamocomodato_form.fields.cat_tipos_inmueble field_name=prestamocomodato_form.cat_tipos_inmueble otro_name=prestamocomodato_form.otro_tipo_inmueble tipo='cat_tipos_inmueble' campos_privados=campos_privados%}
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <h6>UBICACIÓN DEL INMUEBLE</h6>
+                        </div>
+                        {% include 'declaracion/direccion.html' with form=inmueble_domicilio_form campos_privados=campos_privados only=True%}
+                    </div>
+
+                    <!-- MUEBLE -->
+                    <div class="row" id="div_mueble_comodato" style="margin: 2%;border: 1px solid #dff6f6;">
+                        <div class="col-12" style="background: #dff6f6; height: 50px;">
+                            <h6> <br>Vehículo (Mueble)</h6>    
+                        </div>
+                        <div class="col-12 mb-2 row">
+                            <div class="col-2">
+                                <label class="label-secondary">TIPO DE MUEBLE{% if 'cat_tipos_muebles' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Selecoionar el tipo de vehiculo del listado.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                            </div>
+                            <div class="col-10"> 
+                                {% include 'layout/radiobuttons.html' with field_select=prestamocomodato_form.fields.cat_tipos_muebles field_name=prestamocomodato_form.cat_tipos_muebles otro_name=prestamocomodato_form.otro_tipo_mueble tipo='cat_tipos_muebles' campos_privados=campos_privados %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'mueble_marca' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary mb-2">MARCA{% if 'mueble_marca' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Marca del bien mueble declarado.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                <small class="text-help text-primary">(Si aplica)</small>
+                                {% bootstrap_field prestamocomodato_form.mueble_marca  show_label=False placeholder='Vehículo marca' %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'mueble_modelo' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary mb-2">MODELO{% if 'mueble_modelo' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el modelo del vehiculo, de acuerdo a la marca(Ejemplo marca Volkswagen, modelo Jetta).">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                <small class="text-help text-primary">(Año si aplica){% if 'mueble_modelo' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</small>
+                                {% bootstrap_field prestamocomodato_form.mueble_modelo  show_label=False placeholder='Vehículo modelo'%}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'mueble_anio' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary mb-2">AÑO{% if 'mueble_anio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Tipo del bien mueble que se declara.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                <small class="text-help text-primary">(Si aplica){% if 'mueble_anio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</small>
+                                {% bootstrap_field prestamocomodato_form.mueble_anio  show_label=False placeholder='Vehículo año'%}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'mueble_num_serie' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary mb-2">NÚMERO DE SERIE o REGISTRO{% if 'mueble_num_serie' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Número de serie del bien mueble.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+                                <small class="text-help text-primary">(Si aplica){% if 'mueble_num_serie' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</small>
+                                {% bootstrap_field prestamocomodato_form.mueble_num_serie  show_label=False%}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group {% if 'cat_paises' in campos_privados %}form-group-private{% endif %}">
+                                <label class="label-secondary ">Lugar de registro{% if 'cat_paises' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="País de registro.">
+                                    <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                                </button>
+
+                                {% include 'layout/nacionalidad.html' with field=prestamocomodato_form.cat_paises%}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group {% if 'cat_entidades_federativas' in campos_privados %}form-group-private{% endif %}">
+                            <label for="ente-publico" class="label-secondary">ENTIDAD FEDERATIVA{% if 'cat_entidades_federativas' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="País de ubicación de la Institución educativa.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field prestamocomodato_form.cat_entidades_federativas show_label=False%}
+                          </div>
+                        </div>
+                    </div>
+                
+                    <!-- TITULAR -->
+                    <div class="col-12">
+                        <h6>INFORMACIÓN DEL TITULAR</h6>
+                    </div>
+                    <div class="col-12">
+                        {% include 'layout/persona_simp.html' with form=titular_infopersonalVar_form title="Información del titular" label=" del titular" tipo=True %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">RFC DEL TITULAR{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} <small class="text-help text-primary">(si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  titular_infopersonalVar_form.rfc  field_class='valida_rfc' show_label=False placeholder="RFC del titular" %}
+                        </div>
+                    </div>
+
+                    <div class="text-right row-form col-12" style="{% if checked %}display: none;{% endif %}">
+                        <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-primary font-weight-semibold text-uppercase">
+                          Guardar y agregar otro prestamo comodato<img src="{% static 'src/img/plus.svg'%}" alt="agregar" class="svg">
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label for="deudas-comentarios" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field observaciones_form.observacion  placeholder="Observaciones y comentarios"  show_label=False%}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">{% include 'layout/guardar.html' %}</div>
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                } 
+            }
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='comodato-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

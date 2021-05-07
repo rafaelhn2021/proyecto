@@ -1,0 +1,53 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$iJqL2kB528YE$Z3ou98YLK6lB9vFJIAi/YtmVct4aDR38fukvN6wdYSU=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "admin@admin.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2020-07-01T19:16:43.576Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user", 
+    "pk": 2, 
+    "fields": {
+        "password": "pbkdf2_sha256$180000$bv6Qbh7XZ6Oi$HCWYVzb8ydtgRulYVHj/VNcGM0Q882hkEbx2lJ/KX2c=", 
+        "last_login": "2020-07-02T16:35:00Z", 
+        "is_superuser": false, 
+        "username": "estadisticas", 
+        "first_name": "", 
+        "last_name": "", 
+        "email": "", 
+        "is_staff": true, 
+        "is_active": true, 
+        "date_joined": "2020-07-01T15:20:51Z", 
+        "groups": [], 
+        "user_permissions": []
+    }
+},
+{
+    "model": "oauth2_provider.application", 
+    "pk": 1, 
+    "fields": {
+        "client_id": "estadisticas_id", 
+        "user": 2, "redirect_uris": "", 
+        "client_type": "public", 
+        "authorization_grant_type": "password", 
+        "client_secret": "estadisticas_secret", 
+        "name": "estadisticas", 
+        "skip_authorization": true, 
+        "created": "2020-07-01T15:23:39.515Z", 
+        "updated": "2020-07-01T21:58:02.240Z"
+        }
+    }
+]

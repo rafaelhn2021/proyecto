@@ -1,0 +1,379 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Personalizar puestos {% endblock %}
+{% load bootstrap4 %}
+
+{% block content %}
+<section class="container mt-4 body_content">
+    <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissable alert-link">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>{{ message }}</strong>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        <div class="col-12 pb-5">
+            <h2> Catálogo de Puestos para las declaraciones </h2>
+            <h6>A continuación se muestran los puestos que estarán disponibles para los usuarios en sus declaraciones</h6>
+        </div>
+        <div class="col-6 text-left mb-4">
+            <div class="btn-group " role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                  <button id="btn-elminar-multiple" type="button" class="btn btn-success" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg> Eliminar seleccionados 
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="btn-elminar-multiple">
+                    <span class="px-3">
+                        <svg width="1.0625em" height="1em" viewBox="0 0 17 16" class="bi bi-exclamation-triangle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.938 2.016a.146.146 0 0 0-.054.057L1.027 13.74a.176.176 0 0 0-.002.183c.016.03.037.05.054.06.015.01.034.017.066.017h13.713a.12.12 0 0 0 .066-.017.163.163 0 0 0 .055-.06.176.176 0 0 0-.003-.183L8.12 2.073a.146.146 0 0 0-.054-.057A.13.13 0 0 0 8.002 2a.13.13 0 0 0-.064.016zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                            <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                        </svg> ¿Seguro(a)?
+                    </span>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" id="id_btn_eliminar_multiple">Sí</button>
+                    <span class="dropdown-item">No</span>
+                 </div>
+                </div>
+                <span id="id_btn_eliminar_multiple_errors" class="text-danger text-small" style="display: none;"></span>
+            </div>
+            <div class="progress mt-2" style="display: none;" id="id_progress_container_eliminar_multiple"><div id="id_progress_eliminar_multiple" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div></div>
+        </div>
+        <div class="col-6 text-right">
+            <div class="btn-group " role="group" aria-label="Button group with nested dropdown">
+                  <button id="btnDropAgregarUno" class="btn btn-success " type="button" data-toggle="modal" data-target="#ModalAgregar">
+                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>Agregar
+                    </button>
+                  <!--button id="btnDropAgregarVarios" type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="btnDropAgregarVarios">
+                    <a class="dropdown-item" href="">Importar varios (json)</a>
+                </div-->
+            </div>
+        </div>
+        </div>
+        <div class="col-12">
+            <!--span>Se muestran {{puestos.count}} de {{puestos.count}} elementos  </span-->
+
+                <table  class="table table-striped">
+                    <thead style=" width: 500px;overflow-x: auto;">
+                        <tr>
+                            <th scope="col">
+                                <input type="checkbox" id="puesto-check-all" onchange="check_all(this.checked)">
+                            </th>
+                            <th scope="col">#</th>
+                            <th scope="col">Área</th>
+                            <th scope="col">Nivel</th>
+                            <th scope="col">Puesto</th>
+                            <th scope="col" class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody style=" height: 200px;overflow-y: auto;overflow-x: hidden;">
+                        {% if puestos.count > 0 and puestos != None %}
+                            {% for puesto in puestos %}
+                            <tr id="id-{{puesto.pk}}">
+                                <td class="row">
+                                    <input type="checkbox" id="puesto-check-{{puesto.pk}}">
+                                </td>
+                                <td>{{forloop.counter}}</td>
+                                <td class="px-5">
+                                    <form class="form row" id="area-editar-{{puesto.pk}}" method="POST" action="{% url 'personalizar_catpuestos_editar' puesto.pk %}" style="display: none;padding-top: 1rem;" pk="{{puesto.pk}}">
+                                        <select name="nuevo_puesto_area" required="" class="form-control" id="id_cat_areas_{{puesto.pk}}">
+                                          <option value="" selected="">---------</option>
+                                          {% for area in areas %}
+                                            <option value="{{area.pk}}">{{area.area}}</option>
+                                          {% endfor %}
+                                        </select>
+                                    </form>
+                                    <div class="tooltip_puesto" id="area-{{puesto.pk}}" valor="{{puesto.cat_areas.pk}}">{{puesto.cat_areas.codigo}}
+                                      <span class="tooltiptext">{{puesto.cat_areas}}</span>
+                                    </div>
+                                </td>
+                                <td class="px-5">
+                                    <form class="form row" id="puesto-codigo-editar-{{puesto.pk}}" method="POST" action="{% url 'personalizar_catpuestos_editar' puesto.pk %}" style="display: none;padding-top: 1rem;" pk="{{puesto.pk}}">
+                                        <input class="form-control" type="number" value="{{puesto.codigo}}" id="id_codigo_{{puesto.pk}}"> 
+                                    </form>
+                                    <div id="puesto-codigo-{{puesto.pk}}">{{puesto.codigo}}</div>
+                                </td>
+                                <td class="px-5">
+                                    <form class="form row" id="puesto-editar-{{puesto.pk}}" method="POST" action="{% url 'personalizar_catpuestos_editar' puesto.pk %}" style="display: none; padding-top: 1rem;">
+                                        {% csrf_token %}
+                                        <div class="form-group col-9">
+                                            <input  name="nuevo_puesto" class="form-control" type="text" value="{{puesto.puesto}}" pattern="[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ]+[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ ]+" title=" ¡Sólo se aceptan números y letras!"> 
+                                            <span id="puesto-editar-errors-{{puesto.pk}}" class="text-danger text-small" style="display: none;"> El puesto no puede estar vacio</span>
+                                            <input name="nueva_area" type="hidden" value="{{puesto.cat_areas.pk}}">
+                                            <input name="nuevo_puesto_codigo" type="hidden" value="{{puesto.codigo}}">
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <input value="Guardar" class="btn btn-outline-primary text-uppercase font-weight-bold" type="submit" style="font-size: 10px;">
+                                        </div>
+                                        <div class="col-1">                                        
+                                            <a class="btn btn-sm color-peligro" onclick="catpuesto_editar_toogle({{puesto.pk}})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                                            </svg></a>
+                                        </div>
+                                    </form>
+                                    <div id="puesto-{{puesto.pk}}">{{puesto.puesto}}</div>
+                                </td>
+
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link" onclick="catpuesto_editar_toogle({{puesto.pk}})" id="btn-puesto-editar-{{puesto.pk}}"><img src="{% static '/src/img/editar.svg' %}" alt="editar {{puesto.pk}}"></button>
+                                        <button class="btn btn-link" type="button" id="dropdownMenuButton-{{puesto.pk}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static '/src/img/eliminar.svg' %}" alt="eliminar {{puesto.pk}}"></button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{puesto.pk}}">
+                                            <span class="text-center">¿Eliminar el puesto?</span>
+                                            <div class="dropdown-divider"></div>
+                                            <button class="dropdown-item btn btn-link" onclick="catpuesto_eliminar({{puesto.pk}}, '{% url 'personalizar_catpuestos_eliminar' puesto.pk %}')" id="btn-puesto-editar-{{puesto.pk}}">Sí</button>
+                                            <span class="dropdown-item">No</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="4"> 
+                                <p><< No tienes ningun puesto registrado >> </p>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+        </div>
+    </div>
+</section>
+<div class="modal" tabindex="-1" role="dialog" id="ModalAgregar">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="id_form-puesto-agregar" method="POST" action="">
+            {% csrf_token %}
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="puesto-add" class="label-secondary">Puesto Nuevo </label>
+                <input id="input-puesto-agregar" required="" type="text" name="input-puesto-agregar" class="form-control" pattern="[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ]+[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ ]+" title=" ¡Sólo se aceptan números y letras!">
+
+                <label for="puesto-add" class="label-secondary">Nivel </label>
+                <input id="input-puesto_codigo-agregar" required="" type="number" name="input-puesto_codigo-agregar" class="form-control">
+
+                <label for="puesto-add" class="label-secondary">Área del puesto</label>
+                <select name="input-puesto_area-agregar" required="" class="form-control" id="id_cat_areas_{{puesto.pk}}">
+                  <option value="" selected="">---------</option>
+                  {% for area in areas %}
+                    <option value="{{area.pk}}">{{area.area}}</option>
+                  {% endfor %}
+                </select>
+            </div>
+            <span id="id_form-puesto-errors" class="text-danger text-small" style="display: none;">El puesto no puede estar vacio</span>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" class="btn btn-primary" value="Agregar">
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+ 
+{% block body_script %}
+<script>
+    $(function(){
+        $("form").submit(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            if(this.id == "id_form-puesto-agregar"){
+                catpuesto_agregar();
+            } else {
+                catpuesto_editar(this.id,this.id.slice(14));
+            }
+        });
+        $("#id_btn_eliminar_multiple").click(function(){
+            var result = catpuesto_eliminar_multiple();
+            if(result != true){
+                $("#id_btn_eliminar_multiple_errors").text(result);
+                $("#id_btn_eliminar_multiple_errors").show();
+            }
+        });
+    });
+    function check_all(checked){
+        var checkboxes = document.querySelectorAll('input[type^="checkbox"]');
+        for (i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = checked;
+        }
+    }
+    function catpuesto_agregar(){
+        let puesto = $("#input-puesto-agregar").val();
+        console.log("puesto value : " + puesto);
+        if(puesto == "" || puesto == undefined){
+            $("#id_form-puesto-errors").show();
+            return false;
+        }else{
+            var form = $("#id_form-puesto-agregar");
+            var url = "{% url 'personalizar_catpuestos_agregar' %}";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function(data)
+                {
+                    location.reload();
+                },
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        };
+        return true
+    }
+    function catpuesto_agregar_multiple(){ 
+        alert("ToDo ");
+    }
+    function catpuesto_eliminar(id, url){
+            ajax_(id, url);
+    }
+    function catpuesto_eliminar_multiple(){
+        var checkboxes = document.querySelectorAll('input[type^="checkbox"]:checked:not([id*="puesto-check-all"])');
+        var progress_div = $("#id_progress_container_eliminar_multiple");
+        var progressbar = $("#id_progress_eliminar_multiple");
+        var progress_val = 0;
+        var progress_val_p = 0;
+        var len = checkboxes.length;
+        var i = 0;
+        console.log(len);
+        progressbar.css("width", "0%").text("0%");
+        if(len <= 0){
+            console.log("no hay elementos seleccionados");
+            return "no hay elementos seleccionados";
+        }
+        progressbar.css("width", "0%").text("0%");
+        progress_div.show();
+        progressbar.show();
+        $.each(checkboxes, function eliminar_async(i){
+            if (i < len ){
+                let _id = checkboxes[i].id;
+                _id = _id.replace("puesto-check-","");
+                console.log("eliminando el " + i + " id:" + _id);
+                let url = "/personalizar/catalogos/puestos/eliminar-"+_id.toString();
+                let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+                $.ajax({
+                    url : url,
+                    type : "POST",
+                    success : function(json) {
+                        console.log(json);
+                        if(json["messages"] == "eliminado"){
+                            console.log("eliminado");
+                        }
+                    },
+                    error : function(xhr,errmsg,err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        progressbar.css("width",  "100%").text( "Error");
+                        return xhr.responseText;
+                    },
+                    complete: function(){
+                        $("#id-"+_id).remove();
+                        progress_val =  i + 1;
+                        if(progress_val == len ){ progress_val_p = 100} else {progress_val_p = ((progress_val*100)/len)}
+                        progressbar.css("width", progress_val_p.toString()+"%").text(progress_val_p.toString()+"%");
+                        i++;                        
+                    }
+                });
+            }else{
+                progress_val_p = 100;
+                progressbar.css("width", progress_val_p.toString()+"%").text(progress_val_p.toString()+"%");
+                location.reload();
+                return true;
+            }
+        });
+        return true;
+    }
+    function catpuesto_editar(form_id, puesto_id){
+        var form = $("#"+form_id);
+        var area_visible = $("#id_cat_areas_"+puesto_id);
+        var codigo_visible = $("#id_codigo_"+puesto_id);
+        var puesto = form.find("input[name='nuevo_puesto']").val();
+        
+        form.find("input[name='nueva_area']").val(area_visible.val());
+        form.find("input[name='nuevo_puesto_codigo']").val(codigo_visible.val());
+
+        if(puesto == "" || puesto == undefined){
+            $("#puesto-editar-errors-"+form_id).show();
+            return false;
+        }else{
+            var url = form.attr("action");
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function(data)
+                {
+                    location.reload();
+                },
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        };
+        return true;
+    }
+    function catpuesto_editar_toogle(id){
+        $("#puesto-editar-"+id).toggle();
+        $("#puesto-"+id).toggle();
+
+        $("#puesto-codigo-editar-"+id).toggle();
+        $("#puesto-codigo-"+id).toggle();
+
+        $("#area-editar-"+id).toggle();
+        $("#area-"+id).toggle();
+        $("#id_cat_areas_"+id).prop('selectedIndex', parseInt($("#area-"+id).attr("valor")));
+
+    }
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    function ajax_(id, url){
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $.ajax({
+                url : url,
+                type : "POST",
+                success : function(json) {
+                    console.log(json);
+                    $("#id-"+id).remove();
+                    return true;
+                },
+                error : function(xhr,errmsg,err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                    return xhr.responseText;
+                }
+            });
+    }
+</script>
+{% endblock %}

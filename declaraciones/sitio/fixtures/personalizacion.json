@@ -1,0 +1,16 @@
+[	
+	{	
+		"model":"sitio.sitio_personalizacion",
+		"pk":1,
+		"fields":{
+			"nombre_institucion":"Sin nombrar",
+			"siglas_sistema":"siglas sin nombrar",
+			"direccion_calle":"sin nombrar",
+			"direccion_cp":"sin nombrar",
+			"direccion_ciudad":"sin nombrar",
+			"direccion_estado":"Jalisco",
+			"direccion_telefonos":"sin nombrar",
+			"direccion_correos":"sin nombrar"
+		}
+	}
+]

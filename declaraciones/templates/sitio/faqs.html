@@ -1,0 +1,46 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% load personalizacion_tags %}
+{% block header_title %}Preguntas Frecuentes{% endblock %}
+{% block content %}
+<div class="row container-fluid p-0" >
+    
+    <div class="col-md-3 text-center" style="padding: 8rem 0 0 0;">
+          <img src="{% static 'src/img/SEAJAL-Declaraciones-Preguntas_frecuentes_grafico.png' %}" alt="imagen decorativa para perfil" class="pb-3 float-sm-none">
+          <h4 class="text-uppercase mt-5 line-height-md title-mobile text-primary-light">Preguntas frecuentes</h4>
+          {% if user.is_superuser %} 
+          <a  href="/admin/sitio/declaracion_faqs/" role="button" class="btn btn-success icono_personalizar" target="_blank"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+          </svg> Personalizar las preguntas frecuentes </a>
+          {% endif %}
+    </div>
+    <div class="col-md-9">
+     <section class="container my-md-7">
+    <p class="txt-Servidor text-mobile mb-6"> 
+      A través de esta sección esperamos responder la mayoria de tus dudas,<br> si no es así, por favor ponte en contacto con el enlace de tu ente público.
+    </p>
+    <div class="accordion accordion-faq mb-7" id="faq">
+      
+        {% for question in questions %}
+        <div class="card">
+            <div class="card-header p-0" id="faq_{{ forloop.counter }}">
+                <h2 class="mb-0">
+                    <button class="btn btn-link w-100 p-3 pr-5 color-obscuro font-weight-semibold text-left collapsed rounded-0" type="button" data-toggle="collapse" data-target="#collapse_{{ forloop.counter }}" aria-expanded="false" aria-controls="collapse_{{ forloop.counter }}">
+                       <span class="color-secundario pr-2"> {{ forloop.counter }}</span> {{ question.pregunta }}
+                    </button>
+                </h2>
+            </div>
+            <div id="collapse_{{ forloop.counter }}" class="collapse" aria-labelledby="faq_{{ forloop.counter }}" data-parent="#faq">
+                <div class="card-body text-md p-3">
+                    <p>{{ question.respuesta|safe }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+</section>
+    </div>
+  </div>
+{% endblock %} 

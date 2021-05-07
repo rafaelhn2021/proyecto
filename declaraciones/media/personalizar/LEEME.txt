@@ -1,0 +1,2 @@
+Las imagenes de esta carpeta son las imagenes por defecto en el sistema, no se recomienda eliminarlas.
+Puedes cambiarlas con los privilegios de administrador en el sitio. 

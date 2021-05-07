@@ -1,0 +1,103 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% load personalizacion_tags %}
+{% block header_title %}Bienvenido(a){% endblock %}
+{% block header_style %}
+    <style rel="stylesheet" type="text/css" href="{% static 'index.css' %}"></style>
+    <style>
+        #index_bg {
+            padding-bottom: 80px !important;
+            padding-left: 10px !important;
+        }
+    </style>
+{% endblock %}
+{% block content_header %}
+<div class="row container-fluid p-0 body_content" >
+    <img id="index_bg" src="/media/{% personalizacion 'imagen_inicioFondo' %}" class="img-fluid fixed-bottom zi-a f-center m-center fit_to_body w-75 w-sm-100 pb-3" alt="index_background">
+{% endblock %}
+{% block content %}
+        <div class="col-md-6 col-sm-12">
+            {% if user.is_superuser %} 
+            <a class="color-neutro" href="/admin/sitio/sitio_personalizacion/1/change/#id_imagen_logo" alt="Personalizar" target="_blank">
+            <div class="w-100 personalizar_clic">
+                <p class="color-alerta icono_personalizar"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                  </svg> Personalizar el sitio </p>
+            {% else %}
+            <a href="/">
+            {% endif %}
+            <img src="/media/{% personalizacion 'imagen_logo' %}" alt="logo" class="img-fluid index-logo p-3">
+            {% if user.is_superuser %} </div> {% endif %}    
+        </a>
+        </div>
+        <div class="col-md-6 col-sm-12 row mt-auto text-center index-div-options pt-10p">
+            {% block opciones %}
+            <div class="col-10 offset-2 ">
+                <p class="color-secundario h1 font-weight-semibold"> Bienvenido</p>
+                <p class="h3 font-weight-light"> Al sistema de declaraciones</p>
+                <p class="h2">de</p>
+                <p class="color-primario h1 font-weight-bold"> Jalisco</p>
+            </div>
+            <div class="col-12 row text-center">
+                {% if not user.is_staff and not user.is_superuser %}
+                <div class="col-4 offset-2">
+                <a href="{% url 'declaracion:declaracion' %}" class="color-primario">
+                  <figure class="text-center pr-2">
+                  <img src="{% static 'src/img/SEAJAL-Declaraciones-Index-Hacer_declaracion.png' %}" alt="Realiza tu declaración" width="100px" class="img-responsive">
+                  <figcaption> <strong> Realiza tu declaración </strong></figcaption>
+                  </figure>
+                </a>
+              </div>
+                {%endif%}
+                {% if not user.is_authenticated %}
+                <div class="col-4 offset-2">
+                  <a href="{% url 'declaracion:nuevo' %}" class="color-primario">
+                    <figure class="text-center pl-2">
+                      <img src="{% static 'src/img/SEAJAL-Declaraciones-Index-Crear_cuenta.png' %}" alt="Crea tu cuenta" width="100px" class="img-responsive">
+                      <figcaption> <strong>Crea tu cuenta </strong></figcaption>
+                    </figure>
+                  </a>
+                  </div>
+                  {% else %}
+                  <div class="col-6 text-right">
+                        <p>Tareas disponibles:</p>
+                        {% if user.is_staff %}
+                        <li>   
+                            <a href="/declaracion/admin/busqueda-declaraciones" class="color-primario">
+                                Buscar declaraciones
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>   
+                            <a href="/declaracion" class="color-primario">
+                                Hacer una declaracion
+                            </a>
+                        </li>
+                        <li>
+                            <a class="color-primario" href="{% url 'declaraciones-previas' %}">
+                                ver declaraciones previas
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                        <li>
+                            <a href="/admin/sitio/sitio_personalizacion/1/change/" class="color-primario">
+                                Personalizar el sitio
+                            </a>
+                        </li>
+                        {% endif %}
+                      </ul>
+                {% endif %}
+              </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block content_footer %}
+    <img class="img-fluid fixed-bottom index-img-footer f-center m-center fit_to_body w-100" src="/media/{% personalizacion 'imagen_inicioPiepagina' %}">
+    <div class="version_sw">
+        versión 001.200820
+    </div>
+{% endblock %}

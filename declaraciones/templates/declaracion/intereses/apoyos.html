@@ -1,0 +1,216 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Apoyos{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Intereses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Apoyos o beneficios públicos en especie o monetarios</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">2. INTERESES <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">III. Apoyos o beneficios públicos en especie o monetarios</span></h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:apoyos-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:apoyos-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:apoyos' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+              {% csrf_token %}
+                <div class="row">
+                  {% include 'layout/no_aplica.html' %}
+                </div>
+                {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Nombre del programa" titulo_dos="Beneficiario" titulo_tres="Tipo de apoyo" agregar=agregar editar_id=editar_id %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12 my-2">
+                        <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al bien inmueble.">
+                            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                        </button> {% include 'layout/radiobuttons.html' with field_select=apoyos_form.fields.cat_tipos_operaciones field_name=apoyos_form.cat_tipos_operaciones otro_name=apoyos_form.otro_tipo_operacion col=2 col_o=4 tipo='cat_tipos_operaciones' campos_privados=campos_privados %}
+                    </div>
+                     <div class="col-12">
+                        <div class="form-group">
+                            <label for="nombre-programa" class="label-secondary">BENEFICIARIO DEL PROGRAMA{% if 'cat_tipos_relaciones_personales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Son las personas que reciben el apoyo o beneficio público.De las opciones del catálogo indicar quien o quienes son lo benficarios.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>                            
+                            {% include 'layout/radiobuttons.html' with field_select=apoyos_form.fields.cat_tipos_relaciones_personales  field_name=apoyos_form.cat_tipos_relaciones_personales otro_name=apoyos_form.otro_beneficiario tipo='cat_tipos_relaciones_personales' campos_privados=campos_privados%}
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group {% if 'nombre_programa' in campos_privados %}form-group-private{% endif %}">
+                            <label for="nombre-programa" class="label-secondary">NOMBRE DEL PROGRAMA{% if 'nombre_programa' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Proporcionar el nombre del programa por el cual recibe el apoyo o beneficio público">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field apoyos_form.nombre_programa show_label=False placeholder="Nombre del programa" %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group {% if 'institucion_otorgante' in campos_privados %}form-group-private{% endif %}">
+                            <label for="institucion-apoyo" class="text-muted text-sm mb-0">INSTITUCIÓN QUE OTORGA EL APOYO{% if 'institucion_otorgante' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el nombre de la intitución que le esté dando el apoyo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field apoyos_form.institucion_otorgante  show_label=False placeholder="Institución que otorga el apoyo" %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="nivel-gobierno" class="text-muted text-sm mb-0">NIVEL U ORDEN DE GOBIERNO{% if 'cat_ordenes_gobierno' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar el orden de gobierno por medio del cual recibe el apoyo o beneficio público.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=apoyos_form.fields.cat_ordenes_gobierno  field_name=apoyos_form.cat_ordenes_gobierno otro_name=apoyos_form.otra_funcion tipo='cat_ordenes_gobierno' campos_privados=campos_privados%}
+                    </div>
+                    <div class="col-md-12">
+                        <label for="tipo-apoyo" class="text-muted text-sm mb-0">TIPO DE APOYO{% if 'cat_tipos_apoyos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar de las opciones.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=apoyos_form.fields.cat_tipos_apoyos  field_name=apoyos_form.cat_tipos_apoyos otro_name=form.otro_apoyo col=2 col_o=6 tipo='cat_tipos_apoyos' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-md-12"><br></div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'institucion_otorgante' in campos_privados %}form-group-private{% endif %}">
+                            <label for="valor-anual-apoyo" class="text-muted text-sm mb-0">FORMA DE RECEPCIÓN{% if 'forma_recepcion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar si el apoyo recibido es moentario o en especie.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field apoyos_form.forma_recepcion show_label=False placeholder="Forma de recepción" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'monto_apoyo_mensual' in campos_privados %}form-group-private{% endif %}">
+                            <label for="valor-anual-apoyo" class="text-muted text-sm mb-0">MONTO APROXIMADO DEL APOYO{% if 'monto_apoyo_mensual' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Es necesario capturar cantidades sin cmoas, sin puntos, sin centavos y sin ceros a la izquierda. Indicar cantidad mensual del apoyo, si es no fuera mensual, realizar la operación aritmética a efecto de establecer la cantidad como lo solicita el formato.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                                {% bootstrap_field apoyos_form.monto_apoyo_mensual show_label=False placeholder="Monto mensual del apoyo" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'moneda' in campos_privados %}form-group-private{% endif %}">
+                            <label for="valor-anual-apoyo" class="text-muted text-sm mb-0">MONEDA{% if 'moneda' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Moneda.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                                {% bootstrap_field apoyos_form.moneda show_label=False placeholder="Moneda" %}
+                        </div>
+                    </div>
+                    <div class="col-md-12" id="class_forma_recepcion">
+                        <label for="valor-anual-apoyo" class="text-muted text-sm mb-0">ESPECIFIQUE EL APOYO{% if 'especifiqueApoyo' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En caso de haber seleccionado en especie deberá describir en qué consiste el apoyo o beneficio.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% bootstrap_field apoyos_form.especifiqueApoyo show_label=False placeholder="Especifique apoyo" %}
+                    </div>
+                </div>
+                <div id="ms_campos_obligatorios"></div>
+                <div class="col-12 text-right row-form"  style="{% if checked %}display: none;{% endif %}">
+                    <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-success font-weight-semibold text-uppercase">
+                      Guardar y agregar otro apoyo
+                        <img src="/static/src/img/plus.svg" alt="agregar" class="svg">
+                    </button>
+                 </div>
+
+                <div class="row row-form">
+                    <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label for="observaciones" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  observaciones_form.observacion show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                </div>
+                   {% include 'layout/guardar.html' %}
+
+            </form>
+            <div class="row"><div class="col-12"><br/></div></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>');
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            } 
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='apoyos-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

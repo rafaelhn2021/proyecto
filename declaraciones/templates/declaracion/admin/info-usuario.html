@@ -1,0 +1,95 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Información del usuario {% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+
+<section class="container-fluid">
+  <div class="row">
+     <div class="col-sm-12 col-md-6">
+        <h2 class="text-gray text-xl font-weight-medium text-uppercase mt-5 line-height-md title-mobile text-mobile"><span class="text-primary-light font-weight-semibold">{{ info.nombres|upper }} {{ info.apellido1|upper }} {{ info.apellido2|upper }}</span></h2>
+     </div>
+     <div class="col-sm-12 col-md-6 mt-3">
+         <div class="row">
+             <div class="col-sm-3 p-1">
+                  <a href="{% url 'declaracion:busqueda-usuarios' %}" class="btn btn-success btn-block btn-lg font-weight-semibold">
+                    <img src="{% static 'src/img/regresar.png' %}"> 
+                    REGRESAR
+                  </a>
+             </div>
+             </div>
+         </div>
+     </div>
+  </div>
+
+
+  <div class="row col-12 my-5 py-5">
+    <div class="col-md-4 col-sm-12">
+      <img src="/static/src/img/SEAJAL-Declaraciones-Index-Crear_cuenta.png" alt="imagen decorativa para perfil" class="pb-3 float-sm-none float-md-right ">
+    </div>
+    <div class="col-md-8 col-sm-12">
+            
+      <div class="pl-3 text-dark mb-5 row">
+        <div class="like_table">
+
+          <div class="col-12 row">
+            <div class="col-6 text-right pr-3 text-secondary-light"> Ente público</div>
+            <div class="col-6"><strong class="text-black text-dynamic text-secondary-light2">{{ info.nombre_ente_publico}}</strong></div>
+          </div>
+          <br>
+
+          <div class="col-12 row">
+            <div class="col-6 text-right pr-3 text-secondary-light">Empleo o cargo</div>
+            <div class="col-6"><strong class="text-black text-dynamic text-secondary-light2">{{ info.puesto}}</strong></div>
+          </div>
+          <br>
+
+          <div class="col-12 row">
+            <div class="col-6 text-right pr-3 text-secondary-light">Teléfono</div>
+            <div class="col-6"><strong class="text-black text-dynamic text-secondary-light2">{{ info.telefono}}</strong></div>
+          </div>
+          <br>
+          <div class="col-12 row"> 
+            <div class="col-6 text-right pr-3 text-secondary-light">Correo Electrónico</div>
+            <div class="col-6"><strong class="text-black text-dynamic text-secondary-light2">{{ info.usuario.email}}</strong></div>
+          </div>
+          <br>
+          <div class="col-12 row">
+            <div class="col-6 text-right pr-3 text-secondary-light">Estatus</div>
+            <div class="col-6"><strong class="text-black text-dynamic text-secondary-light2">{% if info.usuario.is_active %} Activo {% else %} Inactivo {% endif %}</strong></div>
+          </div>
+          <br>
+          <div class="col-12 row">
+            <div class="col-6 text-right pr-3 text-secondary-light">Rol</div>
+            <div class="col-6"><strong class="text-black text-dynamic text-secondary-light2">{% if info.usuario.is_superuser %} Administrador {% else %} {% if info.usuario.is_staff %} Enlace {% else %} Declarante {% endif %} {% endif %}</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal_logo"></div>
+        <!--h4 class="modal-title" style="color: #A4B54C;"><br>Eliminar Usuario</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button-->
+      </div>
+      <div class="modal-body">
+          <p>¿Está seguro de elminar este usuario <span id="nombre-usuario" class="text-primary-light font-weight-semibold"></span> ?</p>
+          <form method="post"  id="elimina_usuario_form" >
+              {% csrf_token %}
+              <input type="hidden" id="id-usuario"/>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <!--a rol="buttn" class="btn btn-primary" href="borraUsuario('{% url 'declaracion:eliminar-usuario' 0 %}','elimina_usuario_form','{% url 'declaracion:busqueda-usuarios' %}')">Eliminar</a-->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

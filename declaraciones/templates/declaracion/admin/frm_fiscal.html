@@ -1,0 +1,20 @@
+{% load no_aplica %}
+{% load static %}
+<div class="row">
+  <div class="col-12">
+    <h4 class="text-base text-uppercase text-success-lighter mb-25">
+      III.DECLARACIÓN FISCAL
+    </h4>
+    
+  <div class="file-read-content">
+    <img class="file-upload-image" src="{% static 'src/img/pdf_bn.png'%}" alt="Archivo PDF"/>
+	    <div class="image-title-wrap">
+        {% if fiscal.archivo_pdf %}
+	 		    <a href="{{fiscal.archivo_pdf.url}}" target="_blank">{{fiscal.archivo_pdf.name}}</a>
+        {% else %}
+          <span>En esta declaración no se ha guardado ningun archivo</span>
+        {% endif %}
+	 	</div>
+  </div>
+</div>
+</div>

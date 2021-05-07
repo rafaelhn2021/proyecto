@@ -1,0 +1,95 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% load personalizacion_tags %}
+{% block extrastyle %}
+<style>
+  :root {
+    --primary-color: #F8F8F8;
+    --primary-color-faded: #046076;
+    --secondary-color: #a3b34c;
+    --third-color: #A4B860
+  }
+
+  ::selection {
+    background: var(--secondary-color);
+    color:var(--primary-color);
+    opacity:1
+  }
+
+  ::-moz-selection {
+    background: var(--secondary-color);
+    color:var(--primary-color);
+    opacity:1
+  }
+  body {
+    font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif,
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol';
+  }
+  body.login{
+    background: url("/media/{% personalizacion 'imagen_inicioFondo' %}") no-repeat !important;
+    background-size: cover !important;
+    margin-right: 100px;
+  }
+  #container{
+    /*float: right;*/
+  }
+  #header {
+    background: var(--primary-color);
+    color: var(--primary-color-faded);
+    height: auto;
+  }
+  .module h2, .module caption, .inline-group h2 {
+    background-color: var(--secondary-color);
+  }
+  div.breadcrumbs {
+    background: var(--primary-color-faded);
+  }
+  a:link, a:visited {
+    color: var(--primary-color-faded);
+  }
+  .selector-chosen h2 {
+    background: var(--primary-color-faded) !important;
+  }
+  .button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--primary-color-faded);
+  }
+  .button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--primary-color-faded);
+  }
+  .button:active, input[type=submit]:active, input[type=button]:active, .button:focus, input[type=submit]:focus, input[type=button]:focus, .button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: var(--secondary-color);
+    opacity: 0.8;
+  }
+  .button.default:active, input[type=submit].default:active, .button.default:focus, input[type=submit].default:focus, .button.default:hover, input[type=submit].default:hover {
+    background: var(--secondary-color);
+  }
+
+  .title_seajal{
+    color: var(--primary-color)
+  }
+
+  #user-tools a{
+    color:var(--primary-color-faded) !important;
+  }
+</style>
+{% endblock %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Declaraciones site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+  <img src="{% static 'src/img/SEAJAL-Declaraciones-Index-Hacer_declaracion.png' %}" width="50">
+   <a href="{% url 'admin:index' %}" style="color: #384D66;">{{ site_header|default:_('Declaraciones administration') }}</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

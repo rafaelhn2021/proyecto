@@ -1,0 +1,177 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Búsqueda de usuarios{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+    <form action="{% url 'declaracion:busqueda-usuarios' %}" method="post" id="form">
+<section class="container body_content">
+  <div class="row row-md ">
+     <div class="col-sm-12 col-md-8">
+        <h1 class="text-gray text-xl font-weight-medium text-uppercase mt-5 line-height-md title-mobile text-mobile"><span class="text-primary-light font-weight-semibold">USUARIOS</span> Búsqueda</h1>
+     </div>
+
+      {% if msg %}
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">¡Se han registrado el usuario <i>{{ infopersonalfija.rfc }}</i>!</h4>
+          <p>{{email_result}}</p>
+          <hr>
+          <p class="mb-0">Debe dar clic al enlace enviado a su correo. </p>
+        </div>
+
+      {% endif %}
+
+      {% if editar%}
+        <div class="alert alert-success col-md-8" role="alert">
+          <h4 class="alert-heading">¡Se han guardado los cambios del usuario <i>{{ infopersonalfija.rfc }}</i>!</h4>
+          <p>La actualización de datos se ha realizado con éxito.</p>
+          <hr>
+        </div>
+      {% endif %}
+     {% if user.is_superuser %}
+        <div class="col-sm-12 col-md-4 mt-4">
+            <a href="{% url 'declaracion:nuevo-usuario' %}" class="btn bgCVerdeSeco btn-success btn-block btn-lg font-weight-semibold" style="width: 90%;"> 
+              Crear usuario 
+              <img src="{% static 'src/img/group.svg' %}">
+            </a>
+        </div>
+      {% endif %}
+  </div>
+
+  <div class="row row-md ">
+    <div class="d-flex justify-content-center align-items-center flex-column flex-sm-row bg-gray p-4 rounded">
+               {% csrf_token %}
+               {%  bootstrap_field form.page %}
+               <div class="row">
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                       {% bootstrap_field form.nombre  field_class="solo_letras" %}
+                   </div>
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                       {% bootstrap_field form.apellido1  field_class="solo_letras" %}
+                   </div>
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                       {% bootstrap_field form.apellido2  field_class="solo_letras" %}
+                   </div>
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                       <label > RFC</label>
+                       {% bootstrap_field form.rfc show_label=False %}
+                   </div>
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                       {% bootstrap_field form.estatus  %}
+                   </div>
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                    {% bootstrap_field form.puesto_str  %}
+                   </div>
+                   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+                       <button class="btn btn-success text-uppercase font-weight-semibold mt-5"  type="submit">Buscar  <img src="{% static 'src/img/busqueda.svg' %}"/></button>
+                       <input class="btn btn-success text-uppercase font-weight-semibold mt-5" type="reset" value="Limpiar">
+                   </div>
+               </div>
+    </div>
+  </div>
+ {% if result %}
+  <div class="row row-md">
+        <table class="table table-striped text-center">
+              <thead>
+                <tr>
+                  <th scope="col">NOMBRE</th>
+                  <th scope="col">PRIMER APELLIDO</th>
+                  <th scope="col">SEGUNDO APELLIDO</th>
+                  <th scope="col">RFC</th>
+                  <th scope="col">ESTATUS</th>
+                  <th scope="col">VER</th>
+                  {% if user.is_superuser %}
+                  <th scope="col">EDITAR</th>
+                  {% endif %}
+                </tr>
+              </thead>
+              <tbody>
+              {% for r in result %}
+                <tr id="id-usuario-{{ r.usuario.id }}">
+                  <th scope="row">{{ r.nombres }}</th>
+                  <td>{{ r.apellido1 }}</td>
+                  <td>{{ r.apellido2 }}</td>
+                  <td>{{ r.rfc }}</td>
+                  <td>{% if r.usuario.is_active %} <span class="text-primary-light">Activo</span> {% else %} Inactivo {% endif %} </td>
+                  <td>
+                      <a href="{%  url 'declaracion:info-usuario' r.usuario.id %}"> <img width="40px" src="{% static 'src/img/see_azul.png' %}"></a>
+                  </td>
+                  {% if user.is_superuser %}
+                  <td>
+                      <a href="{% url 'declaracion:editar-usuario'  r.usuario.id %}"> <img width="40px" src="{% static 'src/img/detalles_usuario_verde.png' %}"></a>
+                  </td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+              </tbody>
+        </table>
+
+
+
+
+
+  </div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal_logo"></div>
+        <h4 class="modal-title" style="color: #A4B54C;"><br>Eliminar Usuario</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+          <p>¿Está seguro de elminar este usuario <span id="nombre-usuario" class="text-primary-light font-weight-semibold"></span> ?</p>
+          <form method="post"  id="elimina_usuario_form" >
+              {% csrf_token %}
+              <input type="hidden" id="id-usuario"/>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="borraUsuario('{% url 'declaracion:eliminar-usuario' 0 %}','elimina_usuario_form',true)">Eliminar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row row-md text-center">
+<div class="col-12">
+  <nav aria-label="Páginas" class="nav d-flex justify-content-center">
+    <ul class="pagination flex-wrap">
+    {% if result.has_previous %}
+    <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.previous_page_number }});$('#form').submit()" href="#">«</a></li>
+     {% endif %}
+
+            {%for p in paginas%}
+              {%ifequal p result.number %}
+                <li class="page-item"><a class="page-link bg-primary text-light" href="#">{{result.number}}</a></li>
+              {%else%}
+                <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ p }});$('#form').submit()" href="#">{{p}}</a></li>
+              {%endifequal%}
+            {%endfor%}
+     {% if result.has_next %}
+    <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.next_page_number }});$('#form').submit()" href="#">»</a></li>
+      {%endif%}
+
+    </ul>
+  </nav>
+</div>
+
+    <!--<div class="col-12 text-center">
+        <span>Página {{ result.number }} de {{ result.paginator.num_pages }}.</span>
+    </div>-->
+
+
+
+</div>
+ {% endif %}
+
+ {% if no_results %}
+  <div style="text-align: center !important;background: #e6f3bd;">
+    <h5 style="color: #417505;">No se encontraron usuarios tipo operador o staff</h5>
+  </div>
+
+ {% endif %}
+
+</section>
+    </form>
+{% endblock %}

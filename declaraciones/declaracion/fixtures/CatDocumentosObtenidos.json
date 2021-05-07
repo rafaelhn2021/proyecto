@@ -1,0 +1,4 @@
+[{"model": "declaracion.catdocumentosobtenidos", "pk": 1, "fields": {"documento_obtenido": "BOLETA", "created_at": "2019-03-11T00:00:00Z", "updated_at": "2019-03-11T00:00:00Z", "default": 0, "orden": 1, "codigo": "BOL"}},
+ {"model": "declaracion.catdocumentosobtenidos", "pk": 2, "fields": {"documento_obtenido": "CERTIFICADO", "created_at": "2019-03-11T00:00:00Z", "updated_at": "2019-03-11T00:00:00Z", "default": 0, "orden": 1, "codigo": "CERT"}},
+ {"model": "declaracion.catdocumentosobtenidos", "pk": 3, "fields": {"documento_obtenido": "CONSTANCIA", "created_at": "2019-03-11T00:00:00Z", "updated_at": "2019-03-11T00:00:00Z", "default": 0, "orden": 1, "codigo": "CONST"}},
+ {"model": "declaracion.catdocumentosobtenidos", "pk": 4, "fields": {"documento_obtenido": "TITULO", "created_at": "2019-03-11T00:00:00Z", "updated_at": "2019-03-11T00:00:00Z", "default": 0, "orden": 1, "codigo": "TIT"}}]

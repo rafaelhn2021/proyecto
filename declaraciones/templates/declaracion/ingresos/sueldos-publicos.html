@@ -1,0 +1,136 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Sueldos públicos{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">INGRESO</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sueldo cargo publico</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">3. INGRESO <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">I. Sueldo cargo publico</span></h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            <form action="{% url 'declaracion:ingresos-publicos' folio_declaracion %}" method="post" novalidate>
+            {% csrf_token %}
+
+            {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Ingreso mensual cargo público actual" titulo_dos="Ingreso anual cargo público" titulo_tres="Moneda" agregar=agregar editar_id=editar_id %}
+                {% csrf_token %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                 <div class="col-md-12">
+                        <label class="label-secondary">¿TE DESEMPEÑASTE COMO SERVIDOR PÚBLICO EN EL AÑO ANTERIOR?<span class='text-danger text-lg font-weight-bold'>*</span></label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Marcar si recibe o no.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        <div class="row">
+                            <div class="col-auto">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="ingreso_anio_anterior-si" name="sueldos_publicos-ingreso_anio_anterior" value="False" class="custom-control-input" {% if form.ingreso_anio_anterior.initial == False %}checked{% endif %}  onclick="accion_hide_disabled_show(this);">
+                                    <label class="custom-control-label text-rg" for="ingreso_anio_anterior-si">Si</label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="custom-control custom-radio custom-control-inline radio-secondary">
+                                    <input type="radio" id="ingreso_anio_anterior-no" name="sueldos_publicos-ingreso_anio_anterior" value="True" class="custom-control-input" {% if not form.ingreso_anio_anterior.initial %}checked{% endif %}  {% if form.ingreso_anio_anterior.initial == True %}checked{% endif %} onclick="accion_hide_disabled_show(this);">
+                                    <label class="custom-control-label text-rg" for="ingreso_anio_anterior-no">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="form-group">
+                          {% bootstrap_label "Ente público (persona física o moral)<span class='text-danger text-lg font-weight-bold'>*</span>:" label_for="nombre_ente_publico" label_class="label-secondary"%}
+                          <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar el Ente que realiza el pago al Declarante.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                          </button>
+                            {% bootstrap_field form.nombre_ente_publico placeholder="Ente público" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            {% bootstrap_label "RFC del ente público (si aplica):" label_for="rfc" label_class="label-secondary"%}
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field form.rfc placeholder="RFC del ente público"  field_class='valida_rfc'  show_label=False %}
+                        </div>
+                    </div>
+                    <div class="col-6" id="div_sueldo_publico_actual">
+                        <div class="form-group {% if 'ingreso_neto_mensual' in campos_privados %}form-group-private{% endif %} ">
+                            {% bootstrap_label "Ingreso neto mensual recibido por el encargo público<span class='text-danger text-lg font-weight-bold'>*</span>:" label_for="ingreso_neto_mensual" label_class="label-secondary"%}
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Ingreso del Declarante sin impuestos ni deducciones.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field form.ingreso_neto_mensual placeholder="Monto" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-6" id="div_sueldo_publico_anterior">
+                        <div class="form-group {% if 'ingreso_bruto_anual' in campos_privados %}form-group-private{% endif %}">
+                            {% bootstrap_label "Ingreso neto anual recibido por el encargo público<span class='text-danger text-lg font-weight-bold'>*</span>:" label_for="ingreso_bruto_anual" label_class="label-secondary"%}
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Ingreso del Declarante sin impuestos ni deducciones.">
+                              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field form.ingreso_bruto_anual placeholder="Monto" show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group {% if 'cat_monedas' in campos_privados %}form-group-private{% endif %}">
+                             {% bootstrap_label "Moneda<span class='text-danger text-lg font-weight-bold'>*</span>:" label_for="cat_monedas" label_class="label-secondary"%}
+                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar tipo de moneda.">
+                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                             </button>
+                             {% bootstrap_field form.cat_monedas placeholder="Monto" field_class="moneda" show_label=False%}
+
+                        </div>
+                    </div>
+                    <div class="col-4" id="div_sueldo_publico_anterior_fi">
+                        <div class="form-group {% if 'fecha_ingreso' in campos_privados %}form-group-private{% endif %}">
+                             {% bootstrap_label "Fecha inicio" label_for="fecha_ingreso" label_class="label-secondary"%}
+                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Fecha de ingreso.">
+                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                             </button>
+                             {% bootstrap_field form.fecha_ingreso placeholder="Fecha ingreso" field_class="fecha" show_label=False%}
+
+                        </div>
+                    </div>
+                    <div class="col-4" id="div_sueldo_publico_anterior_fc">
+                        <div class="form-group {% if 'fecha_conclusion' in campos_privados %}form-group-private{% endif %}">
+                             {% bootstrap_label "Fecha conclusión" label_for="fecha_conclusion" label_class="label-secondary"%}
+                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Fecha de conslusion.">
+                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                             </button>
+                             {% bootstrap_field form.fecha_conclusion placeholder="Fecha inicio" field_class="fecha" show_label=False%}
+
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group {% if 'observacion' in campos_privados %}form-group-private{% endif %}">
+                            <label for="observaciones" class="label-secondary">ACLARACIONES/OBSERVACIONES</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Detallar información de sueldos y salarios.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field observaciones_form.observacion show_label=False %}
+                        </div>
+                    </div>
+                   </div>
+                    {% include 'layout/guardar.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

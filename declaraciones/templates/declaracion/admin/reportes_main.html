@@ -1,0 +1,119 @@
+{% load static %}
+{% load bootstrap4 %}
+{% load personalizacion_tags %}
+{% block layout_style %}
+	<style type="text/css">
+		.logo {
+	      background-color: #015F78;
+	    }
+	    .white{
+	    	color: #fff;
+	    }
+		.tr  {border-collapse:collapse;border-spacing:0;border-color:#ccc;width: 100%;}
+		.tr td{font-family:Arial, sans-serif;font-size:14px;padding:2px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#fff;}
+		.tr th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+		.tr .tr-ukxx{background-color:#efefef;color:#343434;border-color:#cccccc;text-align:center;vertical-align:top;font-weight:bold}
+		.tr .tr-n9g5{background-color:#ffffff;color:#000000;border-color:inherit;text-align:left;vertical-align:top}
+		.tr .tr-us7v{background-color:#ffffff;color:#036400;border-color:inherit;text-align:center;vertical-align:top}
+		.tr .tr-idod{background-color:#ffffff;font-weight:bold;color:#000000;border-color:inherit;text-align:center;vertical-align:top}
+		.tr .tr-fhnp{background-color:#ffffff;color:#010066;border-color:inherit;text-align:center;vertical-align:top}
+		.tr .tr-bjy0{background-color:#ffffff;color:#010066;border-color:inherit;text-align:center;vertical-align:top}
+		.tr .tr-1a2g{background-color:#ffffff;color:#036400;border-color:inherit;text-align:center;vertical-align:top}
+		.tr .tr-i505{font-size:12px;background-color:#ffffff;color:#000000;border-color:inherit;text-align:left;vertical-align:top}
+		.tr .tr-1i3a{font-size:12px;background-color:#ffffff;color:#000000;border-color:inherit;text-align:right;vertical-align:top}
+		.tr .tr-wblm{background-color:#ffffff;font-size:12px;color:#000000;border-color:inherit;text-align:left;vertical-align:top}
+		.tr .tr-zjti{background-color:#cbcefb;color:#000000;border-color:#000000;text-align:left;vertical-align:top}
+
+		.tg_d_resumen  {border-collapse:collapse;border-spacing:0;width: 100%;}
+		.tg_d_resumen td{font-family:Arial, sans-serif;font-size:14px;padding:2px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-color:black;}
+		.tg_d_resumen th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-bottom-width:1px;border-color:black; padding-top: 10px;padding-bottom: 0px}
+		.tg_d_resumen .tg_d_resumen-0pky{border-color:inherit;text-align:left !important;vertical-align:top;padding-right: 45px;font-weight:bold}
+		.tg_d_resumen .tg_d_resumen-dvpl{border-color:inherit;text-align:right !important;vertical-align:top;padding-left: 160px;font-weight:bold}
+		.tg_d_resumen .tg_d_resumen-pcvp{border-color:inherit;text-align:left;vertical-align:top;width: 400px}
+
+		.encabezado  {border-collapse:collapse;border-spacing:0;border:none;}
+		.encabezado td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;}
+		.encabezado th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;text-align:left;vertical-align:top;width: 400px}
+		.encabezado .encabezado-jbzf{background-color:#015F78;color:#ffffff;border-color:inherit}
+
+		.tg_d_completo  {border: solid 1px gray;width: 100% !important;}
+		.tg_d_completo-hx12{font-weight:bold;background-color:#EFEFEF;}
+		.tg_d_completo-km2t{font-weight:bold;}
+
+
+	</style>
+{% endblock %}
+
+{% block extra_style %}
+  <link rel="stylesheet" href="{% static 'app.css' %}">
+{% endblock %}
+
+{%block page_header%}
+<div style="background-color: {{color_encabezado}};">
+  <center>
+  	<img src="/media/{% personalizacion 'imagen_sublogo' %}" alt="Logo entidad"  style="width: auto;">
+  	<p class="white">{% if tipo_declaracion == 'resumen_declaracion' %} Reporte resumido por tipo de declaración {% elif tipo_declaracion == 'completo_declaracion' %} Reporte completo por declaración {% endif %}</p>
+  </center>
+</div>
+{% endblock %}
+{% block content %}
+	<table class="tr">
+	  <tr>
+	    <th class="tr-ukxx" colspan="7">RESUMEN</th>
+	  </tr>
+	  <tr>
+	    <td class="tr-fhnp" colspan="2">USUARIOS</td>
+	    <td class="tr-us7v" colspan="5">DECLARACIONES</td>
+	  </tr>
+	  <tr>
+	    <td class="tr-bjy0">ACTIVOS</td>
+	    <td class="tr-bjy0">BAJA</td>
+	    <td class="tr-1a2g">INICIALES</td>
+	    <td class="tr-1a2g">MODIFICACIÓN</td>
+	    <td class="tr-1a2g">CONCLUSIÓN</td>
+	    <td class="tr-1a2g">ABIERTAS</td>
+	    <td class="tr-1a2g">CERRADAS</td>
+	  </tr>
+	  <tr>
+	    <td class="tr-idod">{{resumen.activos|length}}</td>
+	    <td class="tr-idod">{{resumen.baja|length}}</td>
+	    <td class="tr-idod">{{resumen.iniciales|length}}</td>
+	    <td class="tr-idod">{{resumen.modificacion|length}}</td>
+	    <td class="tr-idod">{{resumen.conclusion|length}}</td>
+	    <td class="tr-idod">{{resumen.abiertas|length}}</td>
+	    <td class="tr-idod">{{resumen.cerradas|length}}</td>
+	  </tr>
+	  <tr>
+	    <td class="tr-n9g5" colspan="6">
+	        <p> Usuarios activos pendientes por cerrar declaración inicial:
+	            <ul>
+					{% if resumen.usuarios_activos_d_inicial %}
+						{% for usuario_activo_d_inicial in resumen.usuarios_activos_d_inicial %}
+						<li>{{usuario_activo_d_inicial.first_name}} {{usuario_activo_d_inicial.last_name}}</li>
+						{% endfor %}
+					{% else %}
+						<p style="color:gray;">Ningún usuario pendiente</p> 
+					{% endif %}
+	            </ul>
+	        </p>
+	        <p> Usuarios activos pendientes por iniciar declaración inicial:
+	            <ul>
+					{% if resumen.usuarios_activos_d_pendiente %}
+						{% for usuario_activo_d_pendiente in resumen.usuarios_activos_d_pendiente %}
+						<li>{{usuario_activo_d_pendiente.first_name}} {{usuario_activo_d_pendiente.last_name}}</li>
+						{% endfor %}
+					{% else %}
+					<p style="color:gray;">Ningún usuario pendiente</p> 
+					{% endif %}
+	            </ul>
+	        </p>
+	    </td>
+	  </tr>
+	</table>
+	<br>
+	{% if tipo_declaracion == 'resumen_declaracion' %}
+	   {% include "declaracion/admin/reportes_resumido.html" %}
+	{% elif tipo_declaracion == 'completo_declaracion' %}
+	  {% include "declaracion/admin/reportes_completo.html" %}
+	{% endif %}
+{% endblock %}

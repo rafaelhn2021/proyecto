@@ -1,0 +1,40 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Personalizar puestos {% endblock %}
+{% load bootstrap4 %}
+
+{% block content %}
+<section class="container mt-4 body_content">
+    <div class="row">
+        {% if messages %}
+            {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissable alert-link">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>{{ message }}</strong>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        <div class="col-12 pb-5">
+            <h2> Datos actuales de la entidad </h2>
+            <h6>A continuación se muestran los datos registrados a nombre de la entidad que está encargada de este sistema</h6>
+        </div>
+        <div class="col-6 text-left mb-4">
+            <form action="{% url 'personalizar_entidad_editar' %}" method="POST" onsubmit="">
+
+            </form>
+        </div>
+</section>
+{% endblock %}
+
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form").submit(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            alert("submited");
+        });
+    });
+</script>
+{% endblock %}

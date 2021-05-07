@@ -1,0 +1,60 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% load personalizacion_tags %}
+{% block header_title %}Preguntas Frecuentes{% endblock %}
+{% block content %}
+<div class="container">
+<div class="row" >
+    <div class="col-md-6" style="padding: 8rem 0 0 0;">
+      Declaracion inicial<br>
+      {% for a in areas %}
+
+              
+        <div class="ui-accordion ui-accordion-header fraccion" data-toggle="collapse" href="#collapse{{a.codigo}}i" role="button" aria-expanded="false" aria-controls="collapse{{a.codigo}}i">{{a.codigo}}</div>
+
+        <div class="collapse" id="collapse{{a.codigo}}i"><div class="card card-body">
+          {% for dec in declaracionInicial %}
+            {% if dec.info_personal_fija.cat_puestos.cat_areas.id is a.id %}
+              {% if 2020 in dec.fecha_recepcion.year %}
+                  <b>2020</b><br>
+                   {% else %}
+                  <b>2021</b><br>
+              {% endif %}
+                  
+
+                   <a target="blank" href="/media/declaraciones/{{ dec.cat_tipos_declaracion.codigo }}/{{ dec.fecha_recepcion.year }}/{{ dec.info_personal_fija.cat_puestos.cat_areas.codigo }}/{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf" >{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf | {{dec.info_personal_fija.cat_puestos.cat_areas.codigo}}</a>
+             
+                   <a target="blank" href="/media/declaraciones/{{ dec.cat_tipos_declaracion.codigo }}/{{ dec.fecha_recepcion.year }}/{{ dec.info_personal_fija.cat_puestos.cat_areas.codigo }}/{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf" >{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf | {{dec.info_personal_fija.cat_puestos.cat_areas.codigo}}</a>
+            {% endif%}
+          {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-md-6" style="padding: 8rem 0 0 0;">
+      Declaracion de Modificación<br>
+      {% for a in areas %}
+              
+        <div class="ui-accordion ui-accordion-header fraccion" data-toggle="collapse" href="#collapse{{a.codigo}}m" role="button" aria-expanded="false" aria-controls="collapse{{a.codigo}}m">{{a.codigo}}</div>
+
+        <div class="collapse" id="collapse{{a.codigo}}m"><div class="card card-body">
+          {% for dec in declaracionMod %}
+            {% if dec.info_personal_fija.cat_puestos.cat_areas.id is a.id %}
+              {% if dec.fecha_recepcion.year is 2020 %}
+                  <b>2020</b><br>
+
+                   <a target="blank" href="/media/declaraciones/{{ dec.cat_tipos_declaracion.codigo }}/{{ dec.fecha_recepcion.year }}/{{ dec.info_personal_fija.cat_puestos.cat_areas.codigo }}/{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf" >{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf | {{dec.info_personal_fija.cat_puestos.cat_areas.codigo}}</a>
+              {% else %}
+                  <b>2021</b><br>
+                   <a target="blank" href="/media/declaraciones/{{ dec.cat_tipos_declaracion.codigo }}/{{ dec.fecha_recepcion.year }}/{{ dec.info_personal_fija.cat_puestos.cat_areas.codigo }}/{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf" >{{ dec.info_personal_fija.rfc }}_{{dec.cat_tipos_declaracion}}.pdf | {{dec.info_personal_fija.cat_puestos.cat_areas.codigo}}</a>
+              {% endif %}
+            {% endif%}
+          {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %} 

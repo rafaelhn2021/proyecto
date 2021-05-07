@@ -1,0 +1,33 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Graficas{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+<section class="container body_content">
+	<h1 class="text-gray text-xl font-weight-medium text-uppercase mt-5 line-height-md title-mobile text-mobile"><span class="text-primary-light font-weight-semibold">Declaraciones</span> Gráficas</h1>
+	<div class="justify-content-left align-items-left flex-column flex-sm-row bg-gray p-4 rounded">
+		<h5>En este modulo podrá visualizar información del sistema como la cantidad de declaraciones y usuarios en modo de gráficas</h5>
+            <span> <b>Gráfica 1:</b> Valores numéricos representan la cantidad de usuarios activos ingresados en el año seleccionado</span><br>
+            <span> <b>Gráfica 2:</b> Valores numéricos representan la cantidad de usuarios activos y/o declaraciones creados en el año seleccionado</span><br><br>
+            <span> <b>Total de usuarios activos registrados en el sistema:</b> {{ total_usuario_activos }}</span><br>
+            <span> <b>Total de usuarios inactivos registrados en el sistema:</b> {{ total_usuario_baja }}</span><br>
+            <span> <b>Tipos de declaración:</b> {{ tipos_declaracion|join:", " }}</span><br><br>
+            <span> <b>Eliga el año en el que desea ver los datos:</b>
+            <div id="filtro_anio_graficas">
+            	{% bootstrap_field form.anio_filtro show_label=False %}
+            </div>
+	</div>
+	<div class="row row-md">
+		<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6" id="grafica_usuarios_declaraciones_general" style="min-height:450px;">
+			<canvas id="chart_grafica_usuarios_declaraciones_general"></canvas>
+		</div>
+		<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6" id="grafica_usuario_declaraciones_fechas" style="min-height:450px;">
+			<canvas id="chart_grafica_usuario_declaraciones_fechas"></canvas>
+		</div> 
+    </div>
+</section>
+
+{% endblock %}
+{% block body_script %}
+
+{% endblock %}

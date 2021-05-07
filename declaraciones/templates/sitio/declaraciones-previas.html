@@ -1,0 +1,72 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% load no_aplica %}
+{% block content %}
+<section>
+  <div class="container body_content">
+    <div class="row row-md py-7">
+      <div class="col-12 mb-5">
+        <p class="text-gray text-xl">
+          <span class="text-primary-light font-weight-semibold">
+            DECLARACIONES PREVIAS</span>
+        </p>
+        <p>Puedes descargar las declaraciones que has realizado con anterioridad en formato PDF</p>
+      </div>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+
+              {% if message.tags == "success" %}
+                  <div class="alert alert-success alert-dismissable alert-link">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                       <strong>{{ message }}</strong>
+                  </div>
+              {% endif %}
+              {% if message.tags == "error" %}
+                  <div class="alert alert-danger alert-dismissable alert-link">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                       <strong>{{ message }}</strong>
+                  </div>
+              {% endif %}
+             {% if message.tags == "warning" %}
+                  <div class="alert alert-warning alert-dismissable alert-link">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                       <strong>{{ message }}</strong>
+                  </div>
+              {% endif %}
+
+
+      {% endfor %}
+  {% endif %}
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center">TIPO DE DECLARACIÓN</th>
+          <th scope="col" class="text-center">FECHA DE REALIZACIÓN</th>
+          <th scope="col" class="text-center">DECLARACIÓN</th>
+          <th scope="col" class="text-center">VER</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for declaracion in declaraciones %}
+        <tr>
+          <td class="font-weight-bold text-center text-uppercase">{{ declaracion.cat_tipos_declaracion }}</td>
+          <td class="font-weight-bold text-center text-uppercase">{{ declaracion.fecha_recepcion|date:"d / F / Y" }}</td>
+          <td class="font-weight-bold text-center text-uppercase">
+            <a href="{% url 'declaraciones-previas-descargar' declaracion.folio %}" target="_blank">
+              <img src="{% static 'src/img/descargar.svg' %}" alt="Descargar" class="svg">
+            </a>            
+          </td>
+          <td class="font-weight-bold text-center text-uppercase">
+            <a href="{% url 'declaraciones-previas-ver' declaracion.folio %}" target="_blank">
+              <img src="{% static 'src/img/view_file.png' %}" alt="Ver" class="svg">
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

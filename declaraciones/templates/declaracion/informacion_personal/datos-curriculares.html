@@ -1,0 +1,203 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Datos curriculares{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    {% include 'layout/sidebar.html' %}
+    <div class="col-md-9">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+          <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+          <li class="breadcrumb-item"><a href="#" class="text-reset">Información personal</a></li>
+          <li class="breadcrumb-item active" aria-current="page">DATOS CURRICULARES DEL DECLARANTE</li>
+        </ol>
+      </nav>
+      <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+      <h2 class="h6 text-uppercase">1. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">III. DATOS CURRICULARES DEL DECLARANTE</span></h2>
+      <p class="text-muted text-sm mb-3">Grado máximo de escolaridad (en caso de contar con posgrado, se declarará la información desde la licenciatura)</p>
+
+      {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Grado acádemico obtenido" titulo_dos="Institución educativa" titulo_tres="Carrera" agregar=agregar editar_id=editar_id %}
+      
+      {% if messages %}
+          {% for message in messages %}
+                <div class="alert alert-danger alert-dismissable alert-link">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                     <strong>{{ message }}</strong>
+                </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if agregar %}
+        <form action="{% url 'declaracion:datos-curriculares-agregar' folio_declaracion %}" method="post" novalidate>
+      {% elif editar_id %}
+        <form action="{% url 'declaracion:datos-curriculares-editar' folio_declaracion editar_id %}" method="post" novalidate>
+      {% else %}
+        <form action="{% url 'declaracion:datos-curriculares' folio_declaracion %}" method="post" novalidate>
+      {% endif %}
+
+        {% csrf_token %}
+        <div class="col-12 my-2">
+          <div class="form-group {% if 'cat_tipos_operaciones' in campos_privados %}form-group-private{% endif %}">
+            <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al dato curricular.">
+              <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+            </button> {% include 'layout/radiobuttons.html' with field_select=datos_curriculares_form.fields.cat_tipos_operaciones field_name=datos_curriculares_form.cat_tipos_operaciones otro_name=datos_curriculares_form.otro_tipo_operacion col=2 col_o=4 %}
+          </div>
+        </div>
+        <div class="col-12 my-2">
+          <div class="form-group {% if 'cat_grados_academicos' in campos_privados %}form-group-private{% endif %}">
+            <label class="label-secondary">NIVEL{% if 'cat_grados_academicos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el nivel de estudios">
+                            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+            </button> {% include 'layout/radiobuttons.html' with field_select=datos_curriculares_form.fields.cat_grados_academicos field_name=datos_curriculares_form.cat_grados_academicos otro_name=datos_curriculares_form.otro_tipo_operacion col=2 col_o=4 %}
+          </div>
+        </div>
+        
+        <div class="col-md-12">
+          <div class="form-group {% if 'institucion_educativa' in campos_privados %}form-group-private{% endif %}">
+            <label for="ente-publico" class="label-secondary">INSTITUCIÓN EDUCATIVA{% if 'institucion_educativa' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Escribir  el nombre de la institucion o escuela donde se realizaron los estudios.">
+              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+            </button>
+            {% bootstrap_field datos_curriculares_form.institucion_educativa  show_label=False placeholder="Institución educativa" %}
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group {% if 'carrera_o_area' in campos_privados %}form-group-private{% endif %}">
+            <label for="ente-publico" class="label-secondary">CARRERA O ÁREA DE CONOCIMIENTO{% if 'carrera_o_area' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Escribir el nombre de la carrera o de los estudios realizados.">
+              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+            </button>
+            {% bootstrap_field datos_curriculares_form.carrera_o_area  show_label=False placeholder="Carrera o área de conocimiento" %}
+          </div>
+        </div>
+      
+
+        <div class="col-12 my-2">
+          <div class="form-group {% if 'cat_estatus_estudios' in campos_privados %}form-group-private{% endif %}">
+            <label class="label-secondary">ESTATUS{% if 'cat_estatus_estudios' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar si se encuentra cursando los estudios, finalizado o trunco.">
+            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+            </button> {% include 'layout/radiobuttons.html' with field_select=datos_curriculares_form.fields.cat_estatus_estudios field_name=datos_curriculares_form.cat_estatus_estudios otro_name=datos_curriculares_form.otro_tipo_operacion col=2 col_o=4 %}
+          </div>
+        </div>
+
+         <div class="col-12 my-2">
+          <div class="form-group {% if 'cat_documentos_obtenidos' in campos_privados %}form-group-private{% endif %}">
+            <label class="label-secondary">DOCUMENTO OBTENIDO{% if 'cat_documentos_obtenidos' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Si se obtuvo documento indicar cuál.">
+                            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+            </button> {% include 'layout/radiobuttons.html' with field_select=datos_curriculares_form.fields.cat_documentos_obtenidos field_name=datos_curriculares_form.cat_documentos_obtenidos otro_name=datos_curriculares_form.otro_tipo_operacion col=2 col_o=4 %}
+          </div>
+        </div>
+
+         <div class="col-md-6">
+          <div class="form-group {% if 'conclusion' in campos_privados %}form-group-private{% endif %}">
+            <label for="ente-publico" class="label-secondary">FECHA DE OBTENCIÓN DEL DOCUMENTO{% if 'conclusion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha que indica el documento obtenido">
+              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+            </button>
+            {% bootstrap_field datos_curriculares_form.conclusion show_label=False placeholder="Año de conclusión" %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group {% if 'cat_pais' in campos_privados %}form-group-private{% endif %}">
+            <label for="ente-publico" class="label-secondary">LUGAR DONDE SE UBICA LA INSTITUCION</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar si se ubica en México o en el extranjero.">
+              <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+            </button>
+            {%include  'layout/nacionalidad.html' with field=datos_curriculares_form.cat_pais show_label=False%}
+          </div>
+        </div>
+
+
+        <div id="ms_campos_obligatorios"></div>
+
+        <div class="text-right row-form" style="{% if checked %}display: none;{% endif %}">
+            <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-success font-weight-semibold text-uppercase">
+                Guardar y agregar grado académico <img src="{% static 'src/img/plus.svg' %}" alt="agregar" class="svg">
+            </button>
+        </div>
+
+        <div class="row row-form">
+          <div class="col-12">
+            <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+              <label for="ente-publico" class="label-secondary">ACLARACIONES/ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+              <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espcio el declarante podrá realizar las aclaraciones u observaciones que consideres pertinentes respecto de algun o algunos de los incisos de este apartado de este apartado">
+                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+              </button>
+              {% bootstrap_field observaciones_form.observacion  show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+            </div>
+          </div>
+        </div>
+          {% include 'layout/guardar.html' %}
+        <div class="row"><div class="col-12"><br/></div></div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            let faltantes = check_camposobligatorios();
+            var submitValue = $("[clicked=true]").val();
+            console.log("submit: " + submitValue);
+            if(faltantes > 0 ){
+                $('#ms_campos_obligatorios').empty();
+                $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>')
+            } else {
+                var myin = document.createElement ("input");
+                myin.setAttribute ("name","accion");
+                myin.setAttribute ("style","display:none;");
+                myin.setAttribute ("value",submitValue);
+                this.appendChild(myin);
+                this.submit();
+            } 
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='datos_curriculares-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

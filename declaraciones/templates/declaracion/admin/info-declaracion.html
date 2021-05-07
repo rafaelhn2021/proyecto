@@ -1,0 +1,71 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block header_title %}Información de la declaración {% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+
+{% block content %}
+<section class="container">
+  <div class="row row-md mt-4 ">
+    <div class="col-2 ">
+      {% if tipo == 'declaracion'%}
+         <a href="{% url 'declaracion:busqueda-declaraciones' %}" class="btn btn-success text-uppercase font-weight-semibold mx-3"><img src="{% static 'src/img/regresar.png' %}"> Regresar</a>
+      {% else %}
+        <a href="{% url 'declaracion:busqueda-declarantes' %}" class="btn btn-success text-uppercase font-weight-semibold mx-3"><img src="{% static 'src/img/regresar.png' %}"> Regresar</a>
+      {% endif %}
+    </div>
+    <div class="col-6">
+        <h3 class="text-primary-light font-weight-semibold hyphen-auto">{{  declaracion.info_personal_fija.nombres|default_if_none:""  }} {{ declaracion.info_personal_fija.apellido1|default_if_none:"" }} {{  declaracion.info_personal_fija.apellido2|default_if_none:""  }}</h3>
+    </div>
+    <div class="col-12">
+      <div class="col-12">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="infopersonal-tab" data-toggle="tab" href="#infopersonal" role="tab"
+                   aria-controls="infopersonal" aria-selected="true">1.- Declaración Patrimonial</a>
+            </li>
+            {% if not declaracion_simplificada %}
+              <li class="nav-item">
+                  <a class="nav-link" id="intereses-tab" data-toggle="tab" href="#intereses" role="tab" aria-controls="profile"
+                    aria-selected="false">2.- Declaración de Intereses</a>
+              </li>
+            {% endif %}
+
+            {% if not declaracion_simplificada %}
+              <li class="nav-item">
+                  <a class="nav-link" id="fiscal-tab" data-toggle="tab" href="#fiscal" role="tab"
+                    aria-controls="fiscal" aria-selected="false">3.- Declaración Fiscal </a>
+              </li>
+            {% endif %}
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="infopersonal" role="tabpanel" aria-labelledby="infopersonal-tab">
+             {% include 'declaracion/admin/frm_informacion_personal.html' %}
+            </div>
+
+            {% if not declaracion_simplificada %}
+              <div class="tab-pane fade" id="intereses" role="tabpanel" aria-labelledby="intereses-tab">
+                  {% include 'declaracion/admin/frm_intereses.html' %}
+              </div>
+            {% endif %}
+
+            {% if not declaracion_simplificada %}
+              <div class="tab-pane fade" id="fiscal" role="tabpanel" aria-labelledby="fiscal-tab">
+                  {% include 'declaracion/admin/frm_fiscal.html' %}
+              </div>
+            {% endif %}
+        </div>
+        <div class="col-md-9">
+          
+        </div>
+      </div>
+    </div>
+    <div class="print-button">
+      Folio: {{declaracion.folio}}
+        <a href="{% url 'declaraciones-previas-descargar' declaracion.folio %}" target="_blank">
+          <img src="{% static 'src/img/impresora.svg' %}" alt="Imprimir" class="svg imprimir-pagina">
+        </a>
+      </div>
+  </div>
+</section>
+{% endblock %}

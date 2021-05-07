@@ -1,0 +1,173 @@
+[
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":1,
+		"fields":{
+			"orden":1,
+			"pregunta":"¿Quiénes están obligados a presentar declaraciones?",
+			"respuesta":"Todas las personas consideradas servidoras públicas."
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":2,
+		"fields":{
+			"orden":2,
+			"pregunta":"¿Quiénes son las personas servidoras públicas?",
+			"respuesta":"El artículo 92 de la Constitución local considera como servidores públicos a los representantes de elección popular; los miembros del Poder Judicial del Estado; del Tribunal de Justicia Administrativa; del Tribunal de Arbitraje y Escalafón, de la Junta Local de Conciliación y Arbitraje; del Instituto Electoral del Estado; del Tribunal Electoral del Estado; de la Comisión Estatal de Derechos Humanos, a los titulares de los órganos internos de control, así como, a los de los organismos autónomos, y en general, a toda persona que desempeñe un cargo o comisión de cualquier naturaleza en el Congreso Local, en la administración pública del Estado o de los municipios, así como a quienes presten servicios en los organismos descentralizados, fideicomisos públicos y empresas de participación estatal o municipal mayoritaria."
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":3,
+		"fields":{
+			"orden":3,
+			"pregunta":"¿Cuál es el fundamento legal que la regula la presentación de las declaraciones?",
+			"respuesta":"<ul><li><p>Artículo 108 de la Constitución Política de los Estados Unidos Mexicanos;</p></li><li><p>Artículo 32 de la Ley General de Responsabilidades Administrativas</p></li><li><p class='m-0'>Artículo 46 de la Ley de Responsabilidades Políticas y Administrativas del Estado de Jalisco</p></li></ul>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":4,
+		"fields":{
+			"orden":4,
+			"pregunta":"¿Qué tipos de declaraciones debe de presentar una persona servidora pública?",
+			"respuesta":"<p>El artículo 32 de la Ley General de Responsabilidades Administrativas reconoce la Existen presentación de tres tipos de declaraciones como son obligatorias para las personas reconocidas como servidores públicos:</p><ul><li> De situación patrimonial;</li><li> De intereses</li><li> La fiscal</li></ul>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":5,
+		"fields":{
+			"orden":5,
+			"pregunta":"¿Cuál es el plazo para la presentación de la declaración de situación patrimonial y la de intereses y cuáles son las modalidades que hay?",
+			"respuesta":"<ol class='list-unstyled'><li><p>a) La Declaración Inicial dentro de los 60 días naturales siguientes a:</p><ol><li><p>Fecha de ingreso al servicio público por primera vez;</p></li><li><p>Fecha de reingreso al servicio público después de sesenta días naturales de la conclusión de su último encargo;</p></li></ol></li><li><p>b) Declaración de modificación patrimonial, durante el mes de mayo de cada año (siempre que esté activo)</p></li><li><p class='m-0'>c) Declaración de conclusión del encargo: Dentro de los siguientes 60 días naturales siguientes a la conclusión del encargo.</p></li></ol><p> Para el caso particular de la declaración de intereses, existe en la declaración de la actualización, la cual puede ser presentada en que la persona servidora pública, en el ejercicio de sus funciones, considere que se puede actualizar un posible Conflicto de Interés.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":6,
+		"fields":{
+			"orden":6,
+			"pregunta":"¿Cuándo se presenta la declaración anual de información fiscal?",
+			"respuesta":"<p>Únicamente en el mes de abril del año siguiente al que corresponda la declaración fiscal, de conformidad a lo señalado en el artículo 150 de la Ley del Impuesto sobre la Renta. </p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":7,
+		"fields":{
+			"orden":7,
+			"pregunta":"¿Qué es un conflicto de interés?",
+			"respuesta":"<p>Es la afectación del desempeño imparcial y objetivo de las funciones de las personas servidoras públicas en razón de intereses personales, familiares o de negocios.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":8,
+		"fields":{
+			"orden":8,
+			"pregunta":"¿Qué tipo de documentación debo tener a la vista para el llenado de mi Declaración de Situación Patrimonial?",
+			"respuesta":" <ul><li><p>Escrituras o contratos privados de compra-venta de los bienes inmuebles.</p></li><li><p>Facturas de vehículos y bienes muebles.</p></li><li><p>Contratos y/o estados de cuenta de inversiones, cuentas bancarias y otro tipo de valores.</p></li><li><p>Contratos y/o estados de cuenta de gravámenes y/o adeudos.</p></li><li><p>Comprobantes de percepción de sueldo y de otro tipo de ingresos.</p></li><li><p class='m-0'>La referente al patrimonio del cónyuge y/o dependientes económicos.</p></li></ul>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":9,
+		"fields":{
+			"orden":9,
+			"pregunta":"¿Se pueden corregir las Declaraciones de Situación Patrimonial, de Intereses ?",
+			"respuesta":"<p>Cualquier ajuste u observación a la información contenida en la declaración de situación patrimonial, deberá aplicar antes del envío electrónico de la Declaración, ya que una vez transmitida la declaración no podrá realizarse corrección o aclaración alguna.</p><p>En el caso de la declaración de interés, esta puede ser actualizada en cualquier momento en que el servidor público, considere que se puede actualizar un posible conflicto de interés, en términos de lo señalado en el artículo 48 de la Ley General de ResponsabilidadesAdministrativas.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":10,
+		"fields":{
+			"orden":10,
+			"pregunta":"¿Cuáles son las sanciones por su incumplimiento?",
+			"respuesta":"<p>La no presentación de la declaración patrimonial sin causa justificada en las modalidades Inicial y de Modificación, es sancionado con la separación del cargo del servidor público. Para el caso de no presentar la declaración en su modalidad de conclusión, sin causa justificada, se inhabilitará al servidor público de tres meses a un año. En todos los casos, parala imposición de sanciones, se debe desahogar u procedimiento de responsabilidad administrativa.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":11,
+		"fields":{
+			"orden":11,
+			"pregunta":"¿Puedo elegir entre hacer públicos o no mis datos patrimoniales?",
+			"respuesta":"<p>Sí, en caso de aceptar hacer pública la información patrimonial, podrá elegir qué datos quiere hacer públicos de los 13 apartados que integran la declaración.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":12,
+		"fields":{
+			"orden":12,
+			"pregunta":"¿La información de la declaración, está protegida?",
+			"respuesta":"<p>Sí, los datos personales contenidos en el Sistema de Declaraciones en general se administrarán en los términos señalados por el acuerdo de creación del Sistema de Datos Personales que conforme a la normatividad aplicable corresponda.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":13,
+		"fields":{
+			"orden":13,
+			"pregunta":"¿En qué casos no se está obligado a presentar la Declaración de Conclusión Situación Patrimonial y de Intereses?",
+			"respuesta":"<p>En caso de cambio de dependencia, órgano desconcentrado, demarcaciones territoriales, entidad, unidad administrativa en el mismo poder de gobierno, únicamente se dará aviso de dicha situación.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":14,
+		"fields":{
+			"orden":14,
+			"pregunta":"¿De qué manera se presentan las declaraciones?",
+			"respuesta":"<p>A través de medios electrónicos y mediante el empleo de medios de identificación electrónica y para el caso de los municipios que no cuenten con las tecnologías de la información y comunicación necesarias para cumplir con lo anterior, podrán emplearse formatos impresos.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":15,
+		"fields":{
+			"orden":15,
+			"pregunta":"¿Una vez presentada las declaraciones qué documento obtengo?",
+			"respuesta":"<p>El Sistema otorgará al declarante un acuse de recepción electrónica con medidas de seguridad, mismo que debe imprimir y conservar con la información soporte correspondiente para futuras investigaciones, consultas o compulsas.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":16,
+		"fields":{
+			"orden":16,
+			"pregunta":"¿Las declaraciones se pueden presentar en cualquier momento?",
+			"respuesta":"<p>Sí, el Sistema de declaraciones estará activo las 24 horas de los 365 días del año, debiendo cuidar los plazos señalados en el artículo 33 y 46 de la Ley General de Responsabilidades Administrativas.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":17,
+		"fields":{
+			"orden":17,
+			"pregunta":"¿Qué efectos tiene el cumplimiento de la Declaración de Situación Patrimonial?",
+			"respuesta":"<p>Proporcionar información sobre ingresos y su aplicación, incluyendo adquisiciones o arrendamiento de inmuebles, muebles, vehículos , inversiones y otro tipo de valores; así como declarar la recepción y uso de donaciones, herencias, legados, viajes, participación en fideicomisos y similares, bienes en especie, así como gravámenes  y adeudos vigentes.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":18,
+		"fields":{
+			"orden":18,
+			"pregunta":"¿Qué se entiende por declarante?",
+			"respuesta":"<p>Es toda aquella persona servidora pública obligada a presentar declaración de situación patrimonial, de intereses y de información fiscal.</p>"
+		}
+	},
+	{
+		"model":"sitio.declaracion_faqs",
+		"pk":19,
+		"fields":{
+			"orden":19,
+			"pregunta":"¿Qué es lo que debo de manifestar en la declaración de intereses?",
+			"respuesta":"<p>Las relaciones Familiares (hasta el 4to. Grado), relaciones personales, relaciones profesionales, relaciones laborales y relaciones de Negocio.</p>"
+		}
+	}
+]

@@ -1,0 +1,223 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Información general{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+    <div class="row w-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9 pl-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración patrimonial</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Datos generales</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 mb-3 text-uppercase">1. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">I. DATOS GENERALES</span></h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if cat_tipos_declaracion %}
+              <form action="{% url 'declaracion:informacion-general' cat_tipos_declaracion %}" method="post" id="formInfoPersonal" data-municipios-url="{% url 'declaracion:lista_municipios' %}">
+            {% endif %}
+            
+            {% if folio_declaracion %}
+              <form action="{% url 'declaracion:informacion-general' folio_declaracion %}" method="post" id="formInfoPersonal" data-municipios-url="{% url 'declaracion:lista_municipios' %}">
+            {% endif %}
+            {% csrf_token %}
+              {{ declaracion }}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'nombres' in campos_privados %}form-group-private{% endif %}">
+                            <label for="nombres" class="label-secondary">NOMBRE(S){% if 'nombres' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Nombre o nombres sin abreviatiuras ni signos especiales.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.nombres show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'apellido1' in campos_privados %}form-group-private{% endif %}">
+                            <label for="apellido1" class="label-secondary">PRIMER APELLIDO{% if 'apellido1' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Apellido materno sin abreviaturas ni sognos especiales.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.apellido1 show_label=False placeholder="PRIMER APELLIDO" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'apellido2' in campos_privados %}form-group-private{% endif %}">
+                            <label for="apellido2" class="label-secondary">SEGUNDO APELLIDO:{% if 'apellido2' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Apellido paterno sin abreviaturas ni signos especiales.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.apellido2 show_label=False placeholder="SEGUNDO APELLIDO" %}
+                        </div>
+                    </div>
+                </div>
+
+                <!------------------------------------------------------------------------------------------------------------------------------>
+               
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'curp' in campos_privados %}form-group-private{% endif %}">
+                            <label for="curp" class="label-secondary">CURP{% if 'curp' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} <small class="text-help text-primary">(si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 18 caracteres de la Clave Única de Registro de Población.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.curp field_class='valida_curp' show_label=False placeholder="CURP" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
+                            <label for="rfc" class="label-secondary">RFC SIN HOMOCLAVE{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} <small class="text-help text-primary">(si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 10 caracteres básicos y los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.rfc  field_class='valida_rfc_h' show_label=False placeholder="RFC sin Homoclave" %}
+                        </div>
+                    </div>
+
+                     <div class="col-md-4">
+                        <div class="form-group {% if 'homoclave' in campos_privados %}form-group-private{% endif %}">
+                            <label for="rfc" class="label-secondary">HOMOCLAVE {% if 'homoclave' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %} <small class="text-help text-primary">(si aplica)</small></label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Los 3 caracteres de la homoclave.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.homoclave  field_class='valida_homoclave' show_label=False placeholder="Homoclave" %}
+                        </div>
+                    </div>
+                </div>
+
+                <!------------------------------------------------------------------------------------------------------------------------------>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'email' in campos_privados %}form-group-private{% endif %}">
+                            <label for="correo" class="label-secondary">CORREO ELECTRÓNICO INSTITUCIONAL{% if 'email' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="ejemplo@emplo.com">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_fija.email field_class='valida_email' show_label=False placeholder="Correo electrónico institucional" %}
+                        </div>
+                    </div>
+                     <div class="col-md-4">
+                        <div class="form-group {% if 'email_personal' in campos_privados %}form-group-private{% endif %}">
+                            <label for="correo" class="label-secondary">CORREO ELECTRÓNICO PERSONAL{% if 'email_personal' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="ejemplo@emplo.com">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.email_personal field_class='valida_email' show_label=False placeholder="Correo electrónico personal" %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'tel_particular' in campos_privados %}form-group-private{% endif %}">
+                            <label for="telefono-particular" class="label-secondary">NÚMERO TELEFÓNICO DE CASA{% if 'tel_particular' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="LADA + Número de telefono fijo.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.tel_particular show_label=False placeholder="Teléfono particular"  field_class="valida_telefono"  %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'tel_movil' in campos_privados %}form-group-private{% endif %}">
+                            <label for="telefono-celular" class="label-secondary">NÚMERO CELULAR PERSONAL{% if 'tel_movil' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="LADA + Número de telfono móvil.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.tel_movil show_label=False placeholder="Teléfono celular"  field_class="valida_telefono"  %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'cat_estados_civiles' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">SITUACIÓN PERSONAL/ESTADO CIVIL{% if 'cat_estados_civiles' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar situación personal.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field info_personal_var.cat_estados_civiles  show_label=False%}
+                       </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'cat_regimenes_matrimoniales' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary">RÉGIMEN MATRIMONIAL:{% if 'cat_regimenes_matrimoniales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar tipo de régimen.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                                {% bootstrap_field info_personal_var.cat_regimenes_matrimoniales show_label=False layout='inline' %}
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------------------------------------------------------------------------------------------------>
+
+                
+                <div class="row">
+                     <div class="col-md-4">
+                        <div class="form-group {% if 'cat_pais' in campos_privados %}form-group-private{% endif %}">
+                            <label for="pais" class="label-secondary">PAÍS DE NACIMIENTO{% if 'cat_pais' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Nacionalidad del Declarante.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.cat_pais field_class="pais" show_label=False%}
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group {% if 'nacionalidades' in campos_privados %}form-group-private{% endif %}">
+                            <label for="nacionalidad" class="label-secondary">NACIONALIDAD (ES){% if 'nacionalidades' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="NACIONALIDAD(ES) del Declarante.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field info_personal_var.nacionalidades field_class="multiples-nacionalidades"  show_label=False%}
+                        </div>
+                    </div>
+                    <div class="col d-flex align-items-center">
+                        <button type="button" class="btn btn-primary rounded-circle btn-plus agregar-nacionalidad">&#43;</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary mb-2">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="ACLARACIONES/OBSERVACIONES">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field observaciones.observacion show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                </div>
+                {% include 'layout/guardar.html' %}
+                  <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+<input type="hidden" name="{{nueva_declaracion}}" value="{{nueva_declaracion}}" id="hide_nueva_declaracion" >
+
+<div id="mensaje_bienvenida" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal_logo"></div>
+        <h4 class="modal-title" style="color: #A4B54C;">Bienvenido a tu declaración</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Las secciones del menú lateral izquierdo permanecerán inhabilitados hasta completar la primera hoja <b>"INFORMACIÓN PERSONAL"</b>.</p>
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>         
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

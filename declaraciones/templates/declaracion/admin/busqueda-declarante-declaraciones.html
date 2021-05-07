@@ -1,0 +1,133 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Buscar declarantes{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+<style type="text/css">
+  .pd30{
+    padding-left: 30px;
+  }
+</style>
+<form action="{% url 'declaracion:busqueda-declarantes-declaraciones' %}" method="post" id="form">
+<section class="container body_content">
+  <div class="row row-md ">
+    <h1 class="text-gray text-xl font-weight-medium text-uppercase mt-5 line-height-md title-mobile text-mobile"><span class="text-primary-light font-weight-semibold">Declarantes</span> Extemporaneas</h1>
+    <div class="d-flex justify-content-center align-items-center flex-column flex-sm-row bg-gray p-4 rounded">
+       {% csrf_token %}
+       {% bootstrap_field form.page  show_label=False%}
+       <div class="row">
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.nombre field_class="solo_letras"  %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.apellido1 field_class="solo_letras" %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.apellido2 field_class="solo_letras" %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.rfc field_class="valida_rfc" %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.curp field_class="valida_curp" %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.estatus %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.dec_status %}
+           </div>
+            <div class="col-12"></div>  
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+              <button class="btn btn-success text-uppercase font-weight-semibold mt-5" type="submit">Buscar <img src="{% static 'src/img/busqueda.svg' %}"/></button>
+           </div>
+       </div>
+    </div>
+  </div>
+ {% if result %}
+  <div class="row row-md">
+    <div class="row" style="text-align: left; width: 100%; ">
+      <div class="col-6 pd30">
+        <strong>NOMBRE</strong>
+      </div>
+       <div class="col pd30">
+        <strong>F.NACIMIENTO</strong>
+      </div>
+       <div class="col pd30">
+        <strong>RFC</strong>
+      </div>
+       <div class="col pd30">
+        <strong>ESTATUS</strong>
+      </div>
+    </div>
+    <div class="accordion" id="accordionExample" style="width: 100%;">
+      {% for r in result %}
+        <div class="card z-depth-0 bordered">
+          <button class="btn collapsed" type="button" data-toggle="collapse" data-target="#collapse{{r.id}}" aria-expanded="false" aria-controls="collapse{{r.id}}">
+            <div class="" id="headingOne">
+              <div class="row" style="text-align: left;">
+                <div class="col-6">
+                  {{ r.nombre_completo }}
+                </div>
+                 <div class="col">
+                  {{ r.fecha_nacimiento }}
+                </div>
+                 <div class="col">
+                  {{ r.rfc }}
+                </div>
+                 <div class="col">
+                  {% if r.usuario.is_active %} <span class="text-primary-light">Activo</span> {% else %}Inactivo {% endif %}
+                </div>
+              </div>
+            </div>
+          </button>
+          <div id="collapse{{r.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="row">
+                
+              {% for d in dec %}
+
+                {% if d.info_personal_fija_id is r.id%}
+                <div class="col">
+
+                  <a style="color: black;text-decoration: none;"{% if d.cat_estatus_id is 4 %} href="{%  url 'declaracion:info-declaracion' d.pk 'declaracion' %}" {% endif %}> <strong>{{ d.cat_tipos_declaracion }}</strong> <br> Folio: {{d.folio}} <br> {{ d.cat_estatus }}</a> <br> {% if d.extemporanea %} <p style="color:red">EXTEMPORANEA</p>{% endif%}
+                </div>  
+                {% endif %}
+              {% endfor %}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+<div class="row row-md text-center">
+<div class="col-12">
+  <nav aria-label="Páginas" class="nav d-flex justify-content-center">
+    <ul class="pagination flex-wrap">
+      {% if result.has_previous %}
+      <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.previous_page_number }});$('#form').submit()" href="#">«</a></li>
+       {% endif %}
+
+              {%for p in paginas%}
+                {%ifequal p result.number %}
+                  <li class="page-item"><a class="page-link bg-primary text-light" href="#">{{result.number}}</a></li>
+                {%else%}
+                  <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ p }});$('#form').submit()" href="#">{{p}}</a></li>
+                {%endifequal%}
+              {%endfor%}
+       {% if result.has_next %}
+      <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.next_page_number }});$('#form').submit()" href="#">»</a></li>
+        {%endif%}
+
+
+    </ul>
+  </nav>
+</div>
+</div>
+ {% endif %}
+</section>
+    </form>
+{% endblock %}

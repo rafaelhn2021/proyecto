@@ -1,0 +1,90 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Información del usuario {% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+
+<section class="container">
+  <div class="row row-md mt-4 ">
+     <div class="col-2 ">
+         <a href="{% url 'declaracion:busqueda-declarantes' %}" class="btn btn-success text-uppercase font-weight-semibold mx-3"><img src="{% static 'src/img/regresar.png' %}"> Regresar</a>
+    </div>
+    <div class="col-6">
+        <h3 class="text-primary-light font-weight-semibold hyphen-auto">{% if tipo_registro == 'registrado' %} {{ result.nombre_completo|upper }} {% else %} {{result.first_name}} {{result.last_name}} {% endif %}</h3>
+    </div>
+  </div>
+  {% if tipo_registro == 'registrado' %}
+    {% if not result.usuario.is_active %}
+      <div class="row row-md" style="margin-top: 2rem;background-color: #c3d6da;">
+        <div class="col-12 mb-6">
+          Este usuario se encuentra dado de baja
+        </div>
+      </div>
+    {% endif %}
+    <div class="row row-md" style="margin-top: 2rem;">
+      <div class="col-6 mb-5">
+        <div class="pl-3 border-left text-dark mb-5">
+          <p> Fecha de inicio: <strong class="text-black text-dynamic">{{ result.fecha_inicio|date:"D d M Y"|default_if_none:"----"}}</strong></p>
+          <p> RFC: <strong class="text-black text-dynamic">{{ result.rfc|default_if_none:"----"}}</strong></p>
+          <p> Puesto: <strong class="text-black text-dynamic">{{ result.cat_puestos |default_if_none:"----"}}</strong></p>
+          <p> Honorarios: <strong class="text-black text-dynamic">{{ cargo.honorarios|yesno:"Si,No,Desconocido"|default_if_none:"----" }}</strong></p>
+        </div>
+      </div>
+    </div>
+    <div class="row row-md">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">FOLIO</th>
+            <th scope="col">ESTADO</th>
+            <th scope="col">AVANCE</th>
+            <th scope="col">FECHA DE INICIO</th>
+            <th scope="col">FECHA DE FIRMA</th>
+            <th scope="col">TIPO</th>
+            <th scope="col">VER</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% if declaraciones %}
+          {% for ds in declaraciones %}
+            <tr>
+              <td scope="row">{{ ds.folio |default_if_none:"----"}}</td>
+              <td>{{ ds.cat_estatus |default_if_none:"----" }}</td>
+              <td>{{ ds.avance |default_if_none:"----" }}%</td>
+              <td>{{ ds.fecha_declaracion |default_if_none:"----" }}</td>
+              <td>{{ ds.fecha_recepcion |default_if_none:"----" }}</td>
+              <td>{{ ds.cat_tipos_declaracion.codigo |default_if_none:"----" }}</td>
+                <td><a href="{%  url 'declaracion:info-declaracion' ds.pk 'declarante' %}"><img width="40px" src="{% static 'src/img/see_verde.png' %}"></a></td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7" style="text-align: center !important;background: #e6f3bd;">
+              <h5 style="color: #417505;">Este declarante aún no ha generado una declaración</h5>
+            </td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="row row-md" style="margin-top: 2rem;">
+      <div class="col-12 mb-6">
+        Este usuario solo se encuentra pre-registrado en el sistema
+      </div>
+    </div>
+    <div class="row row-md" style="margin-top: 2rem;">
+      <div class="col-6 mb-5">
+        <div class="pl-3 border-left text-dark mb-5">
+          <p>Estado :<strong> {% if result.is_active %} Activo {% else %} No Activo {% endif %} </strong> </p>
+          <p>Fecha registro :<strong>{{result.date_joined}}</strong> </p>
+          <p>Correo electrónico :<strong>{{result.email}} </strong> </p>
+          <p>RFC/Username :<strong> {{result.username}} </strong> </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}

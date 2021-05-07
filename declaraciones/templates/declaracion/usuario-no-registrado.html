@@ -1,0 +1,16 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}No registrado{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+<section class="container-fluid container-offset-x my-md-7 py-7">
+  <figure class="text-center">
+    <img src="{% static 'src/img/SEAJAL-Declaraciones-Crear_cuenta-Grafico.png' %}" alt="crea tu cuenta">
+    <figcaption class="txtCAzulF">
+    	<h1>RFC no registrado previamente por usuario administrativo</h1>
+    	<h2 class="txtCVerdeSeco">Para crear su cuenta solicite darse de alta</h2>
+  	    <p class="text-md font-weight-semibold text-gray-dark mb-0"><a href="{% url 'declaracion:nuevo' %}" class="btn btn-primary bgCVerdeSeco borderless">Regresar</a></p>
+    </figcaption>
+  </figure>
+</section>
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Experiencia Laboral{% endblock %}
+{% load bootstrap4 %}
+{% load flujo_declaracion %}
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        {% include 'layout/sidebar.html' %}
+        <div class="col-md-9">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-reset">Información personal</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Experiencia laboral(último 5 empleos)</li>
+                </ol>
+            </nav>
+            <h1 class="text-uppercase text-black h5">Declaración de intereses y patrimonial. <span class="text-primary">{% tipo_declaracion %}</span></h1>
+            <h2 class="h6 text-uppercase">1. Declaración patrimonial <span class="text-black mx-1">|</span> <span class="text-primary font-weight-light">V. EXPERIENCIA LABORAL(ÚLTIMOS 5 EMPLEOS)</span></h2>
+            <p class="text-muted text-sm mb-3">Se deberán incluir los últimos 10 años</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                      <div class="alert alert-danger alert-dismissable alert-link">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                           <strong>{{ message }}</strong>
+                      </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% if agregar %}
+              <form action="{% url 'declaracion:experiencia-laboral-agregar' folio_declaracion %}" method="post" novalidate>
+            {% elif editar_id %}
+              <form action="{% url 'declaracion:experiencia-laboral-editar' folio_declaracion editar_id %}" method="post" novalidate>
+            {% else %}
+              <form action="{% url 'declaracion:experiencia-laboral' folio_declaracion %}" method="post" novalidate>
+            {% endif %}
+       		{% csrf_token %}
+                {% if aplica %}
+                    <div class="row">
+                      {% include 'layout/no_aplica.html' %}
+                    </div>
+                {% endif %}
+            {% include 'layout/informacion-registrada.html' with registros=informacion_registrada titulo_uno="Nombre de la institución" titulo_dos="Jerarquía / Rango" titulo_tres="Cargo / Puesto" agregar=agregar editar_id=editar_id %}
+                <div class="row row-form" style="{% if checked %}display: none;{% endif %}">
+                    <div class="col-12 my-2">
+                        {% for k, message in experiencia_laboral_form.errors.items %}
+                            <div style="background: #d46f6f;color: #fff;padding-top: 5px;">
+                                <h5>{{ message }}</h5>
+                            </div>
+                        {% endfor %}
+                        <label class="label-secondary">TIPO DE OPERACIÓN{% if 'cat_tipos_operaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Indicar TIPO DE OPERACIÓN realizada al bien inmueble.">
+                            <img src="{% static 'src/img/info.svg' %}" alt="info" class="svg">
+                        </button> {% include 'layout/radiobuttons.html' with field_select=experiencia_laboral_form.fields.cat_tipos_operaciones field_name=experiencia_laboral_form.cat_tipos_operaciones otro_name=experiencia_laboral_form.otro_tipo_operacion col=2 col_o=4 tipo='cat_tipo_operaciones' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="label-secondary">ÁMBITO/SECTOR EN EL QUE LABORASTE{% if 'cat_ambitos_laborales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar si el empleo que reporta corresponde al sector público, privado u otro. En caso de señalar otro deberá especificar el sector el que laboró">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=experiencia_laboral_form.fields.cat_ambitos_laborales  field_name=experiencia_laboral_form.cat_ambitos_laborales otro_name=experiencia_laboral_form.otro_ambitos_laborales campos_obligatorios=campos_obligatorios tipo='cat_ambitos_laborales' col=2 col_o=4 tipo='cat_ambitos_laborales' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-md-12 ambito_publico">
+                        <label for="experiencia-nivel" class="label-secondary">NIVEL/ORDEN GOBIERNO{% if 'cat_ordenes_gobierno' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999" title="Elegir la opción correspondiente">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>                        
+                        {% include 'layout/radiobuttons.html' with field_select=experiencia_laboral_form.fields.cat_ordenes_gobierno  field_name=experiencia_laboral_form.cat_ordenes_gobierno otro_name=experiencia_laboral_form.otro_ambitos_laborales campos_obligatorios=campos_obligatorios tipo='cat_ordenes_gobierno' col=2 col_o=4 tipo='cat_ordenes_gobierno' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-12 my-2 ambito_publico">
+                        <label class="label-secondary">ÁMBITO PÚBLICO{% if 'cat_poderes' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la naturaleza jurídica al que pertence: ejecutivo, legisltaivo, judicial u órgano autónomo">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                         {% include 'layout/radiobuttons.html' with field_select=experiencia_laboral_form.fields.cat_poderes  field_name=experiencia_laboral_form.cat_poderes otro_name=experiencia_laboral_form.otro_poder col_o=4 col=2 tipo='cat_poderes' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-8">
+                        <div class="form-group">
+                            <label for="exp-institucion" class="label-secondary">NOMBRE DEL ENTE PÚBLICO/NOMBRE DE LA EMPRESA SOCIEDAD ASOCIACIÓN{% if 'nombre_institucion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el Ente Público al cual se encontró adcrita la plaza.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                           {% bootstrap_field  experiencia_laboral_form.nombre_institucion  show_label=False placeholder="Nombre de la institución" %}
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="exp-institucion" class="label-secondary">RFC{% if 'rfc' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="RFC de la institución, empresa, sociedad, asociación.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  experiencia_laboral_form.rfc  show_label=False placeholder="RFC de la institución, empresa, sociedad, asociación" field_class='valida_rfc' %}
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="exp-area" class="label-secondary">ÁREA DE ADSCRIPCIÓN/ÁREA{% if 'unidad_area_administrativa' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Especificar el nombre de la Unidad Adminstrativa u homóloga superior inmediata en la que estuvo adcrito.(Superior jerárquico)">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  experiencia_laboral_form.unidad_area_administrativa  show_label=False placeholder="Unidad administrativa / área" %}
+                        </div>
+                    </div>
+                     <div class="col-6">
+                        <div class="form-group">
+                            <label for="exp-cargo" class="label-secondary">EMPLEO, CARGO O COMISIÓN/PUESTO{% if 'cargo_puesto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar el nombre del empleo, cargo o comisión que se estableció es su recibo de nómina, nombramiento, contrato u oficio de comisión.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                             {% bootstrap_field  experiencia_laboral_form.cargo_puesto show_label=False placeholder="Cargo / Puesto" %}
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label class="label-secondary mb-2">FUNCIONES PRINCIPALES{% if 'cat_funciones_principales' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar cual es la función o actividad principal que desempeñó.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                         {% include 'layout/radiobuttons.html' with field_select=experiencia_laboral_form.fields.cat_funciones_principales  field_name=experiencia_laboral_form.cat_funciones_principales otro_name=experiencia_laboral_form.otra_funcion col=4 col_o=4 tipo='cat_funciones_principales' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-12 mb-2">
+                        <label class="label-secondary mb-2">SECTOR AL QUE PERTENECE{% if 'cat_sectores_industria' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Sector o Área laboral al que pertenece el encargo.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% include 'layout/radiobuttons.html' with field_select=experiencia_laboral_form.fields.cat_sectores_industria  field_name=experiencia_laboral_form.cat_sectores_industria otro_name=experiencia_laboral_form.otro_sector col=4 col_o=4 tipo='cat_sectores_industria' campos_privados=campos_privados %}
+                    </div>
+                    <div class="col-md-5">
+                        <label class="label-secondary">FECHA DE INGRESO{% if 'fecha_ingreso' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Fecha de ingreso en que inicio empleo, cargo o comisión.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                         {% bootstrap_field  experiencia_laboral_form.fecha_ingreso show_label=False placeholder="Fecha de ingreso" %}
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <label class="label-secondary">FECHA DE EGRESO{% if 'fecha_salida' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha en que concluyó empleo, cargo o comisón.">
+                            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {% bootstrap_field  experiencia_laboral_form.fecha_salida show_label=False placeholder="Fecha de salida" %}
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group {% if 'cat_pais' in campos_privados %}form-group-private{% endif %}">
+                        <label for="ente-publico" class="label-secondary">LUGAR DONDE SE UBICA</label>
+                        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar en México o en el extranjero">
+                          <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                        </button>
+                        {%include  'layout/nacionalidad.html' with field=domicilio_form.cat_pais show_label=False%}
+                      </div>
+                    </div>
+               </div>
+
+               <div id="ms_campos_obligatorios"></div>
+
+                <div class="text-right row-form" style="{% if checked %}display: none;{% endif %}">
+                    <button type="submit" name="accion" value="guardar_otro" class="btn btn-link btn-link-plus text-success font-weight-semibold text-uppercase">
+                      Guardar y agregar otro cargo previo
+                        <img src="/static/src/img/plus.svg" alt="agregar" class="svg">
+                    </button>
+                </div>
+
+                <div class="row row-form">
+                    <div class="col-md-12">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
+                            <label class="label-secondary mb-2">ACLARACIONES/OBSERVACIONES{% if 'observaciones' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
+                                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+                            </button>
+                            {% bootstrap_field  observaciones_form.observacion   show_label=False placeholder="ACLARACIONES/OBSERVACIONES" %}
+                        </div>
+                    </div>
+                </div>
+
+
+                {% include 'layout/guardar.html' %}
+                <div class="row"><div class="col-12"><br/></div></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block body_script %}
+<script>
+    $(function(){
+        $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form button").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $("button", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+        });
+        $("form").submit(function(e){
+            if($("#no_aplica").prop("checked") != true){
+                e.preventDefault();
+                e.stopPropagation();
+                let faltantes = check_camposobligatorios();
+                var submitValue = $("[clicked=true]").val();
+                console.log("submit: " + submitValue);
+                if(faltantes > 0 ){
+                    $('#ms_campos_obligatorios').empty();
+                    $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
+                      '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                           '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>')
+                } else {
+                    var myin = document.createElement ("input");
+                    myin.setAttribute ("name","accion");
+                    myin.setAttribute ("style","display:none;");
+                    myin.setAttribute ("value",submitValue);
+                    this.appendChild(myin);
+                    this.submit();
+                }
+            }
+        });
+    });
+
+    function check_camposobligatorios(){
+        var camposOb = [
+            {% for campo in campos_obligatorios %}
+            "{{campo}}"{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        console.log("Verificando " + camposOb.length + " campos obligatorios");
+        var obligatoriosSinVerificar = "";
+        var faltantes = 0;
+        for (let index = 0; index < camposOb.length; index++) {
+            const element =  camposOb[index];
+            var domElements = $("[id*='experiencia_laboral-"+element+"']");
+            for (let i = 0; i < domElements.length; i++) {
+                if(domElements[i].value == ""){
+                    obligatoriosSinVerificar  += element + ", ";
+                    faltantes += 1;
+                }
+            }
+        }
+        obligatoriosSinVerificar += + " " + faltantes + " faltan de llenar";
+        console.log(obligatoriosSinVerificar);
+        return faltantes;
+    }
+</script>
+{% endblock %}

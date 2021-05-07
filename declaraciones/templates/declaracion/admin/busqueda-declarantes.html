@@ -1,0 +1,157 @@
+{% extends "layout/base.html" %}
+{% load static %}
+{% block header_title %}Buscar declarantes{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+<form action="{% url 'declaracion:busqueda-declarantes' %}" method="post" id="form">
+<section class="container body_content" style="max-width: 1500px;">
+  <div class="row row-md ">
+    <div class="col-sm-12 col-md-8">
+       <h1 class="text-gray text-xl font-weight-medium text-uppercase mt-5 line-height-md title-mobile text-mobile">
+         <span class="text-primary-light font-weight-semibold">DECLARANTES</span> 
+         Búsqueda</h1>
+    </div>
+     {% if msg and not editar %}
+       <div class="alert alert-success" role="alert">
+         <h4 class="alert-heading">¡Se han registrado el declarante!</h4>
+         <p>{{email_result}}</p>
+         <hr>
+       </div>
+     {% endif %}
+
+
+     {% if editar %}
+       <div class="alert alert-success col-md-8" role="alert">
+         <h4 class="alert-heading">¡Se han guardado los cambios del declarante <i>{{ infopersonalfija.rfc }}</i>!</h4>
+         <p>La actualización de datos se ha realizado con éxito.</p>
+         <hr>
+       </div>
+     {% endif %}
+    {% if user.is_superuser %}
+      <div class="col-sm-12 col-md-4 mt-4">
+        <a href="{% url 'declaracion:nuevo-usuario-declarante' %}" class="btn bgCVerdeSeco btn-success btn-block btn-lg font-weight-semibold" style="width: 90%;"> 
+          Crear declarante <img src="{% static 'src/img/group.svg' %}">
+        </a>
+      </div>
+      {% endif %}
+ </div>
+  <div class="row row-md ">
+    <div class="d-flex justify-content-center align-items-center flex-column flex-sm-row bg-gray p-4 rounded">
+       {% csrf_token %}
+       {% bootstrap_field form.page  show_label=False%}
+       <div class="row">
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.nombre field_class="solo_letras"  %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.apellido1 field_class="solo_letras" %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+               {% bootstrap_field form.rfc_search %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+             {% bootstrap_field form.estatus %}
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                {% bootstrap_field form.tipo_registro %}
+            </div>
+            <div class="col-12"></div>
+            <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
+               {% bootstrap_field form.fecha_inicio %}
+           </div>
+           <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
+               {% bootstrap_field form.fecha_fin %}
+           </div>
+           <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ">
+              <button class="btn btn-success text-uppercase font-weight-semibold mt-5" type="submit">Buscar <img src="{% static 'src/img/busqueda.svg' %}"/></button>
+              <input class="btn btn-success text-uppercase font-weight-semibold mt-5" type="reset" value="Limpiar">
+           </div>
+       </div>
+    </div>
+  </div>
+ {% if result %}
+  <div class="row row-md">
+    <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">NOMBRE</th>
+              <th scope="col">F.INGRESO</th>
+              <th scope="col">RFC</th>
+              <th scope="col">ESTATUS</th>
+              <th scope="col">VER</th>
+              {% if user.is_superuser %}
+              <th scope="col">EDITAR</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+          {% for r in result %}
+            <tr>
+              <td scope="row"> {% if tipo_registro == 'registrado' %} {{ r.nombre_completo }} {% else %} {{r.first_name}} {{r.last_name}} {% endif %}</td>
+              <td> {% if tipo_registro == 'registrado' %} {{ r.fecha_inicio }} {% else %} {{ r.date_joined }} {% endif %}</td>
+              <td> {% if tipo_registro == 'registrado' %} {{ r.rfc }} {% else %} {{ r.username }} {% endif %} </td>
+              <td>
+                {% if tipo_registro == 'registrado' %}
+                  {% if r.usuario.is_active %} 
+                  <span class="text-primary-light">Activo</span> 
+                  {% else %} Inactivo {% endif %} 
+                {% else %}
+                  {% if r.is_active %} 
+                  <span class="text-primary-light">Activo</span> 
+                  {% else %} Inactivo {% endif %} 
+                {% endif %}
+                
+              </td>
+              <td>
+                <a href="{% url 'declaracion:info-declarante' r.pk tipo_registro %}">
+                  <img width="40px" src="{% static 'src/img/see_azul.png' %}">
+                </a>
+              </td>
+              {% if user.is_superuser %}
+                <td>
+                  <a href="{% url 'declaracion:editar-usuario-declarante' r.pk tipo_registro %}">
+                    <img width="40px" src="{% static 'src/img/detalles_usuario_verde.png' %}">
+                  </a>
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+    </table>
+  </div>
+
+<div class="row row-md text-center">
+<div class="col-12">
+  <nav aria-label="Páginas" class="nav d-flex justify-content-center">
+    <ul class="pagination flex-wrap">
+    {% if result.has_previous %}
+    <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.previous_page_number }});$('#form').submit()" href="#">«</a></li>
+     {% endif %}
+
+            {%for p in paginas%}
+              {%ifequal p result.number %}
+                <li class="page-item"><a class="page-link bg-primary text-light" href="#">{{result.number}}</a></li>
+              {%else%}
+                <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ p }});$('#form').submit()" href="#">{{p}}</a></li>
+              {%endifequal%}
+            {%endfor%}
+     {% if result.has_next %}
+    <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.next_page_number }});$('#form').submit()" href="#">»</a></li>
+      {%endif%}
+    </ul>
+  </nav>
+</div>
+</div>
+{% else %}
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable alert-link">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+  {% endif %}
+</section>
+    </form>
+{% endblock %}

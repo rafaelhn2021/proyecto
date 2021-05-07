@@ -1,0 +1,107 @@
+
+{% load static %}
+{% load personalizacion_tags %}
+{% block layout_style %}
+    <style type="text/css">
+        @page {
+          @bottom-center{
+            size: A0;
+            content: '{{declaracion.cat_tipos_declaracion.tipo_declaracion}} {{declaracion.folio}}';
+            margin-bottom: 40px;
+          }
+          @top-center{size: A0; content: element(header)}
+        }
+
+        header{
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 2.5cm;
+          width: 100%;
+        }
+
+        footer {
+          position: fixed;
+          bottom: 0;
+          height: 10mm;
+          text-align: center;
+          font-size: 10px;
+          width: 100%;
+        }
+
+        .logo {
+          background-color: #015F78;
+        }
+        .navbar-brand {
+          width: 200px
+        }
+        .p_opciones dd, .p_opciones dt {
+            display: inline !important;
+        }
+        .text-black_opciones {
+            font-weight: 700;
+            color: #000;
+        }
+        .text-privado{
+          background-color: black;
+        }
+    </style>
+{% endblock %}
+{% block extra_style %}
+  <link rel="stylesheet" href="{% static 'app.css' %}">
+{% endblock %}
+ <div style="width: 100%;height: 1400px;">
+    <div class="row">
+      <div class="col-12">
+        <center>
+          <img src="/media/{% personalizacion 'imagen_logo' %}" alt="Logo entidad" style="max-width: 50%;"> 
+        </center>
+      </div>
+    </div>
+    <div class="container py-3 mt-3">
+        <div class="d-flex justify-content-between" style="height: 500px;">
+      </div>
+      <div class="d-flex justify-content-between">
+          <div style="width: 40%;">
+          </div>
+          <div style="width: 60%;">
+              <span> <h1> {{declaracion.cat_tipos_declaracion}} </h1> </span>
+              <br>
+              <span> 
+                <p> 
+                  <b>{{declaracion.folio}}</b>
+                  <hr>
+                  Fecha de declaración: {{ declaracion.fecha_declaracion|date:"D d M Y"|default_if_none:""}} 
+                  <br>
+                  Fecha de recepción: {{ declaracion.fecha_recepcion|date:"D d M Y"|default_if_none:""}}
+                  <br>
+                  Estaus: {{declaracion.sello|default_if_none:"Extemporanea" }}
+                </p>
+                <p>
+                  Declarante: {{ info_personal_fija.apellido1|default_if_none:"" }} {{ info_personal_fija.apellido2|default_if_none:"" }} {{ info_personal_fija.nombres|default_if_none:"" }}
+                  <br>
+                  RFC: {{ info_personal_fija.rfc|default_if_none:"" }}
+                </p>
+              </span>
+          </div>
+      </div>
+      <br>
+    </div>
+  </div>
+  
+  <center> 
+    <img src="/media/{% personalizacion 'imagen_logo' %}" alt="Logo entidad"  style="width: 300px;margin-bottom: 1rem;"> 
+    <h5> {{ institucion.nombre_institucion }} </h5>
+    <hr>
+  </center>
+{% block content %}
+<div class="page-container">
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+      <div class="col-md-9 py-4 printable margin-bottom:100px;">
+        {% include "declaracion/confirmacion/all_fields.html" %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

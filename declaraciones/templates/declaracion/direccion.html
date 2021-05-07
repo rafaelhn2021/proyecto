@@ -1,0 +1,70 @@
+{% load static %}
+{% load bootstrap4 %}
+<div class="col-md-4 m-3">
+    {% include 'layout/nacionalidad.html' with field=form.cat_pais form=form label="Lugar donde se ubica" pais=pais %}
+</div>
+<div class="col-md-12">
+    <div class="form-group {% if 'nombre_via' in campos_privados %}form-group-private{% endif %}">
+        <label for="cargo-via" class="label-secondary">CALLE{% if nombre_via %}{% if 'nombre_via' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Nombre de la vía donde se ubica.">
+            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+        </button>
+       {% bootstrap_field form.nombre_via   show_label=False placeholder="Nombre de la vía" %}
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="form-group {% if 'num_exterior' in campos_privados %}form-group-private{% endif %}">
+        <label for="cargo-no-ext" class="label-secondary">NÚMERO EXTERIOR{% if exterior %}{% if 'num_exterior' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Número exterior donde se ubica.">
+            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+        </button>
+        {% bootstrap_field form.num_exterior   show_label=False placeholder="Número exterior" %}
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-group {% if 'num_interior' in campos_privados %}form-group-private{% endif %}">
+        <label for="cargo-no-int" class="label-secondary">NÚMERO INTERIOR{% if interior %}{% if 'num_interior' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Número interior donde se ubica.">
+            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+        </button>
+         {% bootstrap_field form.num_interior   show_label=False placeholder="Número interior" %}
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="form-group {% if 'colonia' in campos_privados %}form-group-private{% endif %}">
+        <label for="cargo-colonia" class="label-secondary">COLONIA/LOCALIDAD{% if colonia %}{% if 'colonia' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Colonia donde se ubica.">
+            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+        </button>
+        {% bootstrap_field form.colonia   show_label=False placeholder="Colonia" %}
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="form-group {% if 'cat_entidades_federativas' in campos_privados %}form-group-private{% endif %}">
+        <label for="cargo-entidad" class="label-secondary">ENTIDAD FEDERATIVA{% if entidad %}{% if 'cat_entidades_federativas' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Lugar donde se encuentra actualmente.">
+            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+        </button>
+        {% bootstrap_field form.cat_entidades_federativas field_class='entidad' show_label=False%}
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="form-group {% if 'municipio' in campos_privados %}form-group-private{% endif %}">
+        <label for="cargo-municipio" class="label-secondary">MUNICIPIO/ALCALDÍA{% if municipio %}{% if 'municipio' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+        <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Municipio donde se ubica actualmente.">
+            <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+        </button>
+        {% bootstrap_field form.municipio show_label=False placeholder="Municipio" %}
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="w-50">
+        <div class="form-group {% if 'cp' in campos_privados %}form-group-private{% endif %}">
+            <label for="cargo-cp" class="label-secondary">CÓDIGO POSTAL{% if cp %}{% if 'cp' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}{% endif %}</label>
+            <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Código postal donde se ubica.">
+                <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
+            </button>
+           {% bootstrap_field form.cp show_label=False placeholder="Código postal"  field_class='valida_cp'  %}
+        </div>
+    </div>
+</div>
