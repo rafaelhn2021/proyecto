@@ -1,0 +1,16 @@
+Para linux (probado en ubuntu y redhat: 
+1.- en la carpeta origen ejecutar el comando de :   sudo bash install
+2.- una vez terminado en la consola de docker dashboard aparecerá un mensaje como 'spawned uWSGI worker 1 (pid ...
+
+Para Windows 
+1 - instalar Docker con toolbox para windows
+2 - Ejecutar el archivo installS1Windows.bat
+Nota : para Docker windows versión > 20 necesita dar acceso a la carpeta del proyecto en resources del dashboard
+
+más información en: 
+https://seajal.org/declaraciones/
+
+contacto: 
+https://seajal.org/acerca_de/contacto/
+contacto@seajal.org
+Tel. 33 2472 6011 y 33 2472 6012. 

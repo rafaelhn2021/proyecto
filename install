@@ -1,0 +1,108 @@
+#!/bin/bash
+# para correr este archivo es "sudo bash install"
+echo "****************************************************************************************************************************"
+echo "Instalando el Sistema de delcaraciones 1.0  SEAJAL (en colaboración con la PDN)..."
+echo "****************************************************************************************************************************"
+# based on https://docs.docker.com/install/linux/docker-ce/ubuntu/
+# based on https://docs.docker.com/compose/install/
+echo "** ANTES DE INSTALAR SE RECOMIENDA HACER LA PERSONALIZACIÓN PRIMERO **"
+echo "Para personalizar favor de abrir con tu navegador la página de /personalizar/index.html"
+echo "** **"
+#echo "¿Quieres entrar a la personalización primero? [s/n]"
+
+#while read YESNO ; do
+#	if [[ "$YESNO" -eq "s" ]]
+#		"para personalizar el software debes abrir  personalizar/index.html con un navegador..."
+#		xdg-open
+#		break
+#	fi
+#done
+
+echo "----------------------------------------------------------"
+echo "*** !!!! ADVERTENCIA !!!! ESTA INSTALACIÓN QUITARÁ TODOS LOS PROYECTOS DE DOCKER EN EL SERVER ACTUALMENTE INSTALADOS"
+echo "----------------------------------------------------------"
+echo "las opciones disponibles son:"
+echo "------ escribe 1 para instalar en UBUNTU con apt"
+echo "------ escribe 2 para instalar en CENTOS con yum"
+
+
+while read OPTION ; do
+    echo "escogiste : $OPTION"
+    hash -r
+
+	if [ "$OPTION" -eq 1 ]; then
+		echo "instalando para UBUNTU"
+		echo "---- preparando la instalación ----"
+		sudo dd if=/dev/zero of=/swapfile bs=64M count=16
+		sudo mkswap /swapfile
+		sudo swapon /swapfile
+		echo "---- Actualizando software del Sistema operativo ----"
+		sudo apt-get -y update
+		sudo apt-get -y upgrade
+		echo "---- Instalando software mínimo ----"
+		sudo apt-get install \
+			apt-transport-https \
+			ca-certificates \
+			curl \
+			gnupg-agent \
+			software-properties-common
+		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+		sudo apt-key fingerprint 0EBFCD88
+		sudo add-apt-repository \
+			"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+			$(lsb_release -cs) \
+			stable"
+		# sudo apt-get update
+		sudo apt-get install docker-ce docker-ce-cli containerd.io
+		sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo chmod +x /usr/local/bin/docker-compose
+		sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+		docker-compose --version
+		cd proyecto
+		sudo docker-compose down | echo ""
+		sudo docker network prune -f
+		docker-compose up -d
+		docker-compose logs -f
+		sudo swapoff /swapfile
+		sudo rm /swapfile
+		break
+	fi
+
+	if [ "$OPTION" -eq 2 ]; then
+		echo "instalando para CENTOS"
+		echo "---- preparando la instalación ----"
+		sudo dd if=/dev/zero of=/swapfile bs=64M count=16
+		sudo mkswap /swapfile
+		sudo swapon /swapfile
+		echo "---- Actualizando software del Sistema operativo ----"
+		sudo yum update	-y
+		echo "---- Instalando software mínimo ----"
+		sudo yum install -y yum-utils \
+			device-mapper-persistent-data \
+			lvm2
+		sudo yum-config-manager \
+			--add-repo \
+			https://download.docker.com/linux/centos/docker-ce.repo
+		sudo yum install -y docker-ce docker-ce-cli containerd.io
+		sudo systemctl start docker
+		sudo systemctl enable docker
+		sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo chmod +x /usr/local/bin/docker-compose
+		sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+		docker-compose --version
+		cd proyecto
+		sudo docker-compose down | echo ""
+		sudo docker network prune -f
+		sudo docker-compose up -d
+		sudo docker-compose logs -f
+		sudo swapoff /swapfile
+		sudo rm /swapfile
+		break
+	fi
+
+done
+
+
+echo "****************************************************************************************************************************"
+echo "FINALIZADO"
+echo "****************************************************************************************************************************"
