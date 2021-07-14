@@ -103,11 +103,11 @@ class IngresosDeclaracionView(View):
 
             if tipo_ingreso:
                 ingresos_pareja=actualizar_ingresos(declaracion)
-                
-                ingresos_declaracion_data = {
-                    'ingreso_mensual_pareja_dependientes': ingresos_pareja,
-                    'ingreso_mensual_total':ingresos_pareja
-                }
+                if declaracion.cat_tipos_declaracion.codigo != 'MODIFICACIÓN': 
+                    ingresos_declaracion_data = {
+                        'ingreso_mensual_pareja_dependientes': ingresos_pareja,
+                        'ingreso_mensual_total':ingresos_pareja
+                    }
             observaciones_data = {}
         
         #Se inicializan los formularios a utilizar que conformen a la sección

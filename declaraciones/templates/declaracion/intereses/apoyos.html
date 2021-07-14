@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group {% if 'monto_apoyo_mensual' in campos_privados %}form-group-private{% endif %}">
-                            <label for="valor-anual-apoyo" class="text-muted text-sm mb-0">MONTO APROXIMADO DEL APOYO{% if 'monto_apoyo_mensual' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                            <label for="valor-anual-apoyo" class="text-muted text-sm mb-0">MONTO MENSUAL APROXIMADO DEL APOYO{% if 'monto_apoyo_mensual' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Es necesario capturar cantidades sin cmoas, sin puntos, sin centavos y sin ceros a la izquierda. Indicar cantidad mensual del apoyo, si es no fuera mensual, realizar la operación aritmética a efecto de establecer la cantidad como lo solicita el formato.">
                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                             </button>

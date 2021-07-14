@@ -167,8 +167,8 @@ class DeudasOtros(models.Model):
             return u""
 
     def columna_dos(self):
-        if self.cat_tipos_acreedores:
-            return u"{}".format(self.cat_tipos_acreedores)
+        if self.cat_tipos_titulares:
+            return u"{}".format(self.cat_tipos_titulares)
         else:
             return u""
 

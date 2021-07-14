@@ -30,11 +30,11 @@
             {% endif %}
             
             {% if agregar %}
-              <form action="{% url 'declaracion:muebles-noregistrables-agregar' folio_declaracion %}" method="post" novalidate>
+              <form  action="{% url 'declaracion:muebles-noregistrables-agregar' folio_declaracion %}" method="post" novalidate>
             {% elif editar_id %}
-              <form action="{% url 'declaracion:muebles-noregistrables-editar' folio_declaracion editar_id %}" method="post" novalidate>
+              <form  action="{% url 'declaracion:muebles-noregistrables-editar' folio_declaracion editar_id %}" method="post" novalidate>
             {% else %}
-              <form action="{% url 'declaracion:muebles-noregistrables' folio_declaracion %}" method="post" novalidate>
+              <form  action="{% url 'declaracion:muebles-noregistrables' folio_declaracion %}" method="post" novalidate>
             {% endif %}
             {% csrf_token %}
                 {% if aplica %}
@@ -68,7 +68,7 @@
                     {% include 'layout/radiobuttons.html' with field_select=muebles_no_registrables_form.fields.cat_tipos_titulares  field_name=muebles_no_registrables_form.cat_tipos_titulares otro_name=muebles_no_registrables_form.otro_titular tipo='cat_tipos_titulares' campos_privados=campos_privados %}
                 </div>
                 <div class="col-md-12">
-                    {% include 'layout/persona_simp.html' with form=copropietario_form title="TRANSMISOR" label=" del transmisor" tipo=False nombre=False razon_social=True%}
+                    {% include 'layout/persona_simp.html' with form=propietario_anterior_form title="TRANSMISOR" label=" del transmisor" tipo=False nombre=False razon_social=True%}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
@@ -77,7 +77,7 @@
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
                                 <small class="text-help text-primary">(Si aplica)</small>
-                                {% bootstrap_field copropietario_form.rfc placeholder="RFC del copropietario" show_label=False  field_class='valida_rfc' %}
+                                {% bootstrap_field propietario_anterior_form.rfc placeholder="RFC del copropietario" show_label=False  field_class='valida_rfc' %}
                             </div>
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    {% include 'layout/persona_simp.html' with form=propietario_anterior_form  title="TERCERO" label="del tercero" tipo=False nombre=False razon_social=True %}
+                    {% include 'layout/persona_simp.html' with form=copropietario_form  title="TERCERO" label="del tercero" tipo=False nombre=False razon_social=True %}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group {% if 'rfc' in campos_privados %}form-group-private{% endif %}">
@@ -163,7 +163,7 @@
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
                                 <small class="text-help text-primary">(Si aplica)</small>
-                                {% bootstrap_field propietario_anterior_form.rfc  show_label=False  field_class='valida_rfc'  %}
+                                {% bootstrap_field copropietario_form.rfc  show_label=False  field_class='valida_rfc'  %}
                             </div>
                         </div>
                     </div>

@@ -276,7 +276,7 @@
                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir la opción estatal (local)">
                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                             </button>
-                            {% bootstrap_field actividad_laboral_sector_form.moneda show_label=False placeholder="Moneda" %}
+                            {% bootstrap_field actividad_laboral_sector_form.moneda_publico show_label=False placeholder="Moneda" %}
                         </div>
                     </div>
                     <div class="col-4">
@@ -285,7 +285,7 @@
                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha en que inició empleo, cargo o comisón">
                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                             </button>
-                            {% bootstrap_field actividad_laboral_sector_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                            {% bootstrap_field actividad_laboral_sector_form.posesion_inicio_publico  show_label=False placeholder="Fecha de toma de posesión" %}
                         </div>
                     </div>
                 </div>
@@ -332,7 +332,7 @@
                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir fecha en la que asumió el cargo">
                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                             </button>
-                            {% bootstrap_field actividad_laboral_sector_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                            {% bootstrap_field actividad_laboral_sector_form.posesion_inicio_privado  show_label=False placeholder="Fecha de toma de posesión" %}
                         </div>
                     </div>
                      <div class="col-4">
@@ -352,7 +352,7 @@
                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar moneda">
                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                             </button>
-                            {% bootstrap_field actividad_laboral_sector_form.moneda show_label=False placeholder="Moneda" %}
+                            {% bootstrap_field actividad_laboral_sector_form.moneda_privado show_label=False placeholder="Moneda" %}
                         </div>
                     </div>
                     <div class="col-12">

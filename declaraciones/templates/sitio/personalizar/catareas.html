@@ -53,7 +53,7 @@
             </div>
         </div>
         </div>
-        <div class="col-12">
+        <div class="col-12" style="max-height: 800px;overflow: auto;">
                 <table  class="table table-striped">
                     <thead style=" width: 500px;overflow-x: auto;">
                         <tr>
@@ -154,6 +154,25 @@
       </div>
     </div>
   </div>
+
+  <div class="modal" tabindex="-1" role="dialog" id="ModalAreas">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <center>
+                <img src="{% static '/src/img/SEAJAL-Declaraciones-Mi_cuenta-Icono_alerta.png' %}" style="padding-bottom: 20px;height: 50px;">
+                <div class="modal-body-areas" style="height:auto;padding: 3em;max-height: 500px; overflow: auto;">
+                </div>
+            </center>
+        </div>
+    </div>
+  </div>
+
+  </div>
 {% endblock %}
  
 {% block body_script %}
@@ -213,8 +232,10 @@
     }
 
     function catpuesto_eliminar(id, url){
-        ajax_(id, url);
+        ajax_eliminacion(id, url);
     }
+
+
 
     function catarea_eliminar_multiple(){
         var checkboxes = document.querySelectorAll('input[type^="checkbox"]:checked:not([id*="area-check-all"])');
@@ -224,7 +245,7 @@
         var progress_val_p = 0;
         var len = checkboxes.length;
         var i = 0;
-        console.log(len);
+
         progressbar.css("width", "0%").text("0%");
         if(len <= 0){
             console.log("no hay elementos seleccionados");
@@ -233,6 +254,8 @@
         progressbar.css("width", "0%").text("0%");
         progress_div.show();
         progressbar.show();
+        var mensajes_json = []
+        var ids_registro = []
         $.each(checkboxes, function eliminar_async(i){
             if (i < len ){
                 let _id = checkboxes[i].id;
@@ -251,10 +274,9 @@
                     url : url,
                     type : "POST",
                     success : function(json) {
-                        console.log(json);
-                        if(json["messages"] == "eliminado"){
-                            console.log("eliminado");
-                        }
+                        mensajes_json.push(json);
+                        ids_registro.push(_id);
+                        mensajes_areas(mensajes_json,ids_registro);
                     },
                     error : function(xhr,errmsg,err) {
                         console.log(xhr.status + ": " + xhr.responseText);
@@ -262,11 +284,12 @@
                         return xhr.responseText;
                     },
                     complete: function(){
-                        $("#id-"+_id).remove();
                         progress_val =  i + 1;
                         if(progress_val == len ){ progress_val_p = 100} else {progress_val_p = ((progress_val*100)/len)}
                         progressbar.css("width", progress_val_p.toString()+"%").text(progress_val_p.toString()+"%");
-                        i++;                        
+                        i++; 
+                        setTimeout(function(){ progress_div.hide(); progressbar.hide() }, 4000);                      
+                        
                     }
                 });
             }else{
@@ -276,7 +299,8 @@
                 return true;
             }
         });
-        return true;g
+        
+        return true;
     }
 
     function catarea_editar(form_id){
@@ -297,8 +321,10 @@
                 data: form.serialize(),
                 success: function(data)
                 {
-                    location.reload();
-                    console.log(url)
+                    var response  = mensajes_areas([data])
+                    if(response){
+                        location.reload();
+                    }
                 },
                 error : function(xhr,errmsg,err) {
                     console.log(xhr.status + ": " + xhr.responseText);
@@ -321,7 +347,7 @@
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
-    function ajax_(id, url){
+    function ajax_eliminacion(id, url){
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
@@ -334,9 +360,7 @@
                 url : url,
                 type : "POST",
                 success : function(json) {
-                    console.log(json);
-                    $("#id-"+id).remove();
-                    return true;
+                    mensajes_areas([json],[id]);
                 },
                 error : function(xhr,errmsg,err) {
                     console.log(xhr.status + ": " + xhr.responseText);
@@ -344,5 +368,31 @@
                 }
             });
     }
+
+    function mensajes_areas(jsons, id=null){
+        var response = true;
+        var modalEliminacion = $("#ModalAreas");
+        $( ".modal-body-areas").empty()
+
+        for(var i =0; i<jsons.length; i++){
+            if(jQuery.type(jsons[i]) == 'object'){            
+                if(jsons[i].tipo == "error"){
+                    response = false;
+                    $( ".modal-body-areas").append( '<h5>'+"<img src="+"{% static '/src/img/status-pending.svg' %}"+' style="height: 15px;"> '+jsons[i].messages +'</h5>' );
+                }else{
+                    $( ".modal-body-areas").append( '<h5>'+"<img src="+"{% static '/src/img/status-success.svg' %}"+' style="height: 15px;"> '+ jsons[i].messages +'</h5>' );
+                    if(id != null){
+                        $("#id-"+id[i]).remove();
+                    }
+                }
+            }else{
+                response = false;
+                $( ".modal-body-areas").append( '<h5> Se ha presentado un error al eliminar el registro '+ id +' </h5>' );
+            }
+        }
+        modalEliminacion.modal('show');
+        return response;
+    }
+    
 </script>
 {% endblock %}

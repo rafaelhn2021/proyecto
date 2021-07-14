@@ -43,6 +43,8 @@
             <th scope="col">FECHA DE FIRMA</th>
             <th scope="col">TIPO</th>
             <th scope="col">VER</th>
+            <th scope="col">ACUSE</th>
+
           </tr>
         </thead>
         <tbody>
@@ -55,7 +57,9 @@
               <td>{{ ds.fecha_declaracion |default_if_none:"----" }}</td>
               <td>{{ ds.fecha_recepcion |default_if_none:"----" }}</td>
               <td>{{ ds.cat_tipos_declaracion.codigo |default_if_none:"----" }}</td>
-                <td><a href="{%  url 'declaracion:info-declaracion' ds.pk 'declarante' %}"><img width="40px" src="{% static 'src/img/see_verde.png' %}"></a></td>
+              <td><a href="{%  url 'declaracion:info-declaracion' ds.pk 'declarante' %}"><img width="40px" src="{% static 'src/img/see_verde.png' %}"></a></td>
+              <td>{% if ds.cat_estatus.pk is 4%}<a href="{%  url 'pdf_confimacion' ds.pk %}" target="blank"> <img width="40px" src="{% static 'src/img/descargar.png' %}"></a>{% else %} N/A {% endif %}</td>
+
             </tr>
           {% endfor %}
         {% else %}

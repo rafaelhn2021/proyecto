@@ -14,15 +14,15 @@
       {% endif %}
     </div>
     <div class="col-md-12 printable px-5">
-        <h1 class="text-uppercase text-black h1">
+      	<h1 class="text-uppercase text-black h1">
           <span class="color-primario pHide">Confirmación de </span>
-          <span class="color-primario pShow">{{ declaracion.cat_tipos_declaracion }}</span>
-        </h1>
+      		<span class="color-primario pShow">{{ declaracion.cat_tipos_declaracion }}</span>
+      	</h1>
         <h5 class="text-black">{{ declaracion.info_personal_fija.rfc }} </h5>
-        <h6 class="pShow">{{ declaracion.info_personal_fija.nombres }} {{ declaracion.info_personal_fija.apellido1 }} {{ declaracion.info_personal_fija.apellido2 }} - {% now "SHORT_DATETIME_FORMAT" %}</h6>
+      	<h6 class="pShow">{{ declaracion.info_personal_fija.nombres }} {{ declaracion.info_personal_fija.apellido1 }} {{ declaracion.info_personal_fija.apellido2 }} - {% now "SHORT_DATETIME_FORMAT" %}</h6>
 
       <p class="text-black">
-        <div class="pHide">Por favor, revisa detenidamente tu información ya que una vez que termines tu declaración no será posible hacer ningún cambio.</div>
+      	<div class="pHide">Por favor, revisa detenidamente tu información ya que una vez que termines tu declaración no será posible hacer ningún cambio.</div>
       </p>
 
       <h2 class="text-uppercase h3" style="border-bottom: 1px solid black;">01.- Declaración Patrimonial</h2>
@@ -57,6 +57,7 @@
                 </dl>
                 <dl class="p_opciones"><dt> Correo electrónico institucional </dt>
                   <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_fija.usuario.email|default_if_none:"" }}
+                    
                   </dd>
                 </dl>
                   <dl class="p_opciones"><dt> Teléfono particular </dt>
@@ -97,9 +98,26 @@
                 <dl class="p_opciones"><dt> País </dt>
                   <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.cat_pais|default_if_none:"" }}</dd>
                 </dl>
+                {% if info_personal_var.domicilios.cat_pais.codigo != 'MX' %}
+                  <dl class="p_opciones"><dt> ciudad/Localidad </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.ciudadLocalidad|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> estado/Provincia </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.estadoProvincia|default_if_none:"" }}</dd>
+                  </dl>
+                    <dl class="p_opciones"><dt> Calle </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.nombre_via|default_if_none:"" }}</dd>
+                    </dl>
+                    <dl class="p_opciones"><dt> Número exterior </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.num_exterior|default_if_none:"" }}</dd>
+                    </dl>
+                    <dl class="p_opciones"><dt> Número interior </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.num_interior|default_if_none:"" }}</dd>
+                  </dl>
+                {% else %}
                   <dl class="p_opciones"><dt> Calle </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.nombre_via|default_if_none:"" }}</dd>
-                </dl>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.nombre_via|default_if_none:"" }}</dd>
+                  </dl>
                   <dl class="p_opciones"><dt> Número exterior </dt>
                     <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.num_exterior|default_if_none:"" }}</dd>
                   </dl>
@@ -115,6 +133,8 @@
                 <dl class="p_opciones"><dt> Municipio </dt>
                   <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.municipio|default_if_none:"" }}</dd>
                 </dl>
+                {% endif %}
+                 
                 <dl class="p_opciones"><dt> Código postal </dt>
                   <dd class="text-black_opciones color-secundario font-italic">{{ info_personal_var.domicilios.cp|default_if_none:"" }}</dd>
                 </dl>
@@ -225,26 +245,44 @@
                   <dt> País </dt>
                   <dd class="text-black_opciones color-secundario font-italic"> {{ encargos.domicilios.cat_pais|default_if_none:"" }}</dd>
                 </dl>
-                <dl class="p_opciones">
-                  <dt> Entidad federativa </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
-              </dl>
-              <dl class="p_opciones">
-                  <dt> Municipio </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.municipio|default_if_none:"" }}</dd>
-                </dl>
-                <dl class="p_opciones"><dt> Colonia </dt>
-                  <dd class="text-black_opciones color-secundario font-italic"> {{ encargos.domicilios.colonia|default_if_none:"" }}</dd>
-                </dl>
-                <dl class="p_opciones"><dt> Calle </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.nombre_via|default_if_none:"" }}</dd>
-                </dl>
-                <dl class="p_opciones"><dt> Número exterior </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.num_exterior|default_if_none:"" }}</dd>
-                </dl>
-                <dl class="p_opciones"><dt> Número interior </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.num_interior|default_if_none:"" }}</dd>
-                </dl>
+                {% if encargos.domicilios.cat_pais.codigo != 'MX' %}
+                  <dl class="p_opciones"><dt> Ciudad/Localidad </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.ciudadLocalidad|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Estado/Provincia </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.estadoProvincia|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Calle </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.nombre_via|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Número exterior </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.num_exterior|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Número interior </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.num_interior|default_if_none:"" }}</dd>
+                  </dl>
+                {% else %}
+                  <dl class="p_opciones">
+                    <dt> Entidad federativa </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones">
+                    <dt> Municipio </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.municipio|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Colonia </dt>
+                    <dd class="text-black_opciones color-secundario font-italic"> {{ encargos.domicilios.colonia|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Calle </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.nombre_via|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Número exterior </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.num_exterior|default_if_none:"" }}</dd>
+                  </dl>
+                  <dl class="p_opciones"><dt> Número interior </dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ encargos.domicilios.num_interior|default_if_none:"" }}</dd>
+                  </dl>
+                {% endif %}
               </div>
               <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
                 <dd class="text-black_opciones color-secundario font-italic">{{ encargos.observaciones|default_if_none:"" }}</dd>
@@ -267,7 +305,7 @@
                     <dl class="p_opciones"><dt> Tipo operación </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ expl.cat_tipos_operaciones|default_if_none:"" }}</dd>
                     </dl>
-                    <dl class="p_opciones"><dt> Ámbito </dt>
+                    <dl class="p_opciones"><dt> Ámbito/Sector en el que laboraste </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ expl.cat_ambitos_laborales|default_if_none:"" }}</dd>
                     </dl>
 
@@ -275,15 +313,20 @@
                       <dl class="p_opciones"><dt> Nivel/orden de gobierno </dt>
                         <dd class="text-black_opciones color-secundario font-italic">{{ expl.cat_ordenes_gobierno|default_if_none:"" }}</dd>
                       </dl>
-                      <dl class="p_opciones"><dt> Poder </dt>
+                      <dl class="p_opciones"><dt> Ámbito público </dt>
                         <dd class="text-black_opciones color-secundario font-italic">{{ expl.cat_poderes|default_if_none:"" }}</dd>
                       </dl>
                     {% endif %}
                     <dl class="p_opciones"><dt> Nombre de la institución </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ expl.nombre_institucion|default_if_none:"" }}</dd>
                     </dl>
+                    <dl class="p_opciones"><dt> RFC de la institución </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">{{ expl.rfc|default_if_none:"" }}</dd>
+                    </dl>
                     <dl class="p_opciones"><dt> Sector/industria </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ expl.cat_sectores_industria|default_if_none:"" }}</dd>
+                      <dd class="text-black_opciones color-secundario font-italic">
+                        {{ expl.cat_sectores_industria|default_if_none:"" }} <br> {{ expl.otro_sector|default_if_none:"--------"}} 
+                      </dd>
                     </dl>
                     <dl class="p_opciones"><dt> Cargo/puesto </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ expl.cargo_puesto|default_if_none:"" }}</dd>
@@ -336,8 +379,13 @@
                     <dl class="p_opciones"><dt> CURP </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.curp|default_if_none:"" }}</dd>
                     </dl>
+
                     <dl class="p_opciones"><dt> RFC con homoclave </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.rfc|default_if_none:"" }}</dd>
+                    </dl>
+
+                    <dl class="p_opciones"><dt> Fecha de nacimiento </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.fecha_nacimiento|default_if_none:"" }}</dd>
                     </dl>
 
                     <dl class="p_opciones"><dt> Ciudadano extranjero </dt>
@@ -384,7 +432,7 @@
                             <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.actividadLaboralSector.cat_funciones_principales }} </dd>
                           </dl>
                           <dl class="p_opciones"><dt> Salario mensual neto </dt>
-                            <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.actividadLaboralSector.salarioMensualNeto }} </dd>
+                            <dd class="text-black_opciones color-secundario font-italic">$ {{ conyuge_dependientes.actividadLaboralSector.salarioMensualNeto|intcomma }} </dd>
                           </dl>
                           <dl class="p_opciones"><dt> Moneda </dt>
                             <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.actividadLaboralSector.moneda }} </dd>
@@ -406,7 +454,7 @@
                             <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.actividadLaboralSector.posesion_inicio }} </dd>
                           </dl>
                           <dl class="p_opciones"><dt> Salario mensual neto </dt>
-                            <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.actividadLaboralSector.salarioMensualNeto }} </dd>
+                            <dd class="text-black_opciones color-secundario font-italic">$ {{ conyuge_dependientes.actividadLaboralSector.salarioMensualNeto|intcomma }} </dd>
                           </dl>
                           <dl class="p_opciones"><dt> Moneda </dt>
                             <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.actividadLaboralSector.moneda }} </dd>
@@ -431,23 +479,56 @@
                     <dl class="p_opciones"><dt> País </dt>
                       <dd class="text-black_opciones color-secundario font-italic"> {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_pais|default_if_none:"" }}</dd>
                     </dl>
-                    <dl class="p_opciones"><dt> Entidad federativa </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+
+                    {% if conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_pais.codigo != 'MX' %}
+                    <dl class="p_opciones"><dt> Ciudad/Localidad </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">
+                        {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.ciudadLocalidad|default_if_none:"" }}
+                      </dd>
                     </dl>
-                    <dl class="p_opciones"><dt> Municipio </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.municipio|default_if_none:"" }}</dd>
+                    <dl class="p_opciones"><dt> Estado/Provincia </dt>
+                      <dd class="text-black_opciones color-secundario font-italic">
+                        {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.estadoProvincia|default_if_none:"" }}
+                      </dd>
                     </dl>
-                    <dl class="p_opciones"><dt> Colonia </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.colonia|default_if_none:"" }}</dd>
-                    </dl>
-                    <dl class="p_opciones"><dt> Nombre de vía </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}</dd>
-                    </dl>
-                    <dl class="p_opciones"><dt> Número exterior </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}</dd>
-                    </dl>
-                    </dl>
-                  </div>
+                      <dl class="p_opciones"><dt> Nombre de vía </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                      <dl class="p_opciones"><dt> Número exterior </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                    {% else %}
+                      <dl class="p_opciones"><dt> Entidad federativa </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.cat_entidades_federativas|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                      <dl class="p_opciones"><dt> Municipio </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.municipio|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                      <dl class="p_opciones"><dt> Colonia </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.colonia|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                      <dl class="p_opciones"><dt> Nombre de vía </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                      <dl class="p_opciones"><dt> Número exterior </dt>
+                        <dd class="text-black_opciones color-secundario font-italic">
+                          {{ conyuge_dependientes.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}
+                        </dd>
+                      </dl>
+                      {% endif %}
+                    </div>
                   <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
                     <dd class="text-black_opciones color-secundario font-italic">{{ conyuge_dependientes.observaciones|default_if_none:"" }}</dd>
                   </dl>
@@ -505,10 +586,10 @@
                       </dl>
 
                       <dl class="p_opciones"><dt> Actividad laboral</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboral }} </dd>
+                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboral|default_if_none:"Sin dato" }} </dd>
                       </dl>
 
-                      {% if dependiente.actividadLaboral.codigo != "NIN"%}
+                      {% if dependiente.actividadLaboral.codigo and dependiente.actividadLaboral.codigo != "NIN"%}
 
                         {% if dependiente.actividadLaboral.codigo == "OTRO" %}
                           <dl class="p_opciones"><dt> Otro sector </dt>
@@ -536,7 +617,7 @@
                               <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboralSector.cat_funciones_principales }} </dd>
                             </dl>
                             <dl class="p_opciones"><dt> Salario mensual neto </dt>
-                              <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboralSector.salarioMensualNeto }} </dd>
+                              <dd class="text-black_opciones color-secundario font-italic">$ {{ dependiente.actividadLaboralSector.salarioMensualNeto|intcomma }} </dd>
                             </dl>
                             <dl class="p_opciones"><dt> Moneda </dt>
                               <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboralSector.moneda }} </dd>
@@ -558,7 +639,7 @@
                               <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboralSector.posesion_inicio }} </dd>
                             </dl>
                             <dl class="p_opciones"><dt> Salario mensual neto </dt>
-                              <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboralSector.salarioMensualNeto }} </dd>
+                              <dd class="text-black_opciones color-secundario font-italic">$ {{ dependiente.actividadLaboralSector.salarioMensualNeto|intcomma }} </dd>
                             </dl>
                             <dl class="p_opciones"><dt> Moneda </dt>
                               <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.actividadLaboralSector.moneda }} </dd>
@@ -583,24 +664,45 @@
                       <dl class="p_opciones"><dt> País </dt>
                         <dd class="text-black_opciones color-secundario font-italic"> {{ dependiente.dependiente_infopersonalvar.domicilios.cat_pais|default_if_none:"" }}</dd>
                       </dl>
-                      <dl class="p_opciones"><dt> Entidad federativa </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
-                      </dl>
-                      <dl class="p_opciones"><dt> Municipio </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.municipio|default_if_none:"" }}</dd>
-                      </dl>
-                      <dl class="p_opciones"><dt> Colonia </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.colonia|default_if_none:"" }}</dd>
-                      </dl>
-                      <dl class="p_opciones"><dt> Calle </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}</dd>
-                      </dl>
-                      <dl class="p_opciones"><dt> Número exterior </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}</dd>
-                      </dl>
-                      <dl class="p_opciones"><dt> Número interior </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.num_interior|default_if_none:"" }}</dd>
-                      </dl>
+
+                      {% if encargos.domicilios.cat_pais.codigo != 'MX' %}
+                        <dl class="p_opciones"><dt> ciudad/Localidad </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.ciudadLocalidad|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> estado/Provincia </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.estadoProvincia|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Calle </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Número exterior </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Número interior </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.num_interior|default_if_none:"" }}</dd>
+                        </dl>
+                      {% else %}
+                        <dl class="p_opciones"><dt> Entidad federativa </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.cat_entidades_federativas|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Municipio </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.municipio|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Colonia </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.colonia|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Calle </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.nombre_via|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Número exterior </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.num_exterior|default_if_none:"" }}</dd>
+                        </dl>
+                        <dl class="p_opciones"><dt> Número interior </dt>
+                          <dd class="text-black_opciones color-secundario font-italic">{{ dependiente.dependiente_infopersonalvar.domicilios.num_interior|default_if_none:"" }}</dd>
+                        </dl>
+                      {% endif %}
+
+                     
                     </div>
 
                     <dl class="p_opciones"><dt> Observaciones y comentarios </dt>
@@ -622,7 +724,7 @@
               </h4>
               <div class="row">
                 <dl class="p_opciones col-6">
-                    <dt> I.- Remuneración mensual neta del declarante por su cargo públcio (por concepto de sueldos, honorarios, compensaciones, bonos y prestaciones)(cantidades netas después de impuestos)</dt>
+                    <dt> I.- Remuneración {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anual {% else %} mensual {% endif %} neta del declarante por su cargo público (por concepto de sueldos, honorarios, compensaciones, bonos y prestaciones)(cantidades netas después de impuestos)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_cargo|intcomma|default_if_none:"00" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
@@ -638,7 +740,7 @@
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.cat_moneda_otro_ingresos_mensual|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
-                    <dt> II.1.- Remuneración mensual por actividad industrial, comercial y/o empresarial (después de impuestos)</dt>
+                    <dt> II.1.- Remuneración {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anual {% else %} mensual {% endif %} por actividad industrial, comercial y/o empresarial (después de impuestos)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_actividad|intcomma|default_if_none:"00" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
@@ -654,7 +756,7 @@
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.tipo_negocio|default_if_none:"" }}</dd>
                   </dl> 
                   <dl class="p_opciones col-6">
-                    <dt> II.2.- Remuneración mensual por actividad financiera (rendimientos o ganancias) (después de impuestos)</dt>
+                    <dt> II.2.- Remuneración {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anual {% else %} mensual {% endif %} por actividad financiera (rendimientos o ganancias) (después de impuestos)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_financiera|intcomma|default_if_none:"00" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
@@ -662,7 +764,7 @@
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.cat_moneda_financiera|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
-                    <dt> II.3.- Remuneración mensual por servicios profesionales, consejos, consultorías y/o asesorías (después de impuestos)</dt>
+                    <dt> II.3.- Remuneración {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anual {% else %} mensual {% endif %} por servicios profesionales, consejos, consultorías y/o asesorías (después de impuestos)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_servicios|intcomma|default_if_none:"00" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
@@ -686,7 +788,7 @@
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.cat_tipos_actividad|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
-                    <dt> A.- Ingreso mensual NETO del declarante (SUMA DEL NUMERAL I y II)</dt>
+                    <dt> A.- Ingreso {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anual {% else %} mensual {% endif %} NETO del declarante (SUMA DEL NUMERAL I y II)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_neto|intcomma|default_if_none:"00" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
@@ -694,7 +796,7 @@
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.cat_moneda_neto|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
-                    <dt> B.- Ingreso mensual NETO de la pareja y/o dependientes económicos (despúes de impuestos)</dt>
+                    <dt> B.- Ingreso {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anual {% else %} mensual {% endif %} NETO de la pareja y/o dependientes económicos (despúes de impuestos)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_pareja_dependientes|intcomma|default_if_none:"00" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
@@ -702,11 +804,11 @@
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.cat_moneda_pareja_dependientes|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
-                    <dt> C.- TOTAL de ingresos mensuales NETOS percibidos por el declarante, pareja y/o dependientes económicos (suma de los apartados A y B)</dt>
+                    <dt> C.- TOTAL de ingresos {% if declaracion.cat_tipos_declaracion.codigo == "MODIFICACIÓN" %} anules {% else %} mensuales {% endif %} NETOS percibidos por el declarante, pareja y/o dependientes económicos (suma de los apartados A y B)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos.ingreso_mensual_total|intcomma|default_if_none:"00" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
-                    <dt> Moneda de ingreso NETO de la pareja</dt>
+                    <dt> Moneda de ingreso NETO total</dt>
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos.cat_moneda_total|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-12">
@@ -726,7 +828,7 @@
               {% no_aplica declaracion.folio 'ingresos-servidor-publico' as checked_servidor %}
                 {% if not checked_servidor %}
                 <dl class="p_opciones col-6">
-                    <dt> I.- Remuneración neta del declarante por su cargo públcio (por concepto de sueldos, honorarios, compensaciones, bonos y prestaciones)(cantidades netas después de impuestos)</dt>
+                    <dt> I.- Remuneración neta del declarante por su cargo público (por concepto de sueldos, honorarios, compensaciones, bonos y prestaciones)(cantidades netas después de impuestos)</dt>
                     <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos_anterior.ingreso_mensual_cargo|intcomma|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
@@ -779,11 +881,11 @@
                   </dl>
                   <dl class="p_opciones col-6">
                     <dt> II.4.- Remuneración por enajenación de bienes (después de impuestos)</dt>
-                    <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos_anterior.ingreso_mensual_servicios|intcomma|default_if_none:"" }}</dd>
+                    <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos_anterior.ingreso_enajenacion_bienes|intcomma|default_if_none:"" }}</dd>
                   </dl>   
                   <dl class="p_opciones col-6">
                     <dt> II.4- Moneda de remuneración por enajenación de bienes (después de impuestos)</dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos_anterior.cat_moneda_servicios|default_if_none:"" }}</dd>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos_anterior.cat_moneda_enajenacion_bienes|default_if_none:"" }}</dd>
                   </dl>
                   <dl class="p_opciones col-6">
                     <dt> II.5.- Otros ingresos no considerados a los anteriores (después de impuestos)</dt>
@@ -805,6 +907,25 @@
                     <dt> Moneda de ingreso NETO del declarante recibido el año anterior</dt>
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos_anterior.cat_moneda_neto|default_if_none:"" }}</dd>
                   </dl>
+
+                  <dl class="p_opciones col-6">
+                    <dt> B.- Ingreso neto de la pareja y/o dependientes económicos, ricibidos en el año inmediato anterior(después de impuestos)</dt>
+                    <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos_anterior.ingreso_mensual_pareja_dependientes|intcomma|default_if_none:"" }}</dd>
+                  </dl>   
+                  <dl class="p_opciones col-6">
+                    <dt> Moneda ingreso neto pareja y/o dependientes</dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos_anterior.cat_moneda_pareja_dependientes|default_if_none:"" }}</dd>
+                  </dl>
+
+                  <dl class="p_opciones col-6">
+                    <dt> C.- Total de ingresos netos percibidos precibidos por el declarante, pareja y/o dependientes económicos en el año inmediato anterior(suma de los apartados a y b)</dt>
+                    <dd class="text-black_opciones color-secundario font-italic">$ {{ IngresosNetos_anterior.ingreso_mensual_total|intcomma|default_if_none:"" }}</dd>
+                  </dl>   
+                  <dl class="p_opciones col-6">
+                    <dt> Moneda ingreso total percibidos(apartados a y b)</dt>
+                    <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos_anterior.cat_moneda_total|default_if_none:"" }}</dd>
+                  </dl>
+
                   <dl class="p_opciones col-12">
                     <dt> Aclaraciones / observaciones</dt>
                     <dd class="text-black_opciones color-secundario font-italic">{{ IngresosNetos_anterior.observaciones|default_if_none:"" }}</dd>
@@ -843,7 +964,7 @@
 
                 <dl class="p_opciones col-12">
                   <dt> Porcentaje de Propiedad</dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ inmueble.declarante_bp.porcentaje|default_if_none:"" }}</dd>
+                  <dd class="text-black_opciones color-secundario font-italic">{{ inmueble.declarante_bp.porcentaje|default_if_none:"" }} % </dd>
                 </dl>
 
                 <dl class="p_opciones col-12">
@@ -1219,7 +1340,7 @@
 
                 <dl class="p_opciones col-12">
                   <dt> Valor Aquisición </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ vehiculo.precio_adquisicion|default_if_none:"" }}</dd>
+                  <dd class="text-black_opciones color-secundario font-italic">$ {{ vehiculo.precio_adquisicion|intcomma|default_if_none:"" }}</dd>
                 </dl>
 
                 <dl class="p_opciones col-12">
@@ -1408,7 +1529,7 @@
 
                 <dl class="p_opciones col-12">
                   <dt> Descripción del bien </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ mueble.despcipcion_bien|default_if_none:"" }}</dd>
+                  <dd class="text-black_opciones color-secundario font-italic">{{ mueble.descripcion_bien|default_if_none:"" }}</dd>
                 </dl>             
                 
                 <dl class="p_opciones col-12">
@@ -1437,126 +1558,125 @@
               <div class="row">
                 {% no_aplica declaracion.folio 'inversiones' as checked_inversiones %}
                 {% if not checked_inversiones %}
-                {% for inversion in inversiones %}
-                  <div class="col-6 row">
-                    <h6>Inversión # {{ forloop.counter }}</h6>
+	                {% for inversion in inversiones %}
+		                <div class="col-6 row">
+		                    <h6>Inversión # {{ forloop.counter }}</h6>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Tipo de operación </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.tipo_operacion|default_if_none:"" }}</dd>
-                  </dl>
+		                    <dl class="p_opciones col-12">
+		                        <dt> Tipo de operación </dt>
+		                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.tipo_operacion|default_if_none:"" }}</dd>
+		                    </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Tipo de inversión </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_tipos_inversiones|default_if_none:"" }}</dd>
-                  </dl>  
+		                    <dl class="p_opciones col-12">
+		                        <dt> Tipo de inversión </dt>
+		                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_tipos_inversiones|default_if_none:"" }}</dd>
+		                    </dl>  
 
-                  <dl class="p_opciones col-12">
-                    <dt>Sub-tipo de inversión </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_tipos_especificos_inversiones|default_if_none:"" }}</dd>
-                  </dl>               
+		                    <dl class="p_opciones col-12">
+		                        <dt>Sub-tipo de inversión </dt>
+		                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_tipos_especificos_inversiones|default_if_none:"" }}</dd>
+		                    </dl>               
 
-                  <dl class="p_opciones col-12">
-                    <dt> Titular ----- </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_tipos_titulares|default_if_none:"" }}</dd>
-                  </dl>
+		                    <dl class="p_opciones col-12">
+		                        <dt> Titular ----- </dt>
+		                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_tipos_titulares|default_if_none:"" }} {{ inversion.otro_tipo_titular|default_if_none:"" }} </dd>
+		                    </dl>
 
-                  <!--------------------COOPROPIETARIO O TERCERO INVERSION-------------------->
-                  <dl class="p_opciones col-12"><hr></dl>
-                  {% if inversion.info_personal_var.es_fisica %}
-                    {% if inversion.info_personal_var.nombres %}
-                      <dl class="p_opciones col-12">
-                        <dt> Tercero (Copropietario) {{ forloop.counter }}- tipo persona</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">
-                          Fisica
-                      </dl> 
-                      <dl class="p_opciones col-12">
-                        <dt> Tercero (Copropietario)- Nombre(s)</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.nombres|default_if_none:"" }}</dd>
-                      </dl> 
+		                    <!--------------------COOPROPIETARIO O TERCERO INVERSION-------------------->
+		                    <dl class="p_opciones col-12"><hr></dl>
+		                    {% if inversion.info_personal_var.es_fisica %}
+		                        {% if inversion.info_personal_var.nombres %}
+		                            <dl class="p_opciones col-12">
+		                                <dt> Tercero (Copropietario) {{ forloop.counter }}- tipo persona</dt>
+		                                <dd class="text-black_opciones color-secundario font-italic">
+		                                  Fisica
+		                            </dl> 
+		                            <dl class="p_opciones col-12">
+		                                <dt> Tercero (Copropietario)- Nombre(s)</dt>
+		                                <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.nombres|default_if_none:"" }}</dd>
+		                            </dl> 
+		    
+		                            <dl class="p_opciones col-12">
+		                                <dt> Tercero (Copropietario)- Apellido Paterno</dt>
+		                                <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.apellido1|default_if_none:"" }}</dd>
+		                            </dl> 
 
-                      <dl class="p_opciones col-12">
-                        <dt> Tercero (Copropietario)- Apellido Paterno</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.apellido1|default_if_none:"" }}</dd>
-                      </dl> 
+					                <dl class="p_opciones col-12">
+					                    <dt> Tercero (Copropietario)- Apellido Materno</dt>
+					                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.apellido2|default_if_none:"" }}</dd>
+					                </dl> 
+		                    	{% else %}
+				                    <dl class="p_opciones col-12">
+				                        <dt> Transmisor (Propietario anterior) - </dt>
+				                        <dd class="text-black_opciones color-secundario font-italic">
+				                          No se guardo dato
+				                        </dd>
+				                    </dl>
+		                    	{% endif %}
+		                    {% else %}
+		                    	{% if inversion.info_personal_var.razon_social %}
+			                      <dl class="p_opciones col-12">
+			                        <dt> Tercero (Copropietario) {{ forloop.counter }}- tipo persona</dt>
+			                        <dd class="text-black_opciones color-secundario font-italic">
+			                          Moral
+			                      </dl> 
+			                      <dl class="p_opciones col-12">
+			                        <dt> Tercero (Copropietario)- Razón social</dt>
+			                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.razon_social|default_if_none:"" }}</dd>
+			                      </dl>
+			                    {% else %}
+			                      <dl class="p_opciones col-12">
+			                        <dt> Transmisor (Propietario anterior) - </dt>
+			                        <dd class="text-black_opciones color-secundario font-italic">
+			                          No se guardo dato
+			                        </dd>
+			                      </dl>
+			                    {% endif %}
+			              	{% endif %}
 
-                      <dl class="p_opciones col-12">
-                        <dt> Tercero (Copropietario)- Apellido Materno</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.apellido2|default_if_none:"" }}</dd>
-                      </dl> 
-                    {% else %}
-                      <dl class="p_opciones col-12">
-                        <dt> Transmisor (Propietario anterior) - </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">
-                          No se guardo dato
-                        </dd>
-                      </dl>
-                    {% endif %}
-                  {% else %}
-                    {% if inversion.info_personal_var.razon_social %}
-                      <dl class="p_opciones col-12">
-                        <dt> Tercero (Copropietario) {{ forloop.counter }}- tipo persona</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">
-                          Moral
-                      </dl> 
-                      <dl class="p_opciones col-12">
-                        <dt> Tercero (Copropietario)- Razón social</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.razon_social|default_if_none:"" }}</dd>
-                      </dl>
-                    {% else %}
-                      <dl class="p_opciones col-12">
-                        <dt> Transmisor (Propietario anterior) - </dt>
-                        <dd class="text-black_opciones color-secundario font-italic">
-                          No se guardo dato
-                        </dd>
-                      </dl>
-                    {% endif %}
-                  {% endif %}
+			                <dl class="p_opciones col-12">
+			                    <dt> Tercero (Copropietario)- rfc</dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.rfc|default_if_none:"" }}</dd>
+			                </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Tercero (Copropietario)- rfc</dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.info_personal_var.rfc|default_if_none:"" }}</dd>
-                  </dl>
+			                <dl class="p_opciones col-12"><hr></dl>
 
-                  <dl class="p_opciones col-12"><hr></dl>
+			                <dl class="p_opciones col-12">
+			                    <dt> Número de cuenta, contrato o póliza </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.num_cuenta|default_if_none:"" }}</dd>
+			                </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Número de cuenta, contrato o póliza </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.num_cuenta|default_if_none:"" }}</dd>
-                  </dl>
+			                <dl class="p_opciones col-12">
+			                    <dt> ¿Dónde se localiza la inversión, cuenta bancaria y otro tipo de valores/activos?  </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_paises|default_if_none:"" }}</dd>
+		                    </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> ¿Dónde se localiza la inversión, cuenta bancaria y otro tipo de valores/activos?  </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_paises|default_if_none:"" }}</dd>
-                  </dl>
+			                <dl class="p_opciones col-12">
+			                    <dt> Institución o Razón social  </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.institucion|default_if_none:"-------" }}</dd>
+			                </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Institución o Razón social  </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.institucion|default_if_none:"-------" }}</dd>
-                  </dl>
+			                <dl class="p_opciones col-12">
+			                    <dt> RFC Institución  </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.rfc|default_if_none:"------" }}</dd>
+			                </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> RFC Institución  </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.rfc|default_if_none:"------" }}</dd>
-                  </dl>
+			                <dl class="p_opciones col-12">
+			                    <dt> Saldo de la fecha (situación actual)  </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">$ {{ inversion.saldo_actual|intcomma|default_if_none:"" }}</dd>
+			                </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Saldo de la fecha (situación actual)  </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">$ {{ inversion.saldo_actual|intcomma|default_if_none:"" }}</dd>
-                  </dl>
+			                <dl class="p_opciones col-12">
+			                    <dt> Tipo de moneda  </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_monedas|default_if_none:"" }}</dd>
+			                </dl>
 
-                  <dl class="p_opciones col-12">
-                    <dt> Tipo de moneda  </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.cat_monedas|default_if_none:"" }}</dd>
-                  </dl>
-
-                  <dl class="p_opciones col-12">
-                    <dt> Aclaraciones/observaciones  </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.observaciones|default_if_none:"" }}</dd>
-                  </dl>
-
-                </div>
-                {% endfor %}
+			                <dl class="p_opciones col-12">
+			                    <dt> Aclaraciones/observaciones  </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ inversion.observaciones|default_if_none:"" }}</dd>
+			                </dl>
+		                </div>
+	                {% endfor %}
                 {% else %}
                   <h6>( NO APLICA )</h6>
                 {% endif %}
@@ -1572,147 +1692,158 @@
               <div class="row">
                 {% no_aplica declaracion.folio 'deudas' as checked_deudas %}
                 {% if not checked_deudas %}
-                {% for adeudo in adeudos %}
-                <div class="col-6 row">
+	                {% for adeudo in adeudos %}
+		                <div class="col-6 row">
+			                <h6> Adeudo # {{ forloop.counter }}</h6>
+			                  <dl class="p_opciones col-12">
+			                    <dt> Tipo de operación </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tipo_operacion|default_if_none:"" }}</dd>
+			                  </dl>
 
-                <h6> Adeudo # {{ forloop.counter }}</h6>
-                  <dl class="p_opciones col-12">
-                    <dt> Tipo de operación </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tipo_operacion|default_if_none:"" }}</dd>
-                  </dl>
+			                  <dl class="p_opciones col-12">
+			                    <dt> Tipo de adeudo </dt>
+			                    <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_tipos_adeudos|default_if_none:"" }} {{ adeudo.otro_tipo_adeudo|default_if_none:"" }} </dd>
+			                  </dl>              
 
-                  <dl class="p_opciones col-12">
-                    <dt> Tipo de adeudo </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_tipos_adeudos|default_if_none:"" }} {{ adeudo.otro_tipo_adeudo|default_if_none:"" }} </dd>
-                  </dl>              
+			                <dl class="p_opciones col-12">
+			                  <dt> Titular </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_tipos_titulares|default_if_none:"" }}</dd>
+			                </dl>
 
-                <dl class="p_opciones col-12">
-                  <dt> Titular </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_tipos_titulares|default_if_none:"" }}</dd>
-                </dl>
+			                <dl class="p_opciones col-12">
+			                  <dt> Número de cuenta o contrato </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.numero_cuenta|default_if_none:"" }}</dd>
+			                </dl>              
 
-                <dl class="p_opciones col-12">
-                  <dt> Número de cuenta o contrato </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.numero_cuenta|default_if_none:"" }}</dd>
-                </dl>              
+			                <dl class="p_opciones col-12">
+			                  <dt> Fecha de adquisición del adeudo/pasivo </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.fecha_generacion|default_if_none:"" }}</dd>
+			                </dl>
 
-                <dl class="p_opciones col-12">
-                  <dt> Fecha de adquisición del adeudo/pasivo </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.fecha_generacion|default_if_none:"" }}</dd>
-                </dl>
+			                <dl class="p_opciones col-12">
+			                  <dt> Monto original del adeudo </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">$ {{ adeudo.monto_original|intcomma|default_if_none:"" }}</dd>
+			                </dl>
 
-                <dl class="p_opciones col-12">
-                  <dt> Monto original del adeudo </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">$ {{ adeudo.monto_original|intcomma|default_if_none:"" }}</dd>
-                </dl>
+			                <dl class="p_opciones col-12">
+			                  <dt> Tipo de moneda </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_monedas|default_if_none:"" }}</dd>
+			                </dl>
 
-                <dl class="p_opciones col-12">
-                  <dt> Tipo de moneda </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_monedas|default_if_none:"" }}</dd>
-                </dl>
+			                <dl class="p_opciones col-12">
+			                  <dt> Saldo insoluto (situación actual) </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">$ {{ adeudo.saldo_pendiente|intcomma|default_if_none:"" }}</dd>
+			                </dl>
 
-                <dl class="p_opciones col-12">
-                  <dt> Saldo insoluto (situación actual) </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">$ {{ adeudo.saldo_pendiente|intcomma|default_if_none:"" }}</dd>
-                </dl>
+			                <dl class="p_opciones col-12"><hr></dl>
+			                {% if adeudo.tercero_infopersonalvar.es_fisica %}
+			                  	{% if adeudo.tercero_infopersonalvar.nombres %}
+				                    <dl class="p_opciones col-12">
+				                      <dt> Tercero (Copropietario) {{ forloop.counter }} - tipo de persona </dt>
+				                      <dd class="text-black_opciones color-secundario font-italic">Fisica</dd>
+				                    </dl>
 
-                <dl class="p_opciones col-12"><hr></dl>
-                {% if adeudo.tercero_infopersonalvar.es_fisica %}
-                  {% if adeudo.tercero_infopersonalvar.nombres %}
-                    <dl class="p_opciones col-12">
-                      <dt> Tercero (Copropietario) {{ forloop.counter }} - tipo de persona </dt>
-                      <dd class="text-black_opciones color-secundario font-italic">Fisica</dd>
-                    </dl>
+				                    <dl class="p_opciones col-12">
+				                      <dt> Tercero (Copropietario) {{ forloop.counter }}- Nombre(s)</dt>
+				                      <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.nombres|default_if_none:"" }}</dd>
+				                    </dl> 
 
-                    <dl class="p_opciones col-12">
-                      <dt> Tercero (Copropietario) {{ forloop.counter }}- Nombre(s)</dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.nombres|default_if_none:"" }}</dd>
-                    </dl> 
+				                    <dl class="p_opciones col-12">
+				                      <dt> Tercero (Copropietario) {{ forloop.counter }}- Apellido Paterno</dt>
+				                      <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.apellido1|default_if_none:"" }}</dd>
+				                    </dl> 
 
-                    <dl class="p_opciones col-12">
-                      <dt> Tercero (Copropietario) {{ forloop.counter }}- Apellido Paterno</dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.apellido1|default_if_none:"" }}</dd>
-                    </dl> 
+				                    <dl class="p_opciones col-12">
+				                      <dt> Tercero (Copropietario) {{ forloop.counter }}- Apellido Materno</dt>
+				                      <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.apellido2|default_if_none:"" }}</dd>
+				                    </dl>
 
-                    <dl class="p_opciones col-12">
-                      <dt> Tercero (Copropietario) {{ forloop.counter }}- Apellido Materno</dt>
-                      <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.apellido2|default_if_none:"" }}</dd>
-                    </dl>
-                  {% else %}
-                    <dl class="p_opciones col-12"></dl>
-                      <dt> Tercero (Copropietario)</dt>
-                      <dd class="text-black_opciones color-secundario font-italic">
-                        No se guardo dato
-                      </dd>
-                    </dl>
-                  {% endif %}
-              {% else %}
-                {% if adeudo.tercero_infopersonalvar.razon_social %}
-                  <dl class="p_opciones col-12">
-                    <dt>Tercero (Copropietario) {{ forloop.counter }} - tipo de persona </dt>
-                    <dd class="text-black_opciones color-secundario font-italic">Moral</dd>
-                  </dl>
-                  <dl class="p_opciones col-12">
-                    <dt> Tercero (Copropietario) {{ forloop.counter }}- Razón social</dt>
-                    <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.razon_social|default_if_none:"" }}</dd>
-                  </dl> 
-                  {% else %}
-                    <dl class="p_opciones col-12"></dl>
-                      <dt> Tercero (Copropietario)</dt>
-                      <dd class="text-black_opciones color-secundario font-italic">
-                        No se guardo dato
-                      </dd>
-                    </dl>
-                  {% endif %}
-              {% endif %}
+				                    <dl class="p_opciones col-12">
+					                	<dt> Tercero (Copropietario) {{ forloop.counter }} - RFC (Si aplica)</dt>
+					                	<dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.rfc|default_if_none:"" }}</dd>
+					              	</dl> 
+			                  	{% else %}
+				                    <dl class="p_opciones col-12"></dl>
+				                      <dt> Tercero (Copropietario)</dt>
+				                      <dd class="text-black_opciones color-secundario font-italic">
+				                        No se guardo dato
+				                      </dd>
+				                    </dl>
+			                  	{% endif %}
+			              	{% else %}
+				                {% if adeudo.tercero_infopersonalvar.razon_social %}
+					                <dl class="p_opciones col-12">
+					                    <dt>Tercero (Copropietario) {{ forloop.counter }} - tipo de persona </dt>
+					                    <dd class="text-black_opciones color-secundario font-italic">Moral</dd>
+					                </dl>
+					                <dl class="p_opciones col-12">
+					                    <dt> Tercero (Copropietario) {{ forloop.counter }}- Razón social</dt>
+					                    <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.razon_social|default_if_none:"" }}</dd>
+					                </dl> 
+					                <dl class="p_opciones col-12">
+					                	<dt> Tercero (Copropietario) {{ forloop.counter }} - RFC (Si aplica)</dt>
+					                	<dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.rfc|default_if_none:"" }}</dd>
+					              	</dl> 
+				                {% else %}
+				                    <dl class="p_opciones col-12"></dl>
+				                      <dt> Tercero (Copropietario)</dt>
+				                      <dd class="text-black_opciones color-secundario font-italic">
+				                        No se guardo dato
+				                      </dd>
+				                    </dl>
+				                {% endif %}
+			              	{% endif %}
+			              	<dl class="p_opciones col-12"><hr></dl>
+			 
 
-              <dl class="p_opciones col-12">
-                <dt> Tercero (Copropietario) {{ forloop.counter }}- RFC (Si aplica)</dt>
-                <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.tercero_infopersonalvar.rfc|default_if_none:"" }}</dd>
-              </dl> 
+		                	****
+			                <dl class="p_opciones col-12">
+			                  <dt> ¿Donde se localiza el adeudo?</dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_paises|default_if_none:"" }}</dd>
+			                </dl>              
+			                
+			                {% if adeudo.acreedor_nombre %}
+				                <dl class="p_opciones col-12">
+				                  <dt>Otorgante tipo persona </dt>
+				                  <dd class="text-black_opciones color-secundario font-italic">
+				                    {% if adeudo.acredor_es_fisica %}
+				                        Física 
+				                    {% else %}
+				                        Moral
+				                    {% endif %}
+				                  </dd>
+				                </dl>
 
-              <dl class="p_opciones col-12"><hr></dl>
+				                <dl class="p_opciones col-12">
+				                  <dt> Otorgante nombre o razón social del otorgante </dt>
+				                  <dd class="text-black_opciones color-secundario font-italic">
+				                  {{ adeudo.acreedor_nombre|default_if_none:"" }}</dd>
+				                </dl>
 
-                ****
-                
-                <dl class="p_opciones col-12">
-                  <dt> ¿Donde se localiza el adeudo?</dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.cat_paises|default_if_none:"" }}</dd>
-                </dl>              
+				                <dl class="p_opciones col-12">
+				                  <dt> Otorgante RFC (si aplica)  </dt>
+				                  <dd class="text-black_opciones color-secundario font-italic">
+				                  	{{ adeudo.acreedor_rfc|default_if_none:"" }}
+				                  </dd>
+				                </dl>
+			                {% else %}
+			                	<dl class="p_opciones col-12"></dl>
+			                      <dt> Otorgante del crédito </dt>
+			                      <dd class="text-black_opciones color-secundario font-italic">
+			                        No se guardo dato
+			                      </dd>
+			                    </dl>
+			                {% endif %}
+			                
 
-                <dl class="p_opciones col-12">
-                  <dt>Otorgante tipo persona </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">
-                    {% if adeudo.acreedor_es_fisica %}
-                        Física 
-                    {% elif not adeudo.acreedor_es_fisica %}
-                        Moral
-                    {% else %}
-                        --
-                    {% endif %}
-                  </dd>
-                </dl>
-
-                <dl class="p_opciones col-12">
-                  <dt> Otorgante nombre o razón social del otorgante </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">
-                  {{ adeudo.acreedor_nombre|default_if_none:"" }}</dd>
-                </dl>
-
-                <dl class="p_opciones col-12">
-                  <dt> Otorgante RFC (si aplica)  </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.acreedor_rfc|default_if_none:"" }}
-                </dd>
-                </dl>
-
-                <dl class="p_opciones col-12">
-                  <dt> Aclaraciones/observaciones  </dt>
-                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.observaciones|default_if_none:"" }}</dd>
-                </dl>
-            </div>
-                {% endfor %}
+			                <dl class="p_opciones col-12">
+			                  <dt> Aclaraciones/observaciones  </dt>
+			                  <dd class="text-black_opciones color-secundario font-italic">{{ adeudo.observaciones|default_if_none:"" }}</dd>
+			                </dl>
+		            	</div>
+	                {% endfor %}
                 {% else %}
-                <h6 class="color-primario">( NO APLICA )</h6>
+                	<h6 class="color-primario">( NO APLICA )</h6>
                 {% endif %}
               </div>
             </li>
@@ -1728,7 +1859,7 @@
                 {% if not checked_PrestamoComodato %}
                 {% for prestamo in prestamos %}
                   <div class="col-6 row">
-                    <h6> prestamo / comodato # {{ forloop.counter }}</h6>
+                    <h6> PRESTAMO / COMODATO # {{ forloop.counter }}</h6>
                     <dl class="p_opciones col-12">
                       <dt> Tipo de operación </dt>
                       <dd class="text-black_opciones color-secundario font-italic">{{ prestamo.tipo_operacion|default_if_none:"" }}</dd>
@@ -1965,7 +2096,7 @@
               {% if not checked_membresias %}
               {% for membresia in membresias %}
               <div class="col-6 row">
-              <h6> MEMBRESIA # {{ forloop.counter }}</h6>
+              <h6> PARTICIPACIÓN # {{ forloop.counter }}</h6>
               <dl class="p_opciones col-12">
                 <dt>Tipo de operación</dt>
                 <dd class="text-black_opciones color-secundario font-italic">{{ membresia.cat_tipos_operaciones|default_if_none:"" }}</dd>
@@ -2002,7 +2133,7 @@
                     {% else %} Sí
                       <dl class="p_opciones col-12">
                         <dt>Monto mensual</dt>
-                        <dd class="text-black_opciones color-secundario font-italic">{{ membresia.monto|default_if_none:"No registrado" }}</dd>
+                        <dd class="text-black_opciones color-secundario font-italic">$ {{ membresia.monto|intcomma|default_if_none:"No registrado" }}</dd>
                       </dl>
                       <dl class="p_opciones col-12">
                         <dt>Moneda</dt>
@@ -2072,7 +2203,7 @@
                 <dd class="text-black_opciones color-secundario font-italic">{{ apoyo.forma_recepcion|default_if_none:"" }}</dd>
               </dl>
               <dl class="p_opciones col-12">
-                <dt>Valor anual del apoyo</dt>
+                <dt>Valor mensual del apoyo</dt>
                 <dd class="text-black_opciones color-secundario font-italic">$ {{ apoyo.monto_apoyo_mensual|intcomma|default_if_none:"No registrado" }}</dd>
               </dl>
               <dl class="p_opciones col-12">
@@ -2512,7 +2643,11 @@
             <dl class="p_opciones col-12">
               <dt> Archivo </dt>
               <!--<dd class="text-black_opciones {% if 'declaracion-fiscal-archivo_pdf' in campos_privados %} text-privado {% endif %}">{{ fiscal.archivo_pdf.name|default_if_none:"" }} </dd>-->
-              <a href="{{fiscal.archivo_pdf.url}}" target="_blank">{{fiscal.archivo_pdf.name}}</a>
+              {% if fiscal.archivo_pdf %}
+                <a href="{{fiscal.archivo_pdf.url}}" target="_blank">{{fiscal.archivo_pdf.name}}</a>
+              {% else %}
+                <dd class="text-black_opciones">No se subio ningún archivo</dd>
+              {% endif %}
             </dl>
           </div>
           </li>
@@ -2530,14 +2665,15 @@
             </figure>
           </a>
         </div>
-        <div class="col-1">
+        <div class="col-1" style="width:  40px;"></div>
+        <!--<div class="col-1">
           <a class="btn btn-info" href="{% url 'declaraciones-previas-descargar' declaracion.folio %}" target="_blank">
             <figure>
               <img src="{% static 'src/img/impresora_blanco.png' %}" alt="Imprimir" class="svg my-2" style="width: 40px; height: 40px;">
               <figurecaption>Imprimir</figurecaption>
             </figure>
           </a>
-        </div>
+        </div>-->
         <div class="col-1">
           <a href="#" class="btn btn-dark" data-toggle="modal" data-target="#ventana-modal">
             <figure>
@@ -2559,7 +2695,7 @@
           <img src="{% static 'src/img/close.svg' %}" alt="Cerrar" class="svg">
         </button>
         {% if avance >= 100 %}
-        <form action="{% url 'declaracion:confirmar-declaracion' folio_declaracion %}" method="post" id="form_finalizar" class="mb-2" enctype="multipart/form-data">
+        <form action="{% url 'declaracion:confirmar-declaracion' folio_declaracion %}" method="post" id="form_finalizar" class="mb-2 block_submit" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="folio_declaracion" value="{{ folio_declaracion }}">
           <div class="row mt-6">
@@ -2600,7 +2736,7 @@
             </div>
             <div class="col-12 text-center">
               <button type="button" class="btn btn-danger m-2 font-weight-semibold" id="cancelar" data-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-lg btn-warning m-3 font-weight-semibold" id="enviar">Sí, deseo terminar mi declaración</button>
+              <button type="submit" class="btn btn-lg btn-warning m-3 font-weight-semibold block_boton" id="enviar">Sí, deseo terminar mi declaración</button>
             </div>
           </div>
         </form>

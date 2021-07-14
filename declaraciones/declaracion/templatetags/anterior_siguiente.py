@@ -43,6 +43,7 @@ def anterior_siguiente(context):
             declaracion=''
 
     if seccion:
+
         try:
             anterior = seccion.get_previous_sibling().url
             tipo = seccion.get_previous_sibling().parametro
@@ -89,6 +90,12 @@ def anterior_siguiente(context):
         else:
             kwargs={'folio': folio}
 
+        if seccion.pk is 2:
+            sig=siguiente
+        else:
+            sig=None
+
+
         if declaracion.cat_tipos_declaracion_id is 2:
             if seccion.pk is not 9:
                 if siguiente:
@@ -106,7 +113,11 @@ def anterior_siguiente(context):
             else:
                 siguiente = ''
 
+
+
+
         return {
             'anterior': anterior,
-            'siguiente': siguiente
+            'siguiente': siguiente,
+            'sig':sig
         }

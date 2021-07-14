@@ -100,6 +100,7 @@ class RegistroUsuarioOICForm(forms.Form):
     email = forms.EmailField(required=True, label="CORREO ELECTRÓNICO")
     rol =  forms.ChoiceField(choices=roles, label="ROL")
     estatus =  forms.ChoiceField(choices=estatus, label="ESTATUS")
+    fecha_inicio = forms.DateField(label='Fecha inicial', widget=forms.SelectDateWidget(years=YEARS),initial=str(datetime.date.today().year)+'-01-01', required=False)
     id = forms.CharField(widget=forms.HiddenInput(),required=False)
 
     def clean(self):

@@ -78,9 +78,14 @@ class DatosCurricularesForm(forms.ModelForm):
 class DatosEncargoActualForm(forms.ModelForm):
     telefono_laboral = forms.CharField(max_length=15, required=False, label="Teléfono", validators=[RegexValidator('^\d{8,}$', message="Introduzca un Teléfono válido")])
     telefono_extension = forms.CharField(max_length=10, required=False, label="Teléfono",validators=[RegexValidator('^\d{2,}$', message="Introduzca una Extensión válido")])
-    posesion_inicio = forms.DateField(label='Fecha de inicio de posesion', widget=forms.SelectDateWidget(years=YEARS))
+    posesion_inicio = forms.DateField(label='Fecha de inicio de posesion', widget=forms.SelectDateWidget(years=YEARS), required=False)
+    posesion_inicio_publico = forms.DateField(label='Fecha de inicio de posesion', widget=forms.SelectDateWidget(years=YEARS), required=False)
+    posesion_inicio_privado = forms.DateField(label='Fecha de inicio de posesion', widget=forms.SelectDateWidget(years=YEARS), required=False)
     email_laboral = forms.EmailField(required=False)
     cat_areas = forms.ModelChoiceField(queryset=CatAreas.objects.all(),required=False, label="" )
+    moneda = forms.ModelChoiceField(queryset=CatMonedas.objects.all(),required=False, label="",initial= 101 )
+    moneda_publico = forms.ModelChoiceField(queryset=CatMonedas.objects.all(),required=False, label="",initial= 101 )
+    moneda_privado = forms.ModelChoiceField(queryset=CatMonedas.objects.all(),required=False, label="",initial= 101  )
 
     def __init__(self, *args, **kwargs):
         super(DatosEncargoActualForm, self).__init__(*args, **kwargs)
@@ -104,8 +109,9 @@ class ExperienciaLaboralForm(forms.ModelForm):
         fecha_ingreso = self.cleaned_data.get('fecha_ingreso')
         fecha_salida = self.cleaned_data.get('fecha_salida')
 
-        if fecha_ingreso > fecha_salida:
-            raise forms.ValidationError("FECHA INGRESO: Fecha de ingreso no puede ser superior a la fecha de egreso")
+        if fecha_ingreso and fecha_salida:
+            if fecha_ingreso > fecha_salida:
+                raise forms.ValidationError("FECHA INGRESO: Fecha de ingreso no puede ser superior a la fecha de egreso")
 
     class Meta:
         model = ExperienciaLaboral

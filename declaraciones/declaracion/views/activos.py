@@ -953,7 +953,7 @@ class MueblesNoRegistrablesView(View):
             copropietario_bienes_personas = BienesPersonas.objects.filter(
                 activos_bienes=activos_bienes,
                 cat_tipo_participacion_id=BienesPersonas.COPROPIETARIO,
-            ).order_by('-id')[0]
+            ).first()
 
             if copropietario_bienes_personas:
                 copropietario_data = copropietario_bienes_personas.otra_persona
@@ -974,7 +974,7 @@ class MueblesNoRegistrablesView(View):
             declarante_bienes_personas = BienesPersonas.objects.filter(
                 activos_bienes=activos_bienes,
                 cat_tipo_participacion_id=BienesPersonas.DECLARANTE,
-            ).order_by('-id')[0]
+            ).first()
 
             if declarante_bienes_personas:
                 if propietario_anterior_bienes_personas:
@@ -1105,7 +1105,8 @@ class MueblesNoRegistrablesView(View):
             copropietario_bienes_personas = BienesPersonas.objects.filter(
                 activos_bienes=activos_bienes,
                 cat_tipo_participacion_id=BienesPersonas.COPROPIETARIO,
-            ).order_by('-id')[0]
+            ).first()
+
             if copropietario_bienes_personas:
                 copropietario_data = copropietario_bienes_personas.otra_persona
             else:
@@ -1114,10 +1115,10 @@ class MueblesNoRegistrablesView(View):
             propietario_anterior_bienes_personas = BienesPersonas.objects.filter(
                 activos_bienes=activos_bienes,
                 cat_tipo_participacion_id=BienesPersonas.PROPIETARIO_ANTERIOR,
-            ).order_by('-id')[0]
+            ).order_by('-id')
 
             if propietario_anterior_bienes_personas:
-                propietario_anterior_data = propietario_anterior_bienes_personas.otra_persona
+                propietario_anterior_data = propietario_anterior_bienes_personas[0].otra_persona
             else:
                 propietario_anterior_data = None
         else:

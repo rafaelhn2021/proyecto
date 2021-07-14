@@ -1,11 +1,9 @@
 {% load static %}
 {% load bootstrap4 %}
 {% load personalizacion_tags %}
+
 {% block layout_style %}
 	<style type="text/css">
-		.logo {
-	      background-color: #015F78;
-	    }
 	    .white{
 	    	color: #fff;
 	    }
@@ -51,69 +49,104 @@
 {%block page_header%}
 <div style="background-color: {{color_encabezado}};">
   <center>
-  	<img src="/media/{% personalizacion 'imagen_sublogo' %}" alt="Logo entidad"  style="width: auto;">
-  	<p class="white">{% if tipo_declaracion == 'resumen_declaracion' %} Reporte resumido por tipo de declaración {% elif tipo_declaracion == 'completo_declaracion' %} Reporte completo por declaración {% endif %}</p>
+  	<img src="/media/{% personalizacion 'imagen_sublogo' %}" alt="Logo"  style="width: auto;">
+	<p class="white">{% if tipo_reporte == 'resumen_declaracion' %} Reporte resumido por tipo de declaración {% elif tipo_reporte == 'completo_declaracion' %} Reporte completo por declaración {% endif %}</p>
   </center>
 </div>
 {% endblock %}
 {% block content %}
 	<table class="tr">
-	  <tr>
-	    <th class="tr-ukxx" colspan="7">RESUMEN</th>
-	  </tr>
-	  <tr>
-	    <td class="tr-fhnp" colspan="2">USUARIOS</td>
-	    <td class="tr-us7v" colspan="5">DECLARACIONES</td>
-	  </tr>
-	  <tr>
-	    <td class="tr-bjy0">ACTIVOS</td>
-	    <td class="tr-bjy0">BAJA</td>
-	    <td class="tr-1a2g">INICIALES</td>
-	    <td class="tr-1a2g">MODIFICACIÓN</td>
-	    <td class="tr-1a2g">CONCLUSIÓN</td>
-	    <td class="tr-1a2g">ABIERTAS</td>
-	    <td class="tr-1a2g">CERRADAS</td>
-	  </tr>
-	  <tr>
-	    <td class="tr-idod">{{resumen.activos|length}}</td>
-	    <td class="tr-idod">{{resumen.baja|length}}</td>
-	    <td class="tr-idod">{{resumen.iniciales|length}}</td>
-	    <td class="tr-idod">{{resumen.modificacion|length}}</td>
-	    <td class="tr-idod">{{resumen.conclusion|length}}</td>
-	    <td class="tr-idod">{{resumen.abiertas|length}}</td>
-	    <td class="tr-idod">{{resumen.cerradas|length}}</td>
-	  </tr>
-	  <tr>
-	    <td class="tr-n9g5" colspan="6">
-	        <p> Usuarios activos pendientes por cerrar declaración inicial:
-	            <ul>
-					{% if resumen.usuarios_activos_d_inicial %}
-						{% for usuario_activo_d_inicial in resumen.usuarios_activos_d_inicial %}
-						<li>{{usuario_activo_d_inicial.first_name}} {{usuario_activo_d_inicial.last_name}}</li>
-						{% endfor %}
-					{% else %}
-						<p style="color:gray;">Ningún usuario pendiente</p> 
-					{% endif %}
-	            </ul>
-	        </p>
-	        <p> Usuarios activos pendientes por iniciar declaración inicial:
-	            <ul>
-					{% if resumen.usuarios_activos_d_pendiente %}
-						{% for usuario_activo_d_pendiente in resumen.usuarios_activos_d_pendiente %}
-						<li>{{usuario_activo_d_pendiente.first_name}} {{usuario_activo_d_pendiente.last_name}}</li>
-						{% endfor %}
-					{% else %}
-					<p style="color:gray;">Ningún usuario pendiente</p> 
-					{% endif %}
-	            </ul>
-	        </p>
-	    </td>
-	  </tr>
+		<tr>
+			<th class="tr-ukxx" colspan="6">RESUMEN</th>
+		</tr>
+		<tr>
+			<td class="tr-fhnp" colspan="6">DECLARACIONES (Total: {{declaraciones|length}}) </td>
+		</tr>
+		<tr>
+			<td class="tr-1a2g" style="background: #f6fff6;" colspan="2">INICIALES</td>
+			<td class="tr-1a2g" style="background: #f6fff6;" colspan="2">MODIFICACIÓN</td>
+			<td class="tr-1a2g" style="background: #f6fff6;" colspan="2">CONCLUSIÓN</td>
+		</tr>
+		<tr>
+			<td class="tr-1a2g">ABIERTAS</td>
+			<td class="tr-1a2g">CERRADAS</td>
+			<td class="tr-1a2g">ABIERTAS</td>
+			<td class="tr-1a2g">CERRADAS</td>
+			<td class="tr-1a2g">ABIERTAS</td>
+	    	<td class="tr-1a2g">CERRADAS</td>
+		</tr>
+		<tr>
+			<td class="tr-idod">{{resumen.iniciales.abiertas}}</td>
+			<td class="tr-idod">{{resumen.iniciales.cerradas}}</td>
+			<td class="tr-idod">{{resumen.modificacion.abiertas}}</td>
+			<td class="tr-idod">{{resumen.modificacion.cerradas}}</td>
+			<td class="tr-idod">{{resumen.conclusion.abiertas}}</td>
+	    	<td class="tr-idod">{{resumen.conclusion.cerradas}}</td>
+		</tr>
+		<tr>
+			<td class="tr-fhnp" colspan="6">USUARIOS DEL SISTEMA (Total: {{resumen.total_usuarios}}) </td>
+		</tr>
+		<tr>
+			<td class="tr-1a2g" style="background: #f6fff6;" colspan="2">DECLARANTES</td>
+			<td class="tr-1a2g" style="background: #f6fff6;" colspan="2">OIC/OPERADOR</td>
+			<td class="tr-1a2g" style="background: #f6fff6;" colspan="2">ADMINISTRADOR</td>
+		</tr>
+		<tr>
+			<td class="tr-1a2g">ACTIVOS</td>
+			<td class="tr-1a2g">INACTIVOS</td>
+			<td class="tr-1a2g">ACTIVOS</td>
+			<td class="tr-1a2g">INACTIVOS</td>
+			<td class="tr-1a2g">ACTIVOS</td>
+	    	<td class="tr-1a2g">INACTIVOS</td>
+		</tr>
+		<tr>
+			<td class="tr-idod">{{resumen.activos.declarantes|length}} </td>
+			<td class="tr-idod">{{resumen.inactivos.declarantes|length}}</td>
+			<td class="tr-idod">{{resumen.activos.oic|length}}</td>
+			<td class="tr-idod">{{resumen.inactivos.oic|length}}</td>
+			<td class="tr-idod">{{resumen.activos.admin|length}}</td>
+	    	<td class="tr-idod">{{resumen.inactivos.admin|length}}</td>
+		</tr>
 	</table>
+
+	<hr>
+	
+	<!--USUARIOS ACTIVOS PENDIENTES POR CERRAR DECLARACION INICIAL-->
+	{% if resumen.usuarios_activos_d_inicial %}
+		<table class="tr">	
+			<tr>
+				<th class="tr-ukxx" colspan="4">Declarantes activos pendientes por cerrar declaración inicial</th>
+			</tr>
+			{% for usuario_activo_d_inicial in resumen.usuarios_activos_d_inicial %}
+				<tr>
+					<td>{{usuario_activo_d_inicial.first_name}} {{usuario_activo_d_inicial.last_name}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		<p style="color:gray;">Ningún usuario pendiente</p> 
+	{% endif %}
 	<br>
-	{% if tipo_declaracion == 'resumen_declaracion' %}
+	<!--USUARIOS ACTIVOS PENDIENTES POR INCIAR DECLARACION-->
+	{% if resumen.usuarios_activos_d_pendiente %}
+		<table class="tr">	
+			<tr>
+				<th class="tr-ukxx"> Declarantes activos pendientes por iniciar declaración inicial</th>
+			</tr>
+			{% for usuario_activo_d_pendiente in resumen.usuarios_activos_d_pendiente %}
+				<tr>
+					<td>{{usuario_activo_d_pendiente.first_name}} {{usuario_activo_d_pendiente.last_name}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		<p style="color:gray;">Ningún usuario pendiente</p> 
+	{% endif %}
+	<br>
+
+	{% if tipo_reporte == 'resumen_declaracion' %}
 	   {% include "declaracion/admin/reportes_resumido.html" %}
-	{% elif tipo_declaracion == 'completo_declaracion' %}
+	{% elif tipo_reporte == 'completo_declaracion' %}
 	  {% include "declaracion/admin/reportes_completo.html" %}
 	{% endif %}
 {% endblock %}

@@ -75,7 +75,7 @@
           <thead>
             <tr>
               <th scope="col">NOMBRE</th>
-              <th scope="col">F.INGRESO</th>
+              <th scope="col">{% if tipo_registro == 'registrado' %} F.INGRESO{% else %} F.REGISTRO {% endif %}</th>
               <th scope="col">RFC</th>
               <th scope="col">ESTATUS</th>
               <th scope="col">VER</th>

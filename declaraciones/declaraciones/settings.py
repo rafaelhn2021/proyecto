@@ -87,7 +87,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -95,6 +94,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'loaders': [
+               ('django.template.loaders.cached.Loader', [
+                   'django.template.loaders.filesystem.Loader',
+                   'django.template.loaders.app_directories.Loader',
+               ]),
+            ]
         },
     },
 ]
@@ -252,7 +257,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = 'cedhjdeclaraciones@gmail.com'
+EMAIL_HOST_PASSWORD = 'cedhj2021'
 
 LIMIT_DEC_SIMP=16

@@ -20,7 +20,8 @@ from declaracion.models import (Declaraciones, InfoPersonalVar,
                                 BeneficiosGratuitos, Inversiones, DeudasOtros, PrestamoComodato, Fideicomisos,DeclaracionFiscal)
 from declaracion.models.catalogos import CatPuestos
 from declaracion.forms import ConfirmacionForm
-from .utils import (validar_declaracion, campos_configuracion_todos, declaracion_datos,set_declaracion_extendida_simplificada)
+from .utils import (validar_declaracion, campos_configuracion_todos, declaracion_datos,
+                    set_declaracion_extendida_simplificada, task_crear_pdf_declaracion)
 from django.conf import settings
 from django.forms.models import model_to_dict
 from itertools import chain
@@ -36,10 +37,11 @@ from weasyprint.fonts import FontConfiguration
 
 
 
+
 CACHE_TTL = getattr(settings, 'CACHE_TTL', 60*1)
 
 
-def get_context_InformacionPersonal(folio_declaracion, usuario):
+def get_context_InformacionPersonal(declaracion):
     """
     Function get_context_InformacionPersonal
     ----------
@@ -58,12 +60,7 @@ def get_context_InformacionPersonal(folio_declaracion, usuario):
     context: dict
 
     """
-    try:
-        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion), info_personal_fija__usuario=usuario).all()[0]
-    except Exception as e:
-        folio_declaracion = None
-
-    if folio_declaracion:
+    if declaracion:
         
         info_personal_var = InfoPersonalVar.objects.filter(declaraciones=declaracion).first()
         info_personal_fija = InfoPersonalFija.objects.filter(declaraciones=declaracion).first()
@@ -96,15 +93,12 @@ def get_context_InformacionPersonal(folio_declaracion, usuario):
         'experiecia_laboral': experiecia_laboral,
         'conyuge_dependientes': conyuge_dependientes,
         'otros_dependientes': otros_dependientes,
-        'observaciones': observaciones,
-        'folio_declaracion': folio_declaracion,
-        'avance':declaracion.avance
+        'observaciones': observaciones
     }
 
     return context
 
-
-def get_context_Intereses(folio_declaracion, usuario):
+def get_context_Intereses(declaracion):
     """
     Function get_context_Intereses
     ----------
@@ -124,7 +118,6 @@ def get_context_Intereses(folio_declaracion, usuario):
 
     """
     try:
-        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion),info_personal_fija__usuario=usuario).all()[0]
         activas = declaracion.representaciones_set.filter(es_representacion_activa=True).all()
         pasivas = declaracion.representaciones_set.filter(es_representacion_activa=False).all()
         socio = SociosComerciales.objects.filter(declaraciones=declaracion) # old_v = False
@@ -132,13 +125,6 @@ def get_context_Intereses(folio_declaracion, usuario):
         apoyo = Apoyos.objects.filter(declaraciones=declaracion) # old_v = False
         clientes = ClientesPrincipales.objects.filter(declaraciones=declaracion)
         beneficios = BeneficiosGratuitos.objects.filter(declaraciones=declaracion)
-
-        seccion_id = Secciones.objects.filter(url='intereses-observaciones').first()
-        seccion = SeccionDeclaracion.objects.filter(declaraciones=declaracion, seccion=seccion_id).first()
-        if seccion:
-            observaciones = seccion.observaciones
-        else:
-            observaciones = ''
 
     except Exception as e:
         folio_declaracion = ''
@@ -151,15 +137,10 @@ def get_context_Intereses(folio_declaracion, usuario):
         'beneficios': beneficios,
         'socios': socio,
         'membresias': membresia,
-        'apoyos': apoyo,
-        'folio_declaracion': folio_declaracion,
-        'avance':declaracion.avance,
-        'observaciones': observaciones,
+        'apoyos': apoyo
     }
 
     return context
-
-
 
 def get_context_pasivos(folio_declaracion, usuario):
     """
@@ -206,8 +187,7 @@ def get_context_pasivos(folio_declaracion, usuario):
 
     return context
 
-
-def get_context_ingresos(folio_declaracion, usuario):
+def get_context_ingresos(declaracion):
     """
     Function get_context_ingresos
     ----------
@@ -227,7 +207,6 @@ def get_context_ingresos(folio_declaracion, usuario):
 
     """
     try:
-        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion),info_personal_fija__usuario=usuario).all()[0]
         IngresosNetos = IngresosDeclaracion.objects.filter(tipo_ingreso=1, declaraciones=declaracion).first()
         IngresosNetos_anterior = IngresosDeclaracion.objects.filter(tipo_ingreso=0, declaraciones=declaracion).first()
 
@@ -240,7 +219,6 @@ def get_context_ingresos(folio_declaracion, usuario):
     }
 
     return context
-
 
 def get_inmuebles(dictionary, objs, name, title=''):
     datos = []
@@ -259,8 +237,7 @@ def get_inmuebles(dictionary, objs, name, title=''):
         dictionary.append('</div>')
     return dictionary
 
-
-def get_context_activos(folio_declaracion, usuario):
+def get_context_activos(declaracion):
     """
     Function get_context_activos
     ----------
@@ -281,42 +258,68 @@ def get_context_activos(folio_declaracion, usuario):
     """
     context = {}
     try:
-        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion), info_personal_fija__usuario=usuario).all()[0]
-
         activos_bienes = ActivosBienes.objects.filter(declaraciones=declaracion, cat_activo_bien_id=ActivosBienes.BIENES_INMUEBLES).first() 
         Inmueble_declarante = BienesPersonas.objects.filter(activos_bienes=activos_bienes, cat_tipo_participacion_id=BienesPersonas.DECLARANTE)
         Inmuebles_propAnterior = BienesPersonas.objects.filter(activos_bienes=activos_bienes, cat_tipo_participacion_id=BienesPersonas.PROPIETARIO_ANTERIOR)
-        
-
-        kwargs = { 'folio_declaracion':folio_declaracion }
-        agregar, editar_id, bienes_inmuebles_data, informacion_registrada = ( declaracion_datos(kwargs, BienesInmuebles, declaracion))
-        
-        #inmueble = sorted(chain(informacion_registrada, Inmueble_declarante, Inmuebles_propAnterior), key=lambda instance: instance.created_at)
-
+                
         inmueble = BienesInmuebles.objects.filter(declaraciones=declaracion)
         vehiculos = MueblesNoRegistrables.objects.filter(declaraciones=declaracion)
         muebles = BienesMuebles.objects.filter(declaraciones=declaracion)
-        error = {}
     
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print(e, exc_type, fname, exc_tb.tb_lineno)
         declaracion = {}
         inmueble = {}
         vehiculos = {}
         muebles = {}
-        error = e
 
     context.update({
         'declaracion': declaracion,
         'inmuebles': inmueble,
         'vehiculos': vehiculos,
-        'muebles': muebles, 
-        'error': error,
+        'muebles': muebles
     })
 
     return context
+
+def get_context_vehiculos(declaracion):
+    try:
+        muebles_no_registrable = MueblesNoRegistrables.objects.filter(declaraciones=declaracion)
+    except Exception as e:
+        muebles_no_registrable = None
+
+    return muebles_no_registrable
+
+def get_context_inversiones(declaracion):
+    try:
+        inversiones_data = Inversiones.objects.filter(declaraciones=declaracion)
+    except Exception as e:
+        inversiones_data = None
+
+    return inversiones_data
+
+def get_context_deudasotros(declaracion):
+    try:
+        deudas_data = DeudasOtros.objects.filter(declaraciones=declaracion)
+    except Exception as e:
+        deudas_data = None
+
+    return deudas_data
+
+def get_context_prestamocomodato(declaracion):
+    try:
+        presamocomodato_data =  PrestamoComodato.objects.filter(declaraciones=declaracion,campo_default=False)
+    except Exception as e:
+        presamocomodato_data = None
+
+    return presamocomodato_data
+
+def get_context_fideicomisos(declaracion):
+    try:
+        fideicomisos_data =  Fideicomisos.objects.filter(declaraciones=declaracion)
+    except Exception as e:
+        fideicomisos_data = None
+
+    return fideicomisos_data
 
 #@cache_page(CACHE_TTL)
 class ConfirmacionAllinOne(View):
@@ -334,27 +337,24 @@ class ConfirmacionAllinOne(View):
         context = {}
         folio_declaracion = self.kwargs['folio']
         usuario = request.user
+        
+        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion), info_personal_fija__usuario=usuario).first()
+        
+        context.update(get_context_InformacionPersonal(declaracion))
+        context.update(get_context_Intereses(declaracion))
+        context.update(get_context_ingresos(declaracion))
+        context.update(get_context_activos(declaracion))
 
-        context.update(get_context_InformacionPersonal(folio_declaracion, usuario))
-        context.update(get_context_Intereses(folio_declaracion, usuario))
-        context.update(get_context_ingresos(folio_declaracion, usuario))
-        context.update(get_context_activos(folio_declaracion, usuario))
-        context.update(get_context_pasivos(folio_declaracion, usuario))
-
-        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion), info_personal_fija__usuario=usuario).all()[0]
-        vehiculos = MueblesNoRegistrables.objects.filter(declaraciones=declaracion)
-        inversiones = Inversiones.objects.filter(declaraciones=declaracion)
-        adeudos = DeudasOtros.objects.filter(declaraciones=declaracion)
-        prestamos = PrestamoComodato.objects.filter(declaraciones=declaracion,campo_default=0)
-        fideicomisos = Fideicomisos.objects.filter(declaraciones=declaracion)
-        context.update({"vehiculos": vehiculos})
-        context.update({"inversiones": inversiones})
-        context.update({"adeudos": adeudos})
-        context.update({"prestamos": prestamos})
-        context.update({"fideicomisos": fideicomisos})
+        context.update({"vehiculos": get_context_vehiculos(declaracion)})
+        context.update({"inversiones": get_context_inversiones(declaracion)})
+        context.update({"adeudos": get_context_deudasotros(declaracion)})
+        context.update({"prestamos": get_context_prestamocomodato(declaracion)})
+        context.update({"fideicomisos": get_context_fideicomisos(declaracion)})
 
         context.update({"fiscal": DeclaracionFiscal.objects.filter(declaraciones=declaracion.pk).first()})
         context.update({"valor_privado_texto": "VALOR PRIVADO"})
+        context.update({"avance": declaracion.avance})
+        context.update({"folio_declaracion": folio_declaracion})
 
         #Determina la información a mostrar por tipo de declaración
         context.update(set_declaracion_extendida_simplificada(context['info_personal_fija']))
@@ -387,67 +387,19 @@ class ConfirmarDeclaracionView(View):
 
 
         folio_declaracion = self.kwargs['folio']
-        declaracion = validar_declaracion(request, folio_declaracion)
+        try:
+            declaracion = validar_declaracion(request, folio_declaracion)
+        except Exception as e:
+            return redirect('declaraciones-previas')
+
+            
         if 'user' in request:
             usuario = request.user
         else:
             usuario = declaracion.info_personal_fija.usuario.pk
         
-        context = {}
-
-        context.update(get_context_InformacionPersonal(folio_declaracion, usuario))
-        context.update(get_context_Intereses(folio_declaracion, usuario))
-        context.update(get_context_ingresos(folio_declaracion, usuario))
-        context.update(get_context_activos(folio_declaracion, usuario))
-        context.update(get_context_pasivos(folio_declaracion, usuario))
-
-
-        declaracion = Declaraciones.objects.filter(folio=uuid.UUID(folio_declaracion), info_personal_fija__usuario=usuario).all()[0]
-        vehiculos = MueblesNoRegistrables.objects.filter(declaraciones=declaracion)
-        inversiones = Inversiones.objects.filter(declaraciones=declaracion)
-        adeudos = DeudasOtros.objects.filter(declaraciones=declaracion)
-        prestamos = PrestamoComodato.objects.filter(declaraciones=declaracion, campo_default=0)
-        fiscal = DeclaracionFiscal.objects.filter(declaraciones=declaracion).first()
-        context.update({"vehiculos": vehiculos})
-        context.update({"inversiones": inversiones})
-        context.update({"adeudos": adeudos})
-        context.update({"prestamos": prestamos})
-        context.update({"fiscal": fiscal})
-        context.update({"valor_privado_texto": "VALOR PRIVADO"})
-
-        if declaracion.datos_publicos == False:
-           context.update({"campos_privados": campos_configuracion_todos('p')})
-
-
-        #Determina la información a mostrar por tipo de declaración
-        context.update(set_declaracion_extendida_simplificada(context['info_personal_fija']))
-       
         usuario_ = User.objects.get(pk=usuario)
         
-        response = HttpResponse(content_type="application/pdf")
-        response['Content-Disposition'] = "inline; filename={}_{}.pdf".format(usuario_.username,declaracion.cat_tipos_declaracion)
-        html = render_to_string(self.template_name, context)
-
-        year=datetime.date.today().year
-        tipo=declaracion.cat_tipos_declaracion.codigo
-        if context['info_personal_fija']:
-            if context['info_personal_fija'].cat_puestos:
-                area = context['info_personal_fija'].cat_puestos.cat_areas.codigo
-            else: 
-                area=""
-        else: 
-            area=""
-        font_config = FontConfiguration()
-        directory = './media/declaraciones/'+tipo+'/'+str(year)+'/'+area+'/'
-        filename = "{}_{}.pdf".format(usuario_.username,declaracion.cat_tipos_declaracion)
-        file_path = os.path.join(directory, filename)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        pdf2 = HTML(string=html,base_url=request.build_absolute_uri()).write_pdf(font_config=font_config) #Convierte html a pdf para descargarse
-        f = open(file_path, "wb")
-        f.write(pdf2)
-        f.close()
-
         try:
             confirmacion = ConfirmacionForm(request.POST)
             if confirmacion.is_valid():
@@ -456,7 +408,6 @@ class ConfirmarDeclaracionView(View):
 
                 declaracion.cat_estatus_id = 4
                 declaracion.fecha_recepcion = datetime.date.today()
-                #declaracion.datos_publicos = bool(request.POST.get('datos_publicos'))
 
                 if 'datos_publicos' in request.POST:
                     datos_publicos = json.loads(request.POST.get('datos_publicos').lower())
@@ -466,7 +417,8 @@ class ConfirmarDeclaracionView(View):
                 declaracion.datos_publicos = datos_publicos
 
                 declaracion.save()
-                #return redirect('declaraciones-previas')
+                #Se manda llamar función para ejecutar en background la creación del PDF
+                task_crear_pdf_declaracion(declaracion, request.build_absolute_uri())
             else:
                 messages.warning(request, u"Debe indicar si los datos serán públicos")
                 return redirect('declaracion:confirmar-allinone', folio=declaracion.folio)

@@ -25,7 +25,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from sitio.forms import LoginForm, PasswordResetForm
 from sitio.util import account_activation_token
-from declaracion.views.utils import campos_configuracion_todos,declaracion_datos,set_declaracion_extendida_simplificada
+from declaracion.views.utils import (campos_configuracion_todos,declaracion_datos, 
+                                    validar_declaracion,set_declaracion_extendida_simplificada,
+                                    task_crear_pdf_declaracion)
 from declaracion.forms import ConfirmacionForm
 from django.template.loader import render_to_string
 from declaracion.models import (Declaraciones, InfoPersonalVar,
@@ -39,12 +41,17 @@ from declaracion.models import (Declaraciones, InfoPersonalVar,
 from declaracion.models.catalogos import CatPuestos, CatAreas
 from .models import declaracion_faqs as faqs, sitio_personalizacion 
 from .forms import Personalizar_datosEntidadForm
-import datetime
 import requests
+from os import path
 import json
 from django.contrib.auth.models import User
 from django.core.cache import cache
 import base64
+
+from datetime import datetime, date
+from fnmatch import fnmatch
+import redis
+import time
 
 
 class IndexView(View):
@@ -162,7 +169,7 @@ class LoginView(FormView):
         else:
             valido_captcha = True
         
-        num=cache.get_or_set('intentos',0,300)
+        num=cache.get_or_set(username,0,300)
        
         if num<5:
             if valido_captcha:
@@ -170,16 +177,17 @@ class LoginView(FormView):
                 if form.is_valid():
                     login(request,user, backend='django.contrib.auth.backends.ModelBackend')
                     return HttpResponseRedirect(self.get_success_url())
+                    cache.set(username,0,300)
                 else:
                     context = {'form': form,'cap_webkey':self.cap_webkey,
                 'cap_bool':cap_bool}
 
-                    num=cache.get('intentos')
+                    num=cache.get(username)
                     if num:
                         num=num+1
-                        cache.set('intentos',num,300)
+                        cache.set(username,num,300)
                     else:
-                        cache.set('intentos',1,300)
+                        cache.set(username,1,300)
 
                     return render(request,self.template_name, context)
 
@@ -505,16 +513,122 @@ def activar(request, uidb64, token):
     else:
         return HttpResponse('¡El enlace es invalido!')
 
-class DeclaracionesPreviasView(ListView):
-    template_name = "sitio/declaraciones-previas.html"
-    context_object_name = "declaraciones"
 
-    def get_queryset(self):
-        queryset = Declaraciones.objects.filter(
+class DeclaracionesPreviasView(View):
+    template_name = "sitio/declaraciones-previas.html"
+
+    @method_decorator(login_required(login_url='/login'))
+    def get(self, request, *args, **kwargs):
+        declaraciones = Declaraciones.objects.filter(
             cat_estatus_id = 4,
             info_personal_fija__usuario=self.request.user
-            )
-        return queryset
+        )
+
+        #Se recorren las declaración para buscar aquellas que tienen un archivo pdf creado
+        declaraciones_archivos = []
+        for declaracion in declaraciones:
+            declaracion_objc = {"declaracion": declaracion, "archivo": ""}
+
+            archivo_pdf =  obtener_pdf_existente(declaracion)            
+            if archivo_pdf:
+                declaracion_objc["archivo"] = archivo_pdf
+            
+            estatus = obtener_estatus_formato_pdf_declaracion(declaracion)
+            declaracion_objc["estatus_proceso"] = estatus
+
+            #Se verfica que el proceso se ejecuto cuando el usuario cerro su declaración mediante la fecha
+            if date.today() == declaracion.fecha_recepcion.date() and not archivo_pdf:
+                declaracion_objc["cierre_declaracion"] = True
+
+            declaraciones_archivos.append(declaracion_objc)
+        
+        return render(request, self.template_name, {"declaraciones": declaraciones_archivos})
+
+
+def obtener_estatus_formato_pdf_declaracion(declaracion):
+    """
+    Function obtener_estatus_formato_pdf_declaracion
+    ----------
+    Función que se encarga de buscar task de ToPDFScript y obtener el progreso
+    
+    Parameters
+    ----------
+    declaracion: obj
+        Objecto del Modelo de Declaraciones
+    """
+    #Se hace conexión a redis para buscar procesos corriendo del PDF
+    redis_cnx = redis.Redis(host='192.168.156.3',db=1,port=6379)
+    estatus_task = redis_cnx.hget("declaracion",declaracion.pk)
+    estatus_task_int = None
+
+    if estatus_task:
+        estatus_task_int = int(estatus_task.decode("utf-8"))
+
+    return estatus_task_int
+
+
+def obtener_pdf_existente(declaracion):
+    #Se busca archivo fisico en el sistema con la ruta absoluta
+        path_media = settings.MEDIA_ROOT + '/declaraciones'
+        pattern = "*.pdf"
+        lista_pdf = []
+
+        #Se recorren todos los subdirectorios para obtener los nombres de los archivos pdf
+        for path, subdirs, files in os.walk(path_media):
+            for name in files:
+                if fnmatch(name, pattern):
+                    #Se reemplaza la ruta absoluta por la url de django
+                    path_real_file = path.replace(settings.MEDIA_ROOT, settings.MEDIA_URL)
+                    lista_pdf.append(os.path.join(path_real_file, name))
+
+        nombre_archivo = "{}_{}_{}.pdf".format(declaracion.info_personal_fija.rfc, declaracion.cat_tipos_declaracion.codigo, declaracion.fecha_recepcion.date().strftime('%d%m%y'))
+        indices_lista_archivos = [i for i, s in enumerate(lista_pdf) if nombre_archivo in s]
+            
+        if len(indices_lista_archivos) >= 1:
+            return lista_pdf[indices_lista_archivos[0]]
+        
+        return None
+
+
+def consultaEstatusTaskPDFDeclaracion(request):
+    """
+    Función que se encarga de de las consultas ajax para obtener el proceso
+    """
+    response = {}
+    declaracion_id = int(request.GET.get('declaracion'))
+    declaracion = Declaraciones.objects.get(pk=declaracion_id)
+
+    estatus = obtener_estatus_formato_pdf_declaracion(declaracion)
+    response['estatus_proceso'] = estatus
+
+    archivo_pdf =  obtener_pdf_existente(declaracion)
+    if archivo_pdf:
+        response["archivo"] = archivo_pdf
+
+    return JsonResponse(response)
+
+
+def crearPDFDeclaracion(request):
+    response = {}
+    declaracion_id = int(request.GET.get('declaracion'))
+    declaracion = Declaraciones.objects.get(pk=declaracion_id)
+
+    task_crear_pdf_declaracion(declaracion, request.build_absolute_uri())
+
+    response['estatus_proceso'] = 10
+    return JsonResponse(response)
+
+
+def eliminarProcesoPDF(request):
+    response = {}
+    redis_cnx = redis.Redis(host='192.168.156.3',db=1,port=6379)
+    declaracion_id = int(request.GET.get('declaracion'))
+
+    redis_cnx.hdel("declaracion", declaracion_id)
+
+    response['eliminado'] = 1
+    return JsonResponse(response)
+
 
 class DeclaracionesPreviasDescargarView(View):
     template_name = "sitio/descargar.html"
@@ -702,18 +816,24 @@ class PersonalizacionCatalogoPuestosView(View):
                 result = self.editar(pkid, puesto, codigo, area)
 
                 if result != True:
-                    self.context["messages"] = {result}
+                    return JsonResponse({"messages": "Surgio un problema con los datos de su puesto, valide toda la información", "tipo": "error"})
                 else:
-                    return JsonResponse({"messages": "editado"})
-
-            if "_eliminar" in current_url and current_url != None: 
-                value = ""
+                    return JsonResponse({"messages": "Editado","tipo": "succes"})
+                    
+            if "_eliminar" in current_url and current_url != None:
+                puesto = CatPuestos.objects.get(pk=pkid).puesto
                 result = self.eliminar(pkid)
 
                 if result != True:
-                    self.context["messages"] = {result}
+                    mensaje_error = "Ha surgido un error al intentar elminar el registro"
+
+                    if '1451' in result:
+                        u"{} {}".format
+                        mensaje_error = u"El puesto - {} - no se puede borrar debido a que el puesto se esta utilizando por un o varios usuarios".format(puesto)
+
+                    return JsonResponse({"messages": mensaje_error,"tipo": "error"})
                 else:
-                    return JsonResponse({"messages": "eliminado"})
+                    return JsonResponse({"messages": u"Puesto - {} - eliminado con éxito ".format(puesto), "tipo": "succes"})
 
             if "_agregar" in current_url and current_url != None:
                 value = request.POST.get("input-puesto-agregar")
@@ -723,7 +843,7 @@ class PersonalizacionCatalogoPuestosView(View):
                 value_empty = re.sub(r'[^\w]', '', value)
 
                 if value_empty == "" or value_empty is None:
-                    self.context["messages"] = {"EL puesto no puede ser nulo y solo debe contener letras"}
+                    self.context["messages"] = {"El puesto no puede ser nulo y solo debe contener letras"}
                 else:
                     result = self.agregar(value, codigo, area_valuea)
                     if result != True:
@@ -795,16 +915,23 @@ class PersonalizacionCatalogoAreasView(View):
                 result = self.editar(pkid,area,codigo)
                 
                 if result != True:
-                    self.context["messages"] = {result}
+                    return JsonResponse({"messages": "Surgio un problema con los datos de su área, valide toda la información", "tipo": "error"})
                 else:
-                    return JsonResponse({"messages": "editado"})
+                    return JsonResponse({"messages": "Editado","tipo": "succes"})
+
             if "_eliminar" in current_url and current_url != None: 
-                value = ""
+                area = CatAreas.objects.get(pk=pkid).area
                 result = self.eliminar(pkid)
                 if result != True:
-                    self.context["messages"] = {result}
+                    mensaje_error = "Ha surgido un error al intentar elminar el registro"
+
+                    if '1451' in result:
+                        u"{} {}".format
+                        mensaje_error = u"El área - {} - no se puede borrar debido a que existe un puesto que hace referencia a esta área".format(area)
+
+                    return JsonResponse({"messages": mensaje_error,"tipo": "error"})
                 else:
-                    return JsonResponse({"messages": "eliminado"})
+                    return JsonResponse({"messages": u"Área - {} - eliminada con éxito ".format(area), "tipo": "succes"})
 
             if "_agregar" in current_url and current_url != None:
                 value_area = request.POST.get("input-area-agregar")
@@ -855,14 +982,23 @@ class PersonalizacionCatalogoAreasView(View):
 def GenerarHTMLView(request):
     template_name='sitio/generar_html.html'
 
-    declaracionInicial = Declaraciones.objects.filter(cat_estatus_id=4, cat_tipos_declaracion_id=1).all()
+    years=[]
+
+    declaracionInicial = Declaraciones.objects.filter(cat_estatus_id=4, cat_tipos_declaracion_id=1).all().order_by('fecha_recepcion')
     declaracionMod = Declaraciones.objects.filter(cat_estatus_id=4, cat_tipos_declaracion_id=2).all()
+    declaraciones = Declaraciones.objects.filter(cat_estatus_id=4).all()
+
+    for dec in declaraciones:
+        if not dec.fecha_recepcion.year in years:
+            years.append(dec.fecha_recepcion.year)
+
     areas = CatAreas.objects.all()
 
     context = {
     'declaracionInicial':declaracionInicial,
     'declaracionMod':declaracionMod,
-    'areas':areas
+    'areas':areas,
+    'years':years
     }
 
     html=render_to_string(template_name, context)
@@ -870,6 +1006,7 @@ def GenerarHTMLView(request):
     archivo=open("prueba.html","w")
     archivo.write(html)
     archivo.close()
+
 
 
     
@@ -897,3 +1034,32 @@ def GenerarHTMLView2(request):
     }
     
     return render(request, template_name, context)
+
+
+
+class PdfConfirmacion(View):
+    template_name="sitio/comprobante.html"
+
+    @method_decorator(login_required(login_url='/login'))
+    def get(self,request,*args,**kwargs):
+        context = {}
+        
+        declaracion = Declaraciones.objects.get(pk=self.kwargs['pk'])
+        usuario = declaracion.info_personal_fija.usuario.pk
+
+        folio_declaracion = str(declaracion.folio)
+        context.update({"declaracion": declaracion})
+        context.update(get_context_InformacionPersonal(folio_declaracion, usuario))
+
+
+        response = HttpResponse(content_type="application/pdf")
+        response['Content-Disposition'] = "inline; filename={}_comprobante.pdf".format(folio_declaracion)
+        html = render_to_string(self.template_name, context)
+
+        font_config = FontConfiguration()
+        HTML(string=html,base_url=request.build_absolute_uri()).write_pdf(response, font_config=font_config)
+
+        return response
+        
+
+

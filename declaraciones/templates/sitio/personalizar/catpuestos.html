@@ -4,7 +4,7 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<section class="container mt-4 body_content">
+<section class="container" style="padding-left: 0px;padding-right: 0px;">
     <div class="row">
         {% if messages %}
             {% for message in messages %}
@@ -59,11 +59,11 @@
             </div>
         </div>
         </div>
-        <div class="col-12">
+        <div class="col-12" style="max-height: 800px;overflow: auto;">
             <!--span>Se muestran {{puestos.count}} de {{puestos.count}} elementos  </span-->
 
                 <table  class="table table-striped">
-                    <thead style=" width: 500px;overflow-x: auto;">
+                    <thead style=" width: 600px;">
                         <tr>
                             <th scope="col">
                                 <input type="checkbox" id="puesto-check-all" onchange="check_all(this.checked)">
@@ -75,7 +75,7 @@
                             <th scope="col" class="text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody style=" height: 200px;overflow-y: auto;overflow-x: hidden;">
+                    <tbody>
                         {% if puestos.count > 0 and puestos != None %}
                             {% for puesto in puestos %}
                             <tr id="id-{{puesto.pk}}">
@@ -85,7 +85,7 @@
                                 <td>{{forloop.counter}}</td>
                                 <td class="px-5">
                                     <form class="form row" id="area-editar-{{puesto.pk}}" method="POST" action="{% url 'personalizar_catpuestos_editar' puesto.pk %}" style="display: none;padding-top: 1rem;" pk="{{puesto.pk}}">
-                                        <select name="nuevo_puesto_area" required="" class="form-control" id="id_cat_areas_{{puesto.pk}}">
+                                        <select name="nuevo_puesto_area" required class="form-control" id="id_cat_areas_{{puesto.pk}}">
                                           <option value="" selected="">---------</option>
                                           {% for area in areas %}
                                             <option value="{{area.pk}}">{{area.area}}</option>
@@ -98,7 +98,7 @@
                                 </td>
                                 <td class="px-5">
                                     <form class="form row" id="puesto-codigo-editar-{{puesto.pk}}" method="POST" action="{% url 'personalizar_catpuestos_editar' puesto.pk %}" style="display: none;padding-top: 1rem;" pk="{{puesto.pk}}">
-                                        <input class="form-control" type="number" value="{{puesto.codigo}}" id="id_codigo_{{puesto.pk}}"> 
+                                        <input class="form-control" required type="number" min="0" oninput="this.value = Math.abs(this.value)" value="{{puesto.codigo}}" id="id_codigo_{{puesto.pk}}"> 
                                     </form>
                                     <div id="puesto-codigo-{{puesto.pk}}">{{puesto.codigo}}</div>
                                 </td>
@@ -114,8 +114,9 @@
                                         <div class="form-group col-2">
                                             <input value="Guardar" class="btn btn-outline-primary text-uppercase font-weight-bold" type="submit" style="font-size: 10px;">
                                         </div>
-                                        <div class="col-1">                                        
-                                            <a class="btn btn-sm color-peligro" onclick="catpuesto_editar_toogle({{puesto.pk}})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <div class="col-1">
+                                            <!-- CIERRA EL FORMA PARA EDICIÓN-->                                     
+                                            <a class="btn btn-sm color-peligro" onclick="catpuesto_edicion_toogle({{puesto.pk}})"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
                                             </svg></a>
                                         </div>
@@ -125,7 +126,8 @@
 
                                 <td>
                                     <div class="dropdown">
-                                        <button class="btn btn-link" onclick="catpuesto_editar_toogle({{puesto.pk}})" id="btn-puesto-editar-{{puesto.pk}}"><img src="{% static '/src/img/editar.svg' %}" alt="editar {{puesto.pk}}"></button>
+                                        <!-- ABRE FORMULARIO EIDICÓN-->
+                                        <button class="btn btn-link" onclick="catpuesto_edicion_toogle({{puesto.pk}})" id="btn-puesto-editar-{{puesto.pk}}"><img src="{% static '/src/img/editar.svg' %}" alt="editar {{puesto.pk}}"></button>
                                         <button class="btn btn-link" type="button" id="dropdownMenuButton-{{puesto.pk}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static '/src/img/eliminar.svg' %}" alt="eliminar {{puesto.pk}}"></button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{puesto.pk}}">
                                             <span class="text-center">¿Eliminar el puesto?</span>
@@ -164,13 +166,13 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="puesto-add" class="label-secondary">Puesto Nuevo </label>
-                <input id="input-puesto-agregar" required="" type="text" name="input-puesto-agregar" class="form-control" pattern="[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ]+[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ ]+" title=" ¡Sólo se aceptan números y letras!">
+                <input id="input-puesto-agregar" required type="text" name="input-puesto-agregar" class="form-control" pattern="[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ]+[A-z0-9ÁÉÍÓÚáéíóúÑñöÖüÜ ]+" title=" ¡Sólo se aceptan números y letras!">
 
                 <label for="puesto-add" class="label-secondary">Nivel </label>
-                <input id="input-puesto_codigo-agregar" required="" type="number" name="input-puesto_codigo-agregar" class="form-control">
+                <input id="input-puesto_codigo-agregar" required type="number" name="input-puesto_codigo-agregar" class="form-control">
 
                 <label for="puesto-add" class="label-secondary">Área del puesto</label>
-                <select name="input-puesto_area-agregar" required="" class="form-control" id="id_cat_areas_{{puesto.pk}}">
+                <select name="input-puesto_area-agregar" required class="form-control" id="id_cat_areas_{{puesto.pk}}">
                   <option value="" selected="">---------</option>
                   {% for area in areas %}
                     <option value="{{area.pk}}">{{area.area}}</option>
@@ -186,6 +188,24 @@
       </div>
     </div>
   </div>
+
+  <div class="modal" tabindex="-1" role="dialog" id="ModalPuestos">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <center>
+                <img src="{% static '/src/img/SEAJAL-Declaraciones-Mi_cuenta-Icono_alerta.png' %}" style="padding-bottom: 20px;height: 50px;">
+                <div class="modal-body-puestos" style="height:auto;padding: 3em;max-height: 500px; overflow: auto;">
+                </div>
+            </center>
+        </div>
+    </div>
+  </div>
+
 {% endblock %}
  
 {% block body_script %}
@@ -208,12 +228,14 @@
             }
         });
     });
+    
     function check_all(checked){
         var checkboxes = document.querySelectorAll('input[type^="checkbox"]');
         for (i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = checked;
         }
     }
+
     function catpuesto_agregar(){
         let puesto = $("#input-puesto-agregar").val();
         console.log("puesto value : " + puesto);
@@ -242,7 +264,7 @@
         alert("ToDo ");
     }
     function catpuesto_eliminar(id, url){
-            ajax_(id, url);
+        ajax_eliminar_puesto(id, url);
     }
     function catpuesto_eliminar_multiple(){
         var checkboxes = document.querySelectorAll('input[type^="checkbox"]:checked:not([id*="puesto-check-all"])');
@@ -261,6 +283,9 @@
         progressbar.css("width", "0%").text("0%");
         progress_div.show();
         progressbar.show();
+
+        var mensajes_json = []
+        var ids_registro = []
         $.each(checkboxes, function eliminar_async(i){
             if (i < len ){
                 let _id = checkboxes[i].id;
@@ -279,10 +304,9 @@
                     url : url,
                     type : "POST",
                     success : function(json) {
-                        console.log(json);
-                        if(json["messages"] == "eliminado"){
-                            console.log("eliminado");
-                        }
+                        mensajes_json.push(json);
+                        ids_registro.push(_id);
+                        mensajes_puestos(mensajes_json,ids_registro);
                     },
                     error : function(xhr,errmsg,err) {
                         console.log(xhr.status + ": " + xhr.responseText);
@@ -290,11 +314,11 @@
                         return xhr.responseText;
                     },
                     complete: function(){
-                        $("#id-"+_id).remove();
                         progress_val =  i + 1;
                         if(progress_val == len ){ progress_val_p = 100} else {progress_val_p = ((progress_val*100)/len)}
                         progressbar.css("width", progress_val_p.toString()+"%").text(progress_val_p.toString()+"%");
-                        i++;                        
+                        i++;
+                        setTimeout(function(){ progress_div.hide(); progressbar.hide() }, 4000);                         
                     }
                 });
             }else{
@@ -326,7 +350,10 @@
                 data: form.serialize(),
                 success: function(data)
                 {
-                    location.reload();
+                    var response = mensajes_puestos([data])
+                    if(response){
+                        location.reload();
+                    }
                 },
                 error : function(xhr,errmsg,err) {
                     console.log(xhr.status + ": " + xhr.responseText);
@@ -335,7 +362,7 @@
         };
         return true;
     }
-    function catpuesto_editar_toogle(id){
+    function catpuesto_edicion_toogle(id){
         $("#puesto-editar-"+id).toggle();
         $("#puesto-"+id).toggle();
 
@@ -344,7 +371,7 @@
 
         $("#area-editar-"+id).toggle();
         $("#area-"+id).toggle();
-        $("#id_cat_areas_"+id).prop('selectedIndex', parseInt($("#area-"+id).attr("valor")));
+        $("#id_cat_areas_"+id).val($("#area-"+id).attr("valor"))
 
     }
 
@@ -352,7 +379,7 @@
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
-    function ajax_(id, url){
+    function ajax_eliminar_puesto(id, url){
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
@@ -365,15 +392,39 @@
                 url : url,
                 type : "POST",
                 success : function(json) {
-                    console.log(json);
-                    $("#id-"+id).remove();
-                    return true;
+                    mensajes_puestos([json],[id]);
                 },
                 error : function(xhr,errmsg,err) {
                     console.log(xhr.status + ": " + xhr.responseText);
                     return xhr.responseText;
                 }
             });
+    }
+
+    function mensajes_puestos(jsons, id=null){
+        var response = true;
+        var modalEliminacion = $("#ModalPuestos");
+        $( ".modal-body-puestos").empty()
+
+        for(var i =0; i<jsons.length; i++){
+            if(jQuery.type(jsons[i]) == 'object'){            
+                if(jsons[i].tipo == "error"){
+                    response = false;
+                    $( ".modal-body-puestos").append( '<h5>'+"<img src="+"{% static '/src/img/status-pending.svg' %}"+' style="height: 15px;"> '+jsons[i].messages +'</h5>' );
+                }else{
+                    $( ".modal-body-puestos").append( '<h5>'+"<img src="+"{% static '/src/img/status-success.svg' %}"+' style="height: 15px;"> '+ jsons[i].messages +'</h5>' );
+                    
+                    if(id != null){
+                        $("#id-"+id[i]).remove();
+                    }
+                }
+            }else{
+                response = false;
+                $( ".modal-body-puestos").append( '<h5> Se ha presentado un error al eliminar el registro '+ id +' </h5>' );
+            }
+        }
+        modalEliminacion.modal('show');
+        return response;
     }
 </script>
 {% endblock %}

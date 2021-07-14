@@ -8,6 +8,9 @@
     <div class="row w-100">
         {% include 'layout/sidebar.html' %}
         <div class="col-md-9 pl-5">
+            {% if folio_declaracion %}
+                <center><span class="font-weight-extralight" style="color: #6c757d;font-size: larger;">Folio: 13e69709-3ed4-47d6-9cbd-4ef2396b911e</span></center>
+            {% endif %}
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb text-sm text-uppercase font-weight-extralight">
                     <li class="breadcrumb-item"><a href="#" class="text-reset">Declaración en curso</a></li>
@@ -28,11 +31,11 @@
             {% endif %}
             
             {% if cat_tipos_declaracion %}
-              <form action="{% url 'declaracion:informacion-general' cat_tipos_declaracion %}" method="post" id="formInfoPersonal" data-municipios-url="{% url 'declaracion:lista_municipios' %}">
+              <form class="block_submit" action="{% url 'declaracion:informacion-general' cat_tipos_declaracion %}" method="post" id="formInfoPersonal" data-municipios-url="{% url 'declaracion:lista_municipios' %}">
             {% endif %}
             
             {% if folio_declaracion %}
-              <form action="{% url 'declaracion:informacion-general' folio_declaracion %}" method="post" id="formInfoPersonal" data-municipios-url="{% url 'declaracion:lista_municipios' %}">
+              <form class="block_submit" action="{% url 'declaracion:informacion-general' folio_declaracion %}" method="post" id="formInfoPersonal" data-municipios-url="{% url 'declaracion:lista_municipios' %}">
             {% endif %}
             {% csrf_token %}
               {{ declaracion }}
@@ -273,6 +276,7 @@
             $('#ms_campos_obligatorios').prepend('<div class="alert alert-danger alert-dismissable alert-link">'+
                   '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
                        '<strong>Favor de llenar todos los campos obligatorios marcados con asterisco * para continuar</strong></div>')
+            $('.block_boton').prop('disabled', false);
 
         } else {
             var myin = document.createElement ("input");

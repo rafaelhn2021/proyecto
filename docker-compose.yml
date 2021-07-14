@@ -71,7 +71,6 @@ services:
             sh -c "/wait" &&
             pip install --upgrade pip &&
             pip install -r requirements.txt &&
-            sh loaddata.sh &&
             echo ...................................... loaddata &&
             uwsgi --ini uwsgi.ini"
     working_dir: /code/declaraciones

@@ -1,11 +1,11 @@
-{% if resumen.iniciales %}
+{% if resumen.iniciales.data %}
 	<table class="tr">
 	  <tr>
-	    <th class="tr-ukxx" colspan="6">DECLARACION INICIAL</th>
+	    <th class="tr-ukxx" colspan="6">DECLARACION INICIAL (Total: {{resumen.iniciales.data|length}})</th>
 	  </tr>
 	</table>
 	<table class="tg_d_resumen">
-	  {% for declaracion_inicial in resumen.iniciales %}
+	  {% for declaracion_inicial in resumen.iniciales.data %}
 	  <tr>
 	    <th class="tg_d_resumen-0pky"><strong>{{declaracion_inicial.folio}}</strong></th>
 	    <th class="tg_d_resumen-dvpl">{{declaracion_inicial.avance}}%</th>
@@ -33,14 +33,48 @@
 
 	<br>
 
-{% if resumen.conclusion %}
+{% if resumen.modificacion.data %}
+	<table class="tr">
+		<tr>
+		<th class="tr-ukxx" colspan="6">DECLARACION MODIFICACIÓN (Total: {{resumen.modificacion.data|length}})</th>
+		</tr>
+	</table>
+	<table class="tg_d_resumen">
+		{% for declaracion_modificacion in resumen.modificacion.data %}
+		<tr>
+		<th class="tg_d_resumen-0pky"><strong>{{declaracion_modificacion.folio}}</strong></th>
+		<th class="tg_d_resumen-dvpl">{{declaracion_modificacion.avance}}%</th>
+		</tr>
+		<tr>
+		<td class="tg_d_resumen-pcvp">
+			<p>
+				<strong>Usuario:</strong> {{declaracion_modificacion.info_personal_fija.nombre_completo|default_if_none:"" }}<br>
+				<strong>RFC:</strong> {{declaracion_modificacion.info_personal_fija.rfc|default_if_none:"" }}<br>
+				<strong>Puesto:</strong> {{declaracion_modificacion.info_personal_fija.puesto|default_if_none:"" }}<br>
+				<strong>Estado:</strong> {{declaracion_modificacion.info_personal_fija.usuario.is_active|yesno:"Activo,No activo"|default_if_none:"" }}<br>
+			</p>
+		</td>
+		<td class="tg_d_resumen-pcvp">
+			<p>
+				<strong>Estado:</strong> {{declaracion_modificacion.cat_estatus.estatus_declaracion|default_if_none:"" }} <br>
+				<strong>Fecha inicio:</strong> {{declaracion_modificacion.fecha_declaracion|date:"D d M Y"|default_if_none:"" }} <br>
+				<strong>Fecha de cierre:</strong> {{declaracion_modificacion.fecha_recepcion|date:"D d M Y"|default_if_none:"" }} <br>
+			</p>
+		</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endif %}
+<br>
+	
+{% if resumen.conclusion.data %}
 	<table class="tr">
 	  <tr>
-	    <th class="tr-ukxx" colspan="6">DECLARACION CONCLUSIÓN</th>
+	    <th class="tr-ukxx" colspan="6">DECLARACION CONCLUSIÓN (Total: {{resumen.conclusion.data|length}})</th>
 	  </tr>
 	</table>
 	<table class="tg_d_resumen">
-	  {% for declaracion_conclusion in resumen.conclusion %}
+	  {% for declaracion_conclusion in resumen.conclusion.data %}
 	  <tr>
 	    <th class="tg_d_resumen-0pky"><strong>{{declaracion_conclusion.folio}}</strong></th>
 	    <th class="tg_d_resumen-dvpl">{{declaracion_conclusion.avance}}%</th>

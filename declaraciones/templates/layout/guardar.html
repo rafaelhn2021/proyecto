@@ -15,8 +15,9 @@
 
     </div>
     <div class="col-6 text-center">
-        <input id="id-guardarycotinuar" type="submit" value="Guardar y continuar" class="btn btn-primary mr-3 text-uppercase font-weight-bold" >
-        <button id="id-guardarysalir" name="accion" value="guardar_salir" class="btn btn-outline-primary text-uppercase font-weight-bold">Guardar y salir</button>
+        <input id="id-guardarycotinuar" type="submit" value="Guardar y continuar" class="btn btn-primary mr-3 text-uppercase font-weight-bold {% if urls.sig == 'direccion' %}block_boton{% endif %}" >
+        
+        <button id="id-guardarysalir" name="accion" value="guardar_salir" class="btn btn-outline-primary text-uppercase font-weight-bold {% if urls.sig == 'direccion' %}block_boton{% endif %}">Guardar y salir</button>
     </div>
     <div class="col-3 text-right">
       {% if puesto > limit_simp %}

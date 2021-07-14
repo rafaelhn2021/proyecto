@@ -123,6 +123,8 @@ def serialize_situacion_patrimonial(declaracion):
         "datosGenerales": serialize_datos_generales(declaracion),
         # $ref: '#/components/schemas/datosCurricularesDeclarante'
         "datosCurricularesDeclarante": serialize_datos_curriculares_declarante(declaracion),
+        # $ref: '#/components/schemas/experienciaLaboral'   
+        "experienciaLaboral": serialize_experiencias_laborales(exp_laborales,declaracion),
         # $ref: '#/components/schemas/ingresos'
         "ingresos": serialize_ingreso(declaracion,1), # TBD,  
         # $ref: '#/components/schemas/bienesInmuebles'
@@ -144,10 +146,6 @@ def serialize_situacion_patrimonial(declaracion):
         # $ref: '#/components/schemas/datosEmpleoCargoComision'
         encargo = encargos.first()
         serialized["datosEmpleoCargoComision"] = serialize_datos_empleado_cargo_comision(encargo,declaracion) # TBD
-
-    if exp_laborales.count() > 0:
-        # $ref: '#/components/schemas/experienciaLaboral'   
-        serialized["experienciaLaboral"] = serialize_experiencias_laborales(exp_laborales,declaracion) # TBD
     
     if declaracion.cat_tipos_declaracion.codigo != "MODIFICACIÓN":
         # $ref: '#/components/schemas/actividadAnualAnterior' 
@@ -258,7 +256,7 @@ def serialize_ingreso(declaracion, tipo):
                     {
                         # $ref: '#/components/schemas/monto'
                         "remuneracion": serialize_monto(servicio["monto"], servicio["moneda"].codigo),
-                        "tipoServicio": servicio["tipo_servicio"]
+                        "tipoServicio": servicio["tipo_servicio"] if servicio["tipo_servicio"] else ""
                     } for servicio in acts_servicios 
                 ]
             },
@@ -506,7 +504,7 @@ def serialize_entidad_federativa(entidad_federativa):
             "clave": entidad_federativa.codigo, 
             "valor": entidad_federativa.entidad_federativa
         }
-    return {"clave":14,"valor":"Jalisco"}
+    return {"clave":'14',"valor":"Jalisco"}
 
 
 def serialize_ubicacion(ubicacion):
@@ -889,7 +887,7 @@ def serialize_datos_empleado_cargo_comision(encargo,declaracion):
     if puesto:
         serialized["areaAdscripcion"] = puesto.cat_areas.area
         serialized["empleoCargoComision"] = puesto.puesto
-        serialized["nivelEmpleoCargoComision"] = puesto.codigo
+        serialized["nivelEmpleoCargoComision"] = str(puesto.codigo)
 
 
     
@@ -1863,6 +1861,7 @@ def serialize_tipo_inversion(tipo_inversion,tipo=0):
 
         if tipo == 1:
             tipo_valor = tipo_inversion.tipo_especifico_inversion.upper()
+            
         else:
             tipo_valor = tipo_inversion.tipo_inversion.upper()
 
@@ -1870,7 +1869,13 @@ def serialize_tipo_inversion(tipo_inversion,tipo=0):
             "clave": tipo_inversion.codigo,
             "valor": tipo_valor
         }
-    return{"clave": "AFOT","valor": "AFORES Y OTROS"}
+
+    if tipo == 1:
+        return_default = {"clave": "AFOR","valor": "AFORES"}
+    else:
+        return_default = {"clave": "AFOT","valor": "AFORES Y OTROS"}
+    
+    return return_default
 
 def serialize_titular_bien(titulares):
     """
@@ -1963,7 +1968,7 @@ def serialize_adeudos_pasivos(declaracion):
                 serialized["tipoOperacion"]= serialize_tipo_operacion(tipo_operacion)
             if adeudo_pasivo.acredor_es_fisica:
                 # $ref: '#/components/schemas/tipoPersona'
-                serialized["otorganteCredito"]["tipoPersona"] = adeudo_pasivo.acredor_es_fisica 
+                serialized["otorganteCredito"]["tipoPersona"] = serialize_persona_fisica_moral(adeudo_pasivo.acredor_es_fisica)
                 serialized["otorganteCredito"]["razon_social"] = adeudo_pasivo.acreedor_nombre if adeudo_pasivo.acreedor_nombre else "" 
                 serialized["otorganteCredito"]["rfc"] = adeudo_pasivo.acreedor_rfc if adeudo_pasivo.acreedor_rfc else ""
                 
@@ -2262,7 +2267,7 @@ def serialize_declaracion_seccion(declaracion, seccion_id, tipo="OBSERVACION", c
     """
       Obtiene información relevante de la sección
     """
-    dato = ""
+    dato = "" if tipo == 'OBSERVACION' else False
 
     seccion_declaracion = declaracion.secciondeclaracion_set.filter(seccion=seccion_id).first()
     if seccion_declaracion:

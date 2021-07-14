@@ -32,7 +32,7 @@
           <div class="sidebar__heading none"> {{ seccion.seccion }} 
             {% get_status seccion folio_declaracion as status%}
                     
-            <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  title="{{ status.1 }}"  data-placement="left">{{ status }}{{status.max}}  </div>
+            <div class="p-0 float-right icon-status {{ status.0 }}" data-toggle="tooltip"  title="{{ status.1 }}"  data-placement="left">{{ status.1 }}{{status.max}}  </div>
           </div>
         </button> 
         {% endif %}

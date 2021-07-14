@@ -10,36 +10,35 @@
         <p class="text-gray text-xl">
           <span class="text-primary-light font-weight-semibold">
             DECLARACIONES PREVIAS</span>
-        </p>
         <p>Puedes descargar las declaraciones que has realizado con anterioridad en formato PDF</p>
       </div>
     </div>
+    <div id="div_mensajes_vista_previa">
     {% if messages %}
-      {% for message in messages %}
+        {% for message in messages %}
+                {% if message.tags == "success" %}
+                    <div class="alert alert-success alert-dismissable alert-link">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong>{{ message }}</strong>
+                    </div>
+                {% endif %}
+                {% if message.tags == "error" %}
+                    <div class="alert alert-danger alert-dismissable alert-link">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong>{{ message }}</strong>
+                    </div>
+                {% endif %}
 
-              {% if message.tags == "success" %}
-                  <div class="alert alert-success alert-dismissable alert-link">
-                  <button type="button" class="close" data-dismiss="alert">&times;</button>
-                       <strong>{{ message }}</strong>
-                  </div>
-              {% endif %}
-              {% if message.tags == "error" %}
-                  <div class="alert alert-danger alert-dismissable alert-link">
-                  <button type="button" class="close" data-dismiss="alert">&times;</button>
-                       <strong>{{ message }}</strong>
-                  </div>
-              {% endif %}
-             {% if message.tags == "warning" %}
-                  <div class="alert alert-warning alert-dismissable alert-link">
-                  <button type="button" class="close" data-dismiss="alert">&times;</button>
-                       <strong>{{ message }}</strong>
-                  </div>
-              {% endif %}
-
-
-      {% endfor %}
-  {% endif %}
-    <table class="table table-hover">
+                {% if message.tags == "warning" %}
+                    <div class="alert alert-warning alert-dismissable alert-link">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong>{{ message }}</strong>
+                    </div>
+                {% endif %}
+        {% endfor %}
+    {% endif %}
+  </div>
+    <table class="table table-hover" id="table_declaraciones_previas">
       <thead>
         <tr>
           <th scope="col" class="text-center">TIPO DE DECLARACIÓN</th>
@@ -49,19 +48,48 @@
         </tr>
       </thead>
       <tbody>
-        {% for declaracion in declaraciones %}
-        <tr>
-          <td class="font-weight-bold text-center text-uppercase">{{ declaracion.cat_tipos_declaracion }}</td>
-          <td class="font-weight-bold text-center text-uppercase">{{ declaracion.fecha_recepcion|date:"d / F / Y" }}</td>
-          <td class="font-weight-bold text-center text-uppercase">
-            <a href="{% url 'declaraciones-previas-descargar' declaracion.folio %}" target="_blank">
-              <img src="{% static 'src/img/descargar.svg' %}" alt="Descargar" class="svg">
-            </a>            
+        {% for dec in declaraciones %}
+        <tr archivo_declaraciones="{{dec.archivo}}" estatus_declaracion="{{dec.estatus_proceso}}" declaracion_id="{{dec.declaracion.pk}}" cierre_declaracion="{{dec.cierre_declaracion}}">
+          <td class="font-weight-bold text-center text-uppercase">{{ dec.declaracion.cat_tipos_declaracion }}</td>
+          <td class="font-weight-bold text-center text-uppercase">{{ dec.declaracion.fecha_recepcion|date:"d / F / Y" }}</td>
+          <td class="font-weight-bold text-center text-uppercase" id="{{dec.declaracion.pk}}_td_pdf">
+            {% if dec.archivo != "" %}
+              <a href="{{dec.archivo}}" target="_blank">
+                <img src="{% static 'src/img/descargar.svg' %}" alt="Ver archivo" class="svg">
+              </a>     
+            {% else %}
+                {% if dec.cierre_declaracion %}
+                  <div class="progress">
+                    {% if dec.estatus_proceso %}
+                        <div class="progress-bar progress-bar-striped active" role="progressbar"
+                        aria-valuenow="{{dec.estatus_proceso}}" aria-valuemin="0" aria-valuemax="100" style="width:{{dec.estatus_proceso}}%">
+                          {{dec.estatus_proceso}}%
+                        </div>
+                      {% else %}
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                          Preparando...
+                        </div>
+                      {% endif %}
+                    </div>
+                {% else %}
+                    {% if dec.estatus_proceso %}
+                      <div class="progress-bar progress-bar-striped active" role="progressbar"
+                      aria-valuenow="{{dec.estatus_proceso}}" aria-valuemin="0" aria-valuemax="100" style="width:{{dec.estatus_proceso}}%">
+                        {{dec.estatus_proceso}}%
+                      </div>
+                    {% else %}
+                      <a href="#" class="a_declaracion_sin_pdf" declaracion="{{dec.declaracion.pk}}" estatus_declaracion="{{dec.estatus_proceso}}" cierre_declaracion="{{dec.cierre_declaracion}}" id="{{dec.declaracion.pk}}_declaracion_sin_pdf">
+                        <img src="{% static 'src/img/descargar_gray.svg' %}" alt="Crear archivo" class="svg">
+                      </a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
           </td>
           <td class="font-weight-bold text-center text-uppercase">
-            <a href="{% url 'declaraciones-previas-ver' declaracion.folio %}" target="_blank">
-              <img src="{% static 'src/img/view_file.png' %}" alt="Ver" class="svg">
-            </a>
+            <a href="{% url 'declaraciones-previas-ver' dec.declaracion.folio %}" target="_blank">
+              <img src="{% static 'src/img/view_file.png' %}" alt="Descargar" class="svg">
+            </a>            
           </td>
         </tr>
         {% endfor %}
@@ -69,4 +97,109 @@
     </table>
   </div>
 </section>
+{% endblock %}
+{% block body_script %}
+  <script>
+
+    function ajax_consulta_estaus_pdf(data, td_registro){
+      var intervalId = window.setInterval(function(){
+        console.log("intervalor------->")
+          $.ajax({
+              url : "{% url 'estatus_pdf_declaracion' %}",
+              data: data,
+              type : "GET",
+              success : function(response) {              
+                td_registro.empty();
+
+                if(response["estatus_proceso"] == 100){
+                  clearInterval(intervalId);
+                  td_registro.append('<a href="'+response["archivo"]+'" target="_blank">'+
+                    '<img src='+"{% static 'src/img/descargar.svg' %}"+' alt="Ver archivo" class="svg"></a>')
+
+                  $.ajax({
+                    url : "{% url 'eliminar_pdf_declaracion' %}",
+                    data: data,
+                    type : "GET",
+                    success : function(response) {              
+                      console.log("Eliminar",response )
+                    },
+                    error : function(xhr,errmsg,err) {
+                      console.log(xhr.status + ": " + xhr.responseText);
+                    }
+                  });
+                  
+                }
+                else{
+                  var estatus_actual = response["estatus_proceso"] == "None" || !response["estatus_proceso"] ? 10 : response["estatus_proceso"]
+                  td_registro.append('<div class="progress">'+
+                    '<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="'+estatus_actual+'"'+
+                    'aria-valuemin="0" aria-valuemax="100" style="width:'+estatus_actual+'%">'+estatus_actual+'%</div></div>');
+                }
+              },
+              error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+              }
+          });
+        }, 8000); 
+    }
+
+    $('#table_declaraciones_previas > tbody  > tr').each(function(index) {
+      var estatus_declaracion = $(this).attr("estatus_declaracion");
+      var cierre_declaracion = $(this).attr("cierre_declaracion");
+      var td_btn_pdf = $(this).find("td").eq(2)
+      var data = {
+        "declaracion": $(this).attr("declaracion_id")
+      }
+
+      console.log("declaracion ----->",  $(this).attr("declaracion_id"))
+      console.log(estatus_declaracion)
+      console.log(typeof estatus_declaracion)
+      if(estatus_declaracion && estatus_declaracion != "null" && estatus_declaracion != "None" && estatus_declaracion != 100 || cierre_declaracion == "True" ){
+        ajax_consulta_estaus_pdf(data, td_btn_pdf);
+      }
+    });
+
+
+    $(".a_declaracion_sin_pdf").click(function(e){
+      var id_declaracion = $(this).attr("declaracion");
+      var estatus_declaracion = $(this).attr("estatus_declaracion");
+      var cierre_declaracion = $(this).attr("cierre_declaracion");
+      var div_mensajes = $("#div_mensajes_vista_previa");
+
+      if(cierre_declaracion && cierre_declaracion == "True"){
+        div_mensajes.append('<div class="alert alert-success alert-dismissable alert-link">'+
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                          '<strong>Su archivo PDF se esta generando, espere por favor</strong>'+
+                    '</div>')
+      }
+      else{
+        var td_btn_pdf = $(this).parent();
+        var data = {
+          "declaracion": $(this).attr("declaracion")
+        }
+        console.log(data)
+        $.ajax({
+            url : "{% url 'crear_pdf_declaracion' %}",
+            data: data,
+            type : "GET",
+            success : function(response) {      
+              var estatus_actual = response["estatus_proceso"] == "None" || !response["estatus_proceso"] ? 10 : response["estatus_proceso"]
+              
+              td_btn_pdf.empty();
+              td_btn_pdf.append('<div class="progress">'+
+                  '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="'+estatus_actual+'"'+
+                  'aria-valuemin="0" aria-valuemax="100" style="width:'+estatus_actual+'%">'+estatus_actual+'%</div></div>');
+              
+              if(estatus_actual && estatus_actual != 100){
+                ajax_consulta_estaus_pdf(data, td_btn_pdf);
+              }
+
+            },
+            error : function(xhr,errmsg,err) {
+              console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+      }
+    });
+  </script>
 {% endblock %}

@@ -346,18 +346,21 @@ class DeudasView(View):
         agregar, editar_id, deudas_data, informacion_registrada = (
             declaracion_datos(kwargs, DeudasOtros, declaracion)
         )
+        domicilio_data = {}
         
         #Si ya existe información se obtiene y separa la información necesaria
         #frecuentemente observaciones y domicilio o demás datos que pertenezcan a otro formulario que no sea el prinicpal
         if deudas_data:
             observaciones_data = deudas_data.observaciones
             tercero_infopersonalvar = deudas_data.tercero_infopersonalvar
-            if tercero_infopersonalvar.domicilios:
-                domicilio_data = tercero_infopersonalvar.domicilios
-                domicilio_data = model_to_dict(domicilio_data)
-            else:
-                domicilio_data = {}
-            tercero_infopersonalvar = model_to_dict(tercero_infopersonalvar)
+            if tercero_infopersonalvar is not None:
+                if tercero_infopersonalvar.domicilios:
+
+                    domicilio_data = tercero_infopersonalvar.domicilios
+                    domicilio_data = model_to_dict(domicilio_data)
+
+                tercero_infopersonalvar = model_to_dict(tercero_infopersonalvar)
+
             observaciones_data = model_to_dict(observaciones_data)
             deudas_data = model_to_dict(deudas_data)
         else:

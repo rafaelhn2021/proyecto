@@ -141,7 +141,7 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                           </svg> Personalizar </p>
                     {% endif %}     
-                    <img class="img-responsive" src="/media/{% personalizacion 'imagen_sublogo' %}" alt="logo secundario">
+                    <img class="img-responsive" src="/media/{% personalizacion 'imagen_sublogo' %}" alt="logo secundario" style="max-width: 500px;">
                     {% if user.is_superuser or user.is_staff %} </div></a> {% endif %}
                 </div>
 
@@ -276,8 +276,8 @@
             });
         }
 
-        function getMunicipios() {
-            var entidad_federativa = $("#id_domicilio-cat_entidades_federativas").val();
+        function getMunicipios(id_dom_entidad, id_dom_municipio=null) {
+            var entidad_federativa = $(id_dom_entidad).val();
             var url = $("#formInfoPersonal").attr("data-municipios-url");
 
             if (entidad_federativa) {
@@ -290,13 +290,17 @@
                         "entidad_federativa": entidad_federativa,
                     },
                     success: function(response){
-                      $("#id_domicilio-municipio").html(response.municipios);
-                      $("#id_domicilio-municipio").trigger("change");
+                        if(id_dom_municipio){
+                            $(id_dom_municipio).html(response.municipios);
+                            $(id_dom_municipio).trigger("change");
+                        }
                     }
                 });
             } else {
-                $("#id_domicilio-municipio").html("<option value='' selected='selected'>---------</option>");
-                $("#id_domicilio-municipio").trigger("change");
+                if(id_dom_municipio){
+                    $(id_dom_municipio).html("<option value='' selected='selected'>---------</option>");
+                    $(id_dom_municipio).trigger("change");
+                }
             }
         }
 
@@ -633,6 +637,16 @@
           }
         }
 
+        function validateNumber(event) {
+            var key = window.event ? event.keyCode : event.which;
+            if (event.keyCode === 8 || event.keyCode === 46) {
+                return true;
+            } else if ( key < 48 || key > 57 ) {
+                return false;
+            } else {
+                return true;
+            }
+        };
             
         $(window).on('load',function(){
             if($("#no_aplica").prop("checked") && $("#no_aplica").length){
@@ -652,12 +666,30 @@
             if('{{declaracion}}'){
               $('#modal-aviso-declaracion-activa').modal('show');
             }
-            //alert("Nuevo----", "{{nueva_declaracion}}");
+
             //Si una declaración es nueva se mostrara un mensaje al usuario
             if("{{nueva_declaracion}}" == "True")
             {
               $('#mensaje_bienvenida').modal('show');
             }
+
+
+            $('input[type="number"]').on("keypress keyup blur",function (event) {    
+               $(this).val($(this).val().replace(/[^\d].+/, ""));
+                if ((event.which < 48 || event.which > 57)) {
+                    $(".error_float_value").css("display", "inline");
+                    event.preventDefault();
+                }else{
+                    $(".error_float_value").css("display", "none");
+                }
+            });
+
+            $('#id_bienes_personas-porcentaje').on('input', function () {
+                var value = $(this).val();                
+                if ((value !== '') && (value.indexOf('.') === -1)) {
+                    $(this).val(Math.max(Math.min(value, 100), -100));
+                }
+            });
 
             if(document.getElementById('ingreso_anio_anterior-no'))
             {
@@ -728,29 +760,26 @@
             //PARA DOMICILIOS SE MOSTRARÁ SOLA LA LISTA DE MUNICIPIOS DE ACUERDO A LA ENTIDAD SELECCIONADA
             if($("#id_domicilio-cat_entidades_federativas")){
               if($("#id_domicilio-cat_entidades_federativas").val() && !$('#id_domicilio-municipio').val()){
-              	$("#id_domicilio-cat_entidades_federativas").val(14)
-                getMunicipios()
+                
+                if($("#id_domicilio-municipio").length){
+                  	$("#id_domicilio-cat_entidades_federativas").val(14)
+                }
+
+                getMunicipios("#id_domicilio-cat_entidades_federativas", "#id_domicilio-municipio");
               }
             }
 
             if($("#id_inmueble_domicilio-cat_entidades_federativas")){
               if($("#id_inmueble_domicilio-cat_entidades_federativas").val() && !$('#id_inmueble_domicilio-municipio').val()){
-              	$("id_inmueble_domicilio-cat_entidades_federativas").val(14)
-                getMunicipios()
+                
+                if($("#id_inmueble_domicilio-municipio").length){
+              	    $("id_inmueble_domicilio-cat_entidades_federativas").val(14)
+                }
+
+                getMunicipios("#id_inmueble_domicilio-cat_entidades_federativas", "#id_inmueble_domicilio-municipio");
               }
             }
 
-            if("{% if current_url == 'ingresos-netos' %}true{% endif %}"){
-              if(parseInt("{{puesto}}") > {% if limit_simp %}{{limit_simp}}{% else %} 15 {% endif %} ){
-                $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr('readonly', true);
-              }
-              
-              $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr("placeholder","ESTE CAMPO SE LLENARÁ AUTOMATICAMENTE")
-            }
-            else{
-              $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr('readonly', false);
-              $("#id_ingresos_declaracion-ingreso_mensual_pareja_dependientes").attr("placeholder","Ingresos de la pareja y/o dependientes económicos")
-            }
 
             var date = new Date();
             var year = date.getFullYear();
@@ -885,7 +914,12 @@
                 $('#id_socios_comerciales-moneda').attr("disabled", true);
             }
 
-            $("#id_domicilio-cat_entidades_federativas").on("change", getMunicipios);
+            $("#id_domicilio-cat_entidades_federativas").on("change", function(e){
+                getMunicipios("#id_domicilio-cat_entidades_federativas", "#id_domicilio-municipio")
+            });
+            $("#id_inmueble_domicilio-cat_entidades_federativas").on("change", function(e){
+                getMunicipios("#id_inmueble_domicilio-cat_entidades_federativas", "#id_inmueble_domicilio-municipio");
+            });
             $("#id_inversiones-cat_tipos_inversiones").on("change", getTiposInversionesEspecificos);
 
 
@@ -917,6 +951,15 @@
             else{
               var puesto_valor =  $("#id_datos_encargo_actual-cat_puestos").val();
               getPuestos("#id_datos_encargo_actual-cat_areas","#id_datos_encargo_actual-cat_puestos", puesto_valor)
+            }
+
+            if( $('#id-domicilio-cat_pais-ex').is(':checked')){
+              $('#id_domicilio-colonia').attr("disabled", true);
+              $('#id_domicilio-cat_entidades_federativas').attr("disabled", true);
+              $('#id_domicilio-municipio').attr("disabled", true);
+              $('#id_domicilio-colonia').val("");
+              $('#id_domicilio-cat_entidades_federativas').val("");
+              $('#id_domicilio-municipio').val("");
             }
 
             //>>>>>>>>>>>>>>>>>>>> FUNCIONAMIENTO

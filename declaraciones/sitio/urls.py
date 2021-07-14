@@ -11,7 +11,9 @@ from .views import (IndexView, LoginView, LogoutView, FAQView, DeclaracionesPrev
                     PersonalizacionCatalogoPuestosView,
                     PersonalizacionDatosEntidadView,
                     PersonalizacionCatalogoAreasView,
-                    DeclaracionesPreviasVerView)
+                    DeclaracionesPreviasVerView,
+                    GenerarHTMLView,
+                    consultaEstatusTaskPDFDeclaracion, crearPDFDeclaracion, eliminarProcesoPDF, PdfConfirmacion)
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
@@ -47,5 +49,11 @@ urlpatterns = [
     path('personalizar/catalogos/areas/eliminar-<int:pkid>', PersonalizacionCatalogoAreasView.as_view(), name='personalizar_catareas_eliminar'),
 
     path('personalizar/datos_entidad', PersonalizacionDatosEntidadView.as_view(), name='personalizar_entidad'),
-    path('personalizar/datos_entidad/editar', PersonalizacionDatosEntidadView.as_view(), name='personalizar_entidad_editar')
+    path('personalizar/datos_entidad/editar', PersonalizacionDatosEntidadView.as_view(), name='personalizar_entidad_editar'),
+   
+    path('generar_html', GenerarHTMLView, name='generar_html'),
+    url(r'^declaraciones-previas/estatus_pdf_declaracion/$', consultaEstatusTaskPDFDeclaracion, name='estatus_pdf_declaracion'),
+    url(r'^declaraciones-previas/crear_pdf_declaracion/$', crearPDFDeclaracion, name='crear_pdf_declaracion'),
+    url(r'^declaraciones-previas/eliminar_pdf_declaracion/$', eliminarProcesoPDF, name='eliminar_pdf_declaracion'),
+	path('pdf_confimacion/<int:pk>/', PdfConfirmacion.as_view(), name="pdf_confimacion"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

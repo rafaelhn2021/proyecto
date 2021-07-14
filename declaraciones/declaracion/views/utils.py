@@ -2,6 +2,8 @@ import traceback
 import uuid
 import sys
 import datetime
+import subprocess
+from subprocess import Popen
 from django.urls import resolve
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,6 +15,8 @@ from declaracion.models import (Declaraciones, Secciones, SeccionDeclaracion, Ca
 from declaracion.models.catalogos import CatPuestos
 from django.apps import apps
 from django.conf import settings
+import time
+import os
 
 
 
@@ -84,6 +88,8 @@ def campos_configuracion_todos(tipo=""):
 
 def actualizar_aplcia(modelo, declaracion, id_seccion):
     aplica=1
+    m=None
+    seccion_dec=None
     try:
         m = modelo.objects.filter(declaraciones=declaracion).first()
         seccion_dec = SeccionDeclaracion.objects.filter(declaraciones=declaracion, seccion=Secciones.objects.get(pk=id_seccion))
@@ -419,6 +425,9 @@ def obtiene_avance(declaracion):
                                     pid = int(s.parametro)+1
                                     o = v.objects.filter(declaraciones=declaracion,
                                                              cat_tipos_ingresos_varios__id=pid ).first()
+                                elif s.url =='datos-del-encargo-actual':
+                                    o = v.objects.filter(declaraciones=declaracion,cat_puestos__isnull=False,nivel_encargo__isnull=False).first()
+                                    
                                 else:
                                     o = v.objects.filter(declaraciones=declaracion).first()
 
@@ -578,7 +587,7 @@ def obtiene_avance(declaracion):
         declaracion.save()
     except:
         pass
-        print('faltas-------------------------------------------->',faltas[42])
+        print('faltas-------------------------------------------->',faltas)
     return (declaracion.avance,faltas)
 
 
@@ -665,3 +674,17 @@ def set_declaracion_extendida_simplificada(info_persona_fija):
         'secciones_por_tipo_declaracion': secciones_por_tipo_declaracion,
         'declaracion_simplificada': declaracion_simplificada
     }
+
+
+def task_crear_pdf_declaracion(declaracion, base_url):
+    """ 
+    Función para generar html a PDF de la información de una declaración
+    ...
+    Parametros
+    ----------
+    declaracion = Object Declaracion del usuario
+
+    """
+    p = Popen(['python', './toPDFScript.py', str(declaracion.pk), base_url])
+
+    return "Task ejecutado"

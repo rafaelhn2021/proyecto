@@ -252,12 +252,12 @@
                         <div class="col-md-12"><br></div>
                         <div class="col-3">
                             <div class="form-group {% if 'salarioMensualNeto' in campos_privados %}form-group-private{% endif %}">
-                                <label for="experiencia-nivel" class="label-secondary">SALARIO MENSUAL NETO{% if 'salarioMensualNeto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <label for="experiencia-nivel" class="label-secondary">SALARIO MENSUAL NETO(sin centavos){% if 'salarioMensualNeto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
                                 <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Deberá especificar el monto mensual neto, sin centavos, que percibe el dependiente">
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
 
-                                <input type="number" name="datos_encargo_actual-salarioMensualNetoPublico" class="form-control" placeholder="Salario mensual neto" title="" id="id_datos_encargo_actual-salarioMensualNetoPublico" value="{{actividad_laboral_sector_form.salarioMensualNeto.initial}}">
+                                <input type="number" name="datos_encargo_actual-salarioMensualNetoPublico" class="form-control" placeholder="Salario mensual neto" title="" id="id_datos_encargo_actual-salarioMensualNetoPublico" value="{{actividad_laboral_sector_form.salarioMensualNeto.initial}}"><small class="text-help text-primary error_float_value" style="display: none">Solo enteros</small>
 
                             </div>
                         </div>
@@ -267,7 +267,7 @@
                                 <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir la opción estatal (local)">
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
-                                {% bootstrap_field actividad_laboral_sector_form.moneda show_label=False placeholder="Moneda" %}
+                                {% bootstrap_field actividad_laboral_sector_form.moneda_publico show_label=False placeholder="Moneda" %}
                             </div>
                         </div>
                         <div class="col-4">
@@ -276,7 +276,7 @@
                                 <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Señalar la fecha en que inició empleo, cargo o comisón">
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
-                                {% bootstrap_field actividad_laboral_sector_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                                {% bootstrap_field actividad_laboral_sector_form.posesion_inicio_publico  show_label=False placeholder="Fecha de toma de posesión" %}
                             </div>
                         </div>
                     </div>
@@ -323,17 +323,18 @@
                                 <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Elegir fecha en la que asumió el cargo">
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
-                                {% bootstrap_field actividad_laboral_sector_form.posesion_inicio  show_label=False placeholder="Fecha de toma de posesión" %}
+                                {% bootstrap_field actividad_laboral_sector_form.posesion_inicio_privado  show_label=False placeholder="Fecha de toma de posesión" %}
                             </div>
                         </div>
                          <div class="col-4">
                             <div class="form-group {% if 'salarioMensualNeto' in campos_privados %}form-group-private{% endif %}">
-                                <label for="experiencia-nivel" class="label-secondary">SALARIO MENSUAL NETO{% if 'salarioMensualNeto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
+                                <label for="experiencia-nivel" class="label-secondary">SALARIO MENSUAL NETO(sin centavos){% if 'salarioMensualNeto' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
                                 <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Especificar el monto mensual neto, sin centavos que percibe la pareja">
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
 
                                 <input type="number" name="datos_encargo_actual-salarioMensualNetoPrivado" class="form-control" placeholder="Salario mensual neto" title="" id="id_datos_encargo_actual-salarioMensualNetoPrivado" value="{{actividad_laboral_sector_form.salarioMensualNeto.initial}}">
+                                <small class="text-help text-primary error_float_value" style="display: none">Solo enteros</small>
 
                             </div>
                         </div>
@@ -343,7 +344,7 @@
                                 <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="Seleccionar moneda">
                                     <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">
                                 </button>
-                                {% bootstrap_field actividad_laboral_sector_form.moneda show_label=False placeholder="Moneda" %}
+                                {% bootstrap_field actividad_laboral_sector_form.moneda_privado show_label=False placeholder="Moneda" %}
                             </div>
                         </div>
                         <div class="col-12">
@@ -392,7 +393,7 @@
 
                     
                     <div class="col-12 mb-2">
-                        <div class="form-group {% if 'salarioMensualNeto' in campos_privados %}form-group-private{% endif %}">
+                        <div class="form-group {% if 'observaciones' in campos_privados %}form-group-private{% endif %}">
                             <label for="relacion-comentarios" class="label-secondary">ACLARACIONES/OBSERVACIONES{% if 'observacion' in campos_obligatorios %}<span class="text-danger text-lg font-weight-bold">*</span>{% endif %}</label>
                             <button type="button" class="btn btn-link p-0 btn-information" data-toggle="tooltip" tabindex="9999"  title="En este espacio el declarante podrá realizar las aclaraciones u observaciones que considere pertinentes respecto de algun o algunos de,los incisos de este apartado.">
                                 <img src="{% static 'src/img/info.svg'%}" alt="info" class="svg">

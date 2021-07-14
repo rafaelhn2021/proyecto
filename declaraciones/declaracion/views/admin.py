@@ -33,7 +33,9 @@ from declaracion.models import (Declaraciones, InfoPersonalVar,
 from declaracion.models.catalogos import CatPuestos
 from declaracion.views import RegistroView
 from declaracion.views.confirmacion import (get_context_InformacionPersonal,get_context_Intereses,get_context_pasivos,
-                                            get_context_ingresos,get_inmuebles,get_context_activos)
+                                            get_context_ingresos,get_inmuebles,get_context_activos, get_context_activos,
+                                            get_context_vehiculos, get_context_inversiones, get_context_deudasotros,
+                                            get_context_prestamocomodato, get_context_fideicomisos)
 from .utils import set_declaracion_extendida_simplificada
 from sitio.util import account_activation_token
 from sitio.models import sitio_personalizacion, Valores_SMTP
@@ -65,9 +67,12 @@ class BusquedaDeclarantesFormView(View):
             request_post = request.POST
             form = BusquedaDeclaranteForm(request_post)
             usuarios_sin_infopersonalfija = []
+            result = None
+            tipo_registro = 'registrado'
 
             if form.is_valid():
                 result = InfoPersonalFija.objects.filter(usuario__is_staff=False, usuario__is_superuser=False)
+                fin_day = int(request_post.get('fecha_fin_day')) + 1 if int(request_post.get('fecha_fin_day')) <= 27 else int(request_post.get('fecha_fin_day'))
 
                 tipo_registro = form.cleaned_data.get('tipo_registro')
                 page = form.cleaned_data.get('page')
@@ -77,8 +82,7 @@ class BusquedaDeclarantesFormView(View):
                 rfc = form.cleaned_data.get('rfc_search')
                 fecha_inicio = date(int(request_post.get('fecha_inicio_year')),int(request_post.get('fecha_inicio_month')),int(request_post.get('fecha_inicio_day')))
                 fecha_fin = date(int(request_post.get('fecha_fin_year')),int(request_post.get('fecha_fin_month')),int(request_post.get('fecha_fin_day')))
-                fecha_fin_mas_uno = date(int(request_post.get('fecha_fin_year')),int(request_post.get('fecha_fin_month')),(int(request_post.get('fecha_fin_day')) + 1))
-
+                fecha_fin_mas_uno = date(int(request_post.get('fecha_fin_year')),int(request_post.get('fecha_fin_month')), fin_day )
                 estatus = form.cleaned_data.get('estatus')
                 q = Q(pk__isnull=False)
 
@@ -137,8 +141,6 @@ class BusquedaDeclarantesFormView(View):
             if result:
                 parametros.update({'result':result})
                 parametros.update({'paginas': range(1, paginator.num_pages + 1)})
-            else:
-                messages.warning(request, u"No se encontraron resultados")
 
             return render(request,self.template_name,parametros)
         else:
@@ -226,9 +228,12 @@ class BusquedaDeclaracionesFormView(View):
         if request.user.is_staff:
             request_post = request.POST
             form = BusquedaDeclaracionForm(request_post)
+            result = None
 
             if form.is_valid():
                 try:
+                    fin_day = int(request_post.get('fecha_fin_day')) + 1 if int(request_post.get('fecha_fin_day')) <= 27 else int(request_post.get('fecha_fin_day'))
+
                     result = Declaraciones.objects.all()
                     page = form.cleaned_data.get('page')
                     page_size =form.cleaned_data.get('page_size')
@@ -244,8 +249,10 @@ class BusquedaDeclaracionesFormView(View):
                         result = result.filter(cat_estatus=estatus)
                     fecha_inicio = date(int(request_post.get('fecha_inicio_year')),int(request_post.get('fecha_inicio_month')),int(request_post.get('fecha_inicio_day')))
                     fecha_fin = date(int(request_post.get('fecha_fin_year')),int(request_post.get('fecha_fin_month')),int(request_post.get('fecha_fin_day')))
+                    fecha_fin_mas_uno = date(int(request_post.get('fecha_fin_year')),int(request_post.get('fecha_fin_month')), fin_day )
+
                     if fecha_inicio and fecha_fin:
-                        result = result.filter(fecha_declaracion__range=[fecha_inicio,fecha_fin])
+                        result = result.filter(fecha_declaracion__range=[fecha_inicio,fecha_fin_mas_uno])
 
                     if page and page.isdigit():
                         page = int(page)
@@ -258,12 +265,22 @@ class BusquedaDeclaracionesFormView(View):
 
                     paginator = Paginator(result, page_size)
                     result = paginator.get_page(page)
+
+
                 except Exception as e:
                     print (e)
                     messages.warning(request, u"Para buscar por folio este debe ser la cadena completa del mismo. NO SE ENCONTRARON RESULTADOS EN EL PERIODO DE FECHAS DADAS")
                     return redirect('declaracion:busqueda-declaraciones')
 
-            return render(request,self.template_name,{'form':form,'result':result,'paginas': range(1, paginator.num_pages + 1)})
+            context = {
+                'form':form,
+                'result':result
+            }
+
+            if result:
+                context.update({'paginas': range(1, paginator.num_pages + 1)})
+
+            return render(request,self.template_name,context)
         else:
             return redirect('declaracion:index')
 
@@ -400,22 +417,21 @@ class InfoDeclaracionFormView(View):
         if request.user.is_staff:
             declaracion = Declaraciones.objects.get(pk=self.kwargs['pk'])
             folio_declaracion = str(declaracion.folio)
-            context.update(get_context_InformacionPersonal(folio_declaracion, declaracion.info_personal_fija.usuario.id))
-            context.update(get_context_Intereses(folio_declaracion, declaracion.info_personal_fija.usuario.id))
-            context.update(get_context_ingresos(folio_declaracion, declaracion.info_personal_fija.usuario.id))
-            context.update(get_context_activos(folio_declaracion, declaracion.info_personal_fija.usuario.id))
-            context.update(get_context_pasivos(folio_declaracion, declaracion.info_personal_fija.usuario.id))
+            context.update(get_context_InformacionPersonal(declaracion))
+            context.update(get_context_Intereses(declaracion))
+            context.update(get_context_ingresos(declaracion))
+            context.update(get_context_activos(declaracion))
 
             vehiculos = MueblesNoRegistrables.objects.filter(declaraciones=declaracion)
             inversiones = Inversiones.objects.filter(declaraciones=declaracion)
             adeudos = DeudasOtros.objects.filter(declaraciones=declaracion)
             prestamos = PrestamoComodato.objects.filter(declaraciones=declaracion)
             fideicomisos = Fideicomisos.objects.filter(declaraciones=declaracion)
-            context.update({"vehiculos": vehiculos})
-            context.update({"inversiones": inversiones})
-            context.update({"adeudos": adeudos})
-            context.update({"prestamos": prestamos})
-            context.update({"fideicomisos": fideicomisos})
+            context.update({"vehiculos": get_context_vehiculos(declaracion)})
+            context.update({"inversiones": get_context_inversiones(declaracion)})
+            context.update({"adeudos": get_context_deudasotros(declaracion)})
+            context.update({"prestamos": get_context_prestamocomodato(declaracion)})
+            context.update({"fideicomisos": get_context_fideicomisos(declaracion)})
             context.update({"tipo": self.kwargs['tipo']})
 
             #Determina la información a mostrar por tipo de declaración
@@ -611,34 +627,41 @@ class RegistroDeclaranteFormView(View):
         editar_id = kwargs.get("pk", False)
         tipo_registro = kwargs.get("tipo_registro")
         data_usuario = None
+        request_post = request.POST
 
         if editar_id:
             if tipo_registro == 'registrado':
+                fecha_inicio = date(int(request_post.get('fecha_inicio_year')),int(request_post.get('fecha_inicio_month')),int(request_post.get('fecha_inicio_day')))
                 info_personal_fija_data = InfoPersonalFija.objects.get(pk=editar_id)
-                info_personal_fija_data.rfc = request.POST.get('rfc')
-                info_personal_fija_data.nombres = request.POST.get('nombres').upper()
-                info_personal_fija_data.apellido1 = request.POST.get('apellido1').upper()
-                info_personal_fija_data.cat_puestos = CatPuestos.objects.get(pk=request.POST.get('cat_puestos'))
+                info_personal_fija_data.rfc = request_post.get('rfc')
+                info_personal_fija_data.nombres = request_post.get('nombres').upper()
+                info_personal_fija_data.apellido1 = request_post.get('apellido1').upper()
+                info_personal_fija_data.apellido2 = request_post.get('apellido2').upper()
+                info_personal_fija_data.cat_puestos = CatPuestos.objects.get(pk=request_post.get('cat_puestos'))
+                info_personal_fija_data.fecha_inicio = fecha_inicio
                 info_personal_fija_data.save()
 
-                usuario_id = info_personal_fija_data.usuario.id
+                data_usuario_registrado = User.objects.get(pk=info_personal_fija_data.usuario.id)
+                data_usuario_registrado.is_active = request_post.get("estatus")
+                data_usuario_registrado.username = request_post.get("rfc")
+                data_usuario_registrado.first_name = request_post.get("nombres")
+                data_usuario_registrado.last_name = request_post.get("apellido1")
+                data_usuario_registrado.email = request_post.get("email")
+                data_usuario_registrado.save()
             else:
-                usuario_id = editar_id
+                data_usuario_preregistrado = User.objects.get(pk=editar_id)
+                registro = RegistroUsuarioDeclaranteForm(request_post, instance=data_usuario_preregistrado)
 
-            data_usuario = User.objects.get(pk=usuario_id)
-            registro = RegistroUsuarioDeclaranteForm(request.POST, instance=data_usuario)
-
-            if registro.is_valid():
-                usuario_django = registro.save(commit=False)
-
-                if tipo_registro == 'registrado':
-                    usuario_django.is_active = request.POST.get("estatus")
-                    usuario_django.username = request.POST.get("rfc")
-                    usuario_django.first_name = request.POST.get("nombres")
-                    usuario_django.last_name = request.POST.get("apellido1")
-                    usuario_django.email = request.POST.get("email")
-                
-                usuario_django.save()
+                if registro.is_valid():
+                    registro.save()
+            
+            context = {
+                    'form':self.form_redirect(),
+                    'msg':True,
+                    'is_staff':self.is_staff,
+                    'editar': editar_id
+                }
+            return render(request,self.template_redirect,context)
 
         else:
             registro = RegistroUsuarioDeclaranteForm(request.POST)
@@ -648,6 +671,14 @@ class RegistroDeclaranteFormView(View):
                 datos_usuario.is_superuser = False
                 datos_usuario.is_active = 0
                 datos_usuario.save()
+
+                context = {
+                    'form':self.form_redirect(),
+                    'msg':True,
+                    'is_staff':self.is_staff,
+                    'editar': editar_id
+                }
+                return render(request,self.template_redirect,context)
             
             else:
                 context = {
@@ -655,15 +686,6 @@ class RegistroDeclaranteFormView(View):
                     'is_staff':self.is_staff
                 }
                 return render(request,self.template_name,context)
-
-
-        context = {
-            'form':self.form_redirect(),
-            'msg':True,
-            'is_staff':self.is_staff,
-            'editar': editar_id
-        }
-        return render(request,self.template_redirect,context)
                 
 
        
@@ -766,13 +788,52 @@ class DescargarReportesView(View):
 
     @method_decorator(login_required(login_url='/login'))
     def get(self, request, *args, **kwargs):
-        tipo_declaracion = self.kwargs['tipo']
+        tipo_reporte = self.kwargs['tipo']
         request_get = request.GET
-        resumen = {'activos':[],'baja':[],'iniciales':[],'modificacion':[],'conclusion':[],'abiertas':[],'cerradas':[],'usuarios_activos_d_inicial':[],'usuarios_activos_d_pendiente':[]}
         form = BusquedaDeclaracionForm(request_get)
 
-        if tipo_declaracion:
-            usuarios = User.objects.filter(is_superuser=0)
+        #Fecha para mostrar las declaraciones en el periodo de tiempo introducido
+        fin_day = int(request_get.get('fecha_fin_day')) + 1 if int(request_get.get('fecha_fin_day')) <= 27 else int(request_get.get('fecha_fin_day'))
+        fecha_fin_mas_uno = date(int(request_get.get('fecha_fin_year')),int(request_get.get('fecha_fin_month')), fin_day )
+
+        fecha_inicio = date(int(request_get.get('fecha_inicio_year')),int(request_get.get('fecha_inicio_month')),int(request_get.get('fecha_inicio_day')))
+        fecha_fin = date(int(request_get.get('fecha_fin_year')),int(request_get.get('fecha_fin_month')),int(request_get.get('fecha_fin_day')))
+        
+        resumen = {
+            'total_usuarios': 0,
+            'activos':{
+                'oic': [],
+                'declarantes': [],
+                'admin': []
+            },
+            'inactivos':{
+                'oic': [],
+                'declarantes': [],
+                'admin': []
+            },
+            'iniciales':{
+                'abiertas': 0,
+                'cerradas': 0,
+                'data': []
+            },
+            'modificacion':{
+                'abiertas': 0,
+                'cerradas': 0,
+                'data': []
+            },
+            'conclusion':{
+                'abiertas': 0,
+                'cerradas': 0,
+                'data': []
+            },
+            'abiertas':[],
+            'cerradas':[],
+            'usuarios_activos_d_inicial':[],
+            'usuarios_activos_d_pendiente':[]
+        }
+
+        if tipo_reporte:
+            usuarios = User.objects.filter(date_joined__range=[fecha_inicio,fecha_fin_mas_uno])
             declaraciones = Declaraciones.objects.extra(
                 select={
                     'patrimonial': 'SELECT max FROM declaracion_secciondeclaracion WHERE  declaracion_secciondeclaracion.seccion_id = 1 AND declaracion_secciondeclaracion.declaraciones_id = declaracion_declaraciones.id',
@@ -795,35 +856,63 @@ class DescargarReportesView(View):
                 estatus = form.cleaned_data.get('estatus')
                 if estatus:
                     declaraciones = declaraciones.filter(cat_estatus=estatus)
-                fecha_inicio = date(int(request_get.get('fecha_inicio_year')),int(request_get.get('fecha_inicio_month')),int(request_get.get('fecha_inicio_day')))
-                fecha_fin = date(int(request_get.get('fecha_fin_year')),int(request_get.get('fecha_fin_month')),int(request_get.get('fecha_fin_day')))
                 declaraciones = declaraciones.filter(fecha_declaracion__range=[fecha_inicio,fecha_fin])
 
             for usuario in usuarios:
+                resumen['total_usuarios'] = resumen['total_usuarios'] + 1
                 if usuario.is_active == True:
-                   resumen['activos'].append(usuario)
+                    #Separa aquellos usuarios que ya tiene una declaración y los que faltan
+                    usuario_declaraciones = Declaraciones.objects.filter(info_personal_fija__usuario=usuario, cat_estatus=1, cat_tipos_declaracion=1)
+                    usuario_declaraciones_terminadas = Declaraciones.objects.filter(info_personal_fija__usuario=usuario, cat_estatus=4, cat_tipos_declaracion=1)
 
-                   #Separa aquellos usuarios que ya tiene una declaración y los que faltan
-                   usuario_declaraciones = Declaraciones.objects.filter(info_personal_fija__usuario=usuario, cat_estatus=1, cat_tipos_declaracion=1)
-                   usuario_declaraciones_terminadas = Declaraciones.objects.filter(info_personal_fija__usuario=usuario, cat_estatus=4, cat_tipos_declaracion=1)
-
-                   if usuario_declaraciones.count() > 0:# and usuario.pk != 103:
-                      resumen['usuarios_activos_d_inicial'].append(usuario)
-                   if usuario_declaraciones_terminadas.count() == 0 and usuario_declaraciones.count() == 0:
-                      resumen['usuarios_activos_d_pendiente'].append(usuario)
+                    if usuario_declaraciones.count() > 0:
+                        resumen['usuarios_activos_d_inicial'].append(usuario)
+                    if usuario_declaraciones_terminadas.count() == 0 and usuario_declaraciones.count() == 0:
+                        resumen['usuarios_activos_d_pendiente'].append(usuario)
+                    
+                    #Separa por tipo de usuario
+                    if usuario.is_staff and usuario.is_superuser == 0:
+                        resumen['activos']['oic'].append(usuario)
+                    if (usuario.is_staff == 0 and usuario.is_superuser) or (usuario.is_staff and usuario.is_superuser):
+                        resumen['activos']['admin'].append(usuario)
+                    if usuario.is_staff == 0 and usuario.is_superuser == 0:
+                        resumen['activos']['declarantes'].append(usuario)
+                    
                 else:
-                    resumen['baja'].append(usuario)
+                    #Separa por tipo de usuario
+                    if usuario.is_staff and usuario.is_superuser == 0:
+                        resumen['inactivos']['oic'].append(usuario)
+                    if (usuario.is_staff == 0 and usuario.is_superuser) or (usuario.is_staff and usuario.is_superuser):
+                        resumen['inactivos']['admin'].append(usuario)
+                    if usuario.is_staff == 0 and usuario.is_superuser == 0:
+                        resumen['inactivos']['declarantes'].append(usuario)
 
             for declaracion in declaraciones:
-                #Separa por tipo de declaración
+                #Declaraciones inciales por abiertas y cerradas
                 if declaracion.cat_tipos_declaracion.pk == 1:
-                    resumen['iniciales'].append(declaracion)
+                    resumen['iniciales']['data'].append(declaracion)
+                    if declaracion.cat_estatus.pk == 4:
+                        resumen['iniciales']['cerradas'] = resumen['iniciales']['cerradas'] +1
+                    else:
+                        resumen['iniciales']['abiertas'] = resumen['iniciales']['abiertas'] +1
+                
+                #Declaraciones modificacion por abiertas y cerradas
                 if declaracion.cat_tipos_declaracion.pk == 2:
-                    resumen['modificacion'].append(declaracion)
+                    resumen['modificacion']['data'].append(declaracion)
+                    if declaracion.cat_estatus.pk == 4:
+                        resumen['modificacion']['cerradas'] = resumen['modificacion']['cerradas'] +1
+                    else:
+                        resumen['modificacion']['abiertas'] = resumen['modificacion']['abiertas'] +1
+                
+                #Declaraciones conclusion por abiertas y cerradas
                 if declaracion.cat_tipos_declaracion.pk == 3:
-                    resumen['conclusion'].append(declaracion)
+                    resumen['conclusion']['data'].append(declaracion)
+                    if declaracion.cat_estatus.pk == 4:
+                        resumen['conclusion']['cerradas'] = resumen['conclusion']['cerradas'] +1
+                    else:
+                        resumen['conclusion']['abiertas'] = resumen['conclusion']['abiertas'] +1
 
-                #Separa por estatus de declaración
+                #Separa por estatus de declaración sin tomar en cuenta el tip de declaración
                 if declaracion.cat_estatus_id == 1:
                     resumen['abiertas'].append(declaracion)
                 if declaracion.cat_estatus_id == 4:
@@ -831,7 +920,7 @@ class DescargarReportesView(View):
 
             context = {
                 'declaraciones': declaraciones,
-                'tipo_declaracion': tipo_declaracion,
+                'tipo_reporte': tipo_reporte,
                 'resumen': resumen
             }
 
@@ -843,7 +932,7 @@ class DescargarReportesView(View):
                 print('error-----------------------', e)
             
             response = HttpResponse(content_type="application/pdf")
-            response['Content-Disposition'] = "inline; filename={}_{}.pdf".format(tipo_declaracion,usuario.username)
+            response['Content-Disposition'] = "inline; filename={}_{}.pdf".format(tipo_reporte,usuario.username)
             html = render_to_string(self.template_name, context)
 
             font_config = FontConfiguration()

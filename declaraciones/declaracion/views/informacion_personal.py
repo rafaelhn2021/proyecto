@@ -9,11 +9,15 @@ from django.forms.models import model_to_dict
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
+
 from declaracion.models.informacion_personal import Nacionalidades
 from declaracion.models import (Declaraciones, InfoPersonalFija,
                                 InfoPersonalVar, SeccionDeclaracion,
                                 DatosCurriculares, Encargos, ExperienciaLaboral,
-                                ConyugeDependientes, Secciones, Apoyos,DeclaracionFiscal,CatCamposObligatorios,IngresosDeclaracion, Domicilios)
+                                ConyugeDependientes, Secciones, Apoyos,DeclaracionFiscal,CatCamposObligatorios,
+                                IngresosDeclaracion, Domicilios)
+from declaracion.models.catalogos import CatMonedas
 from declaracion.forms import (DeclaracionForm, InfoPersonalFijaForm,
                                DomiciliosForm, InfoPersonalVarForm,
                                ObservacionesForm, DatosCurricularesForm,
@@ -32,6 +36,8 @@ from declaracion.models.catalogos import (CatMunicipios,CatTiposRelacionesPerson
 
 from sitio.models import sitio_personalizacion, Valores_SMTP
 from .mailto import mail_conf
+from django.db.models import Q
+from datetime import datetime, date
 
 
 def listaMunicipios(request):
@@ -219,8 +225,8 @@ class DeclaracionFormView(View):
         nueva_declaracion = False
         cat_tipos_declaracion_obj = None
         declaracion_obj = None
-
         declaracion2=None
+        folio_declaracion = ''
 
         try:
             cat_tipos_declaracion = self.kwargs['cat_tipos_declaracion']
@@ -241,10 +247,17 @@ class DeclaracionFormView(View):
         except Exception as e:
             cat_tipos_declaracion = ''
 
-        try:
+        if 'folio' in self.kwargs:
             folio_declaracion = self.kwargs['folio']
-        except Exception as e:
-            folio_declaracion = ''
+        else:
+            try:
+                declaraciones_usuario = Declaraciones.objects.filter(info_personal_fija__usuario=usuario)
+                declaracion_en_curso = declaraciones_usuario.filter(Q(cat_estatus__isnull=True) | Q(cat_estatus__pk__in=(1, 2, 3))).first()
+                if declaracion_en_curso:
+                    folio_declaracion = str(declaracion_en_curso.folio)
+            except Exception as e:
+                print('error-------------------------->', e)
+                folio_declaracion = ''
 
         if folio_declaracion:
             try:
@@ -350,15 +363,24 @@ class DeclaracionFormView(View):
         """
         usuario = request.user
         avance, faltas = 0, None
+        folio_declaracion = None
+        
         try:
             cat_tipos_declaracion = self.kwargs['cat_tipos_declaracion']
         except Exception as e:
             cat_tipos_declaracion = None
 
-        try:
+        if 'folio' in self.kwargs:
             folio_declaracion = self.kwargs['folio']
-        except Exception as e:
-            folio_declaracion = None
+        else:
+            try:
+                declaraciones_usuario = Declaraciones.objects.filter(info_personal_fija__usuario=usuario)
+                declaracion_en_curso = declaraciones_usuario.filter(Q(cat_estatus__isnull=True) | Q(cat_estatus__pk__in=(1, 2, 3))).first()
+                if declaracion_en_curso:
+                    folio_declaracion = str(declaracion_en_curso.folio)
+            except Exception as e:
+                print('error-------------------------->', e)
+                folio_declaracion = None
 
         if folio_declaracion:
             try:
@@ -946,7 +968,7 @@ class DatosEncargoActualView(View):
             raise Http404()
 
         info_personal_fija_puesto = declaracion.info_personal_fija.cat_puestos
-        datos_encargo_actual_data = Encargos.objects.filter(declaraciones=declaracion, cat_puestos__isnull=False).first()
+        datos_encargo_actual_data = Encargos.objects.filter(declaraciones=declaracion, cat_puestos__isnull=False,nivel_encargo__isnull=False).first()
 
         # Busca información de una declaración previa si es de tipo MODIFICACIÓN/CONCLUSIÓN
         # Solo se obtiene información previa si la declaración actual aún no tiene registro de esta sección
@@ -954,7 +976,7 @@ class DatosEncargoActualView(View):
             if not datos_encargo_actual_data:
                 declaracion = get_declaracion_anterior(declaracion)
                 if declaracion:
-                    datos_encargo_actual_data = Encargos.objects.filter(declaraciones=declaracion,cat_puestos__isnull=False).first()
+                    datos_encargo_actual_data = Encargos.objects.filter(declaraciones=declaracion,cat_puestos__isnull=False,nivel_encargo__isnull=False).first()
                     if datos_encargo_actual_data:
                         datos_encargo_actual_data.pk = None
                         datos_encargo_actual_data.observaciones.pk = None
@@ -1051,7 +1073,7 @@ class DatosEncargoActualView(View):
 
         folio = uuid.UUID(folio_declaracion)
         declaracion = Declaraciones.objects.filter(folio=folio).first()
-        datos_encargo_actual_data = Encargos.objects.filter(declaraciones=declaracion).first()
+        datos_encargo_actual_data = Encargos.objects.filter(declaraciones=declaracion,cat_puestos__isnull=False,nivel_encargo__isnull=False).first()
         if datos_encargo_actual_data:
             observaciones_data = datos_encargo_actual_data.observaciones
             domicilio_data = datos_encargo_actual_data.domicilios
@@ -1410,6 +1432,10 @@ class ParejaView(View):
 
             if actividad_laboral_sector_data:
                 actividad_laboral_sector_data = model_to_dict(actividad_laboral_sector_data)
+                actividad_laboral_sector_data["posesion_inicio_publico"] = actividad_laboral_sector_data["posesion_inicio"]
+                actividad_laboral_sector_data["posesion_inicio_privado"] = actividad_laboral_sector_data["posesion_inicio"]
+                actividad_laboral_sector_data["moneda_publico"] = actividad_laboral_sector_data["moneda"]
+                actividad_laboral_sector_data["moneda_privado"] = actividad_laboral_sector_data["moneda"]
             else:
                 actividad_laboral_sector_data = {}
 
@@ -1552,10 +1578,17 @@ class ParejaView(View):
             actividad_laboral_sector_var.salarioMensualNeto = 0
 
             if request.POST.get('datos_pareja-actividadLaboral') == '1':
+                actividad_laboral_sector_var.posesion_inicio = date(int(request.POST.get('datos_encargo_actual-posesion_inicio_publico_year')),int(request.POST.get('datos_encargo_actual-posesion_inicio_publico_month')),int(request.POST.get('datos_encargo_actual-posesion_inicio_publico_day')))
+                actividad_laboral_sector_var.moneda = CatMonedas.objects.get(pk= request.POST.get('datos_encargo_actual-moneda_publico')) 
+
                 if request.POST.get('datos_encargo_actual-salarioMensualNetoPublico'):
                     actividad_laboral_sector_var.salarioMensualNeto = int(request.POST.get('datos_encargo_actual-salarioMensualNetoPublico'))
                     
             if request.POST.get('datos_pareja-actividadLaboral') == '2':
+                actividad_laboral_sector_var.posesion_inicio = date(int(request.POST.get('datos_encargo_actual-posesion_inicio_privado_year')),int(request.POST.get('datos_encargo_actual-posesion_inicio_privado_month')),int(request.POST.get('datos_encargo_actual-posesion_inicio_privado_day')))
+                actividad_laboral_sector_var.moneda = CatMonedas.objects.get(pk=request.POST.get('datos_encargo_actual-moneda_privado'))
+
+
                 if request.POST.get('datos_encargo_actual-salarioMensualNetoPrivado'): 
                     actividad_laboral_sector_var.salarioMensualNeto = int(request.POST.get('datos_encargo_actual-salarioMensualNetoPrivado'))
 
@@ -1705,6 +1738,11 @@ class ConyugeDependientesView(View):
 
             if actividad_laboral_sector_data:
                 actividad_laboral_sector_data = model_to_dict(actividad_laboral_sector_data)
+                actividad_laboral_sector_data["posesion_inicio_publico"] = actividad_laboral_sector_data["posesion_inicio"]
+                actividad_laboral_sector_data["posesion_inicio_privado"] = actividad_laboral_sector_data["posesion_inicio"]
+                actividad_laboral_sector_data["moneda_publico"] = actividad_laboral_sector_data["moneda"]
+                actividad_laboral_sector_data["moneda_privado"] = actividad_laboral_sector_data["moneda"]
+
             else:
                 actividad_laboral_sector_data = {}
 
@@ -1856,10 +1894,16 @@ class ConyugeDependientesView(View):
                 actividad_laboral_var.salarioMensualNeto = 0
 
                 if request.POST.get('conyuge_dependiente-actividadLaboral') == '1':
+                    actividad_laboral_var.posesion_inicio = date(int(request.POST.get('datos_encargo_actual-posesion_inicio_publico_year')),int(request.POST.get('datos_encargo_actual-posesion_inicio_publico_month')),int(request.POST.get('datos_encargo_actual-posesion_inicio_publico_day')))
+                    actividad_laboral_var.moneda = CatMonedas.objects.get(pk= request.POST.get('datos_encargo_actual-moneda_publico')) 
+
                     if request.POST.get('datos_encargo_actual-salarioMensualNetoPublico'):
                         actividad_laboral_var.salarioMensualNeto = int(request.POST.get('datos_encargo_actual-salarioMensualNetoPublico'))
                         
                 if request.POST.get('conyuge_dependiente-actividadLaboral') == '2':
+                    actividad_laboral_var.posesion_inicio = date(int(request.POST.get('datos_encargo_actual-posesion_inicio_privado_year')),int(request.POST.get('datos_encargo_actual-posesion_inicio_privado_month')),int(request.POST.get('datos_encargo_actual-posesion_inicio_privado_day')))
+                    actividad_laboral_var.moneda = CatMonedas.objects.get(pk=request.POST.get('datos_encargo_actual-moneda_privado'))
+                    
                     if request.POST.get('datos_encargo_actual-salarioMensualNetoPrivado'):
                         actividad_laboral_var.salarioMensualNeto = int(request.POST.get('datos_encargo_actual-salarioMensualNetoPrivado'))
 

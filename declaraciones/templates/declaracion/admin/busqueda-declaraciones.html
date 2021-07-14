@@ -53,6 +53,7 @@
               <th scope="col">FECHA CIERRE</th>
               <th scope="col">ESTATUS</th>
               <th scope="col">VER</th>
+              <th scope="col">ACUSE</th>
             </tr>
           </thead>
           <tbody>
@@ -66,6 +67,9 @@
               <td>{{ r.fecha_recepcion|date:"D d M Y"|default_if_none:"" }}</td>
               <td>{{ r.cat_estatus }}</td>
               <td><a href="{%  url 'declaracion:info-declaracion' r.pk 'declaracion' %}"> <img width="40px" src="{% static 'src/img/see_verde.png' %}"></a></td>
+              
+              <td>{% if r.cat_estatus.pk is 4%}<a href="{%  url 'pdf_confimacion' r.pk %}" target="blank"> <img width="40px" src="{% static 'src/img/descargar.png' %}"></a>{% else %} N/A {% endif %}</td>
+              
             </tr>
           {% endfor %}
           </tbody>
@@ -79,17 +83,19 @@
           {% if result.has_previous %}
           <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.previous_page_number }});$('#form_declaraciones').submit()" href="#">«</a></li>
            {% endif %}
-                  {%for p in paginas%}
-                    {%ifequal p result.number %}
-                      <li class="page-item"><a class="page-link bg-primary text-light" href="#">{{result.number}}</a></li>
-                    {%else%}
-                      <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ p }});$('#form_declaraciones').submit()" href="#">{{p}}</a></li>
-                    {%endifequal%}
-                  {%endfor%}
-           {% if result.has_next %}
-          <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.next_page_number }});$('#form_declaraciones').submit()" href="#">»</a></li>
-            {%endif%}
 
+          {% if paginas %}
+            {%for p in paginas%}
+              {%ifequal p result.number %}
+                <li class="page-item"><a class="page-link bg-primary text-light" href="#">{{result.number}}</a></li>
+              {%else%}
+                <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ p }});$('#form_declaraciones').submit()" href="#">{{p}}</a></li>
+              {%endifequal%}
+            {%endfor%}
+            {% if result.has_next %}
+              <li class="page-item"><a class="page-link"  onclick="$('#id_page').val({{ result.next_page_number }});$('#form_declaraciones').submit()" href="#">»</a></li>
+            {%endif%}
+          {% endif %}
           </ul>
         </nav>
       </div>
